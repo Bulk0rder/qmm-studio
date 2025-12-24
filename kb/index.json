@@ -1,0 +1,163 @@
+[
+  {
+    "id": "qmm_overview",
+    "title": "00. Quantum Marketing Model Overview",
+    "type": "framework",
+    "tags": [
+      "core",
+      "philosophy"
+    ],
+    "filepath": "kb/00_qmm_overview.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "jtbd_library",
+    "title": "01. JTBD Library",
+    "type": "framework",
+    "tags": [
+      "strategy",
+      "customer",
+      "research"
+    ],
+    "filepath": "kb/01_jtbd_library.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "aida_playbook",
+    "title": "02. AIDA Playbook",
+    "type": "playbook",
+    "tags": [
+      "messaging",
+      "copy",
+      "tactical"
+    ],
+    "filepath": "kb/02_aida_playbook.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "lean_experiment_system",
+    "title": "03. Lean Experiment System",
+    "type": "framework",
+    "tags": [
+      "growth",
+      "testing",
+      "validation"
+    ],
+    "filepath": "kb/03_lean_experiment_system.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "scenario_catalog",
+    "title": "04. Scenario Catalog",
+    "type": "scenario",
+    "tags": [
+      "scenarios",
+      "examples",
+      "strategy"
+    ],
+    "filepath": "kb/04_scenario_catalog.md",
+    "risk_level": "medium"
+  },
+  {
+    "id": "messaging_patterns",
+    "title": "05. Messaging Patterns",
+    "type": "playbook",
+    "tags": [
+      "copy",
+      "creative"
+    ],
+    "filepath": "kb/05_messaging_patterns.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "offer_ladders",
+    "title": "06. Offer Ladders",
+    "type": "framework",
+    "tags": [
+      "strategy",
+      "pricing"
+    ],
+    "filepath": "kb/06_offer_ladders.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "channels_and_activation",
+    "title": "07. Channels & Activation",
+    "type": "playbook",
+    "tags": [
+      "distribution",
+      "media"
+    ],
+    "filepath": "kb/07_channels_and_activation.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "growth_metrics_and_kpi",
+    "title": "08. Growth Metrics & KPI",
+    "type": "framework",
+    "tags": [
+      "data",
+      "measurement"
+    ],
+    "filepath": "kb/08_growth_metrics_and_kpi.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "compliance_and_claims_safe",
+    "title": "09. Compliance & Claims Safety",
+    "type": "policy",
+    "tags": [
+      "legal",
+      "risk",
+      "banking"
+    ],
+    "filepath": "kb/09_compliance_and_claims_safe.md",
+    "risk_level": "high"
+  },
+  {
+    "id": "templates_one_pagers",
+    "title": "10. Templates & One Pagers",
+    "type": "template",
+    "tags": [
+      "resources",
+      "docs"
+    ],
+    "filepath": "kb/10_templates_one_pagers.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "glossary",
+    "title": "11. Glossary",
+    "type": "glossary",
+    "tags": [
+      "definitions"
+    ],
+    "filepath": "kb/11_glossary.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "quantum_laws",
+    "title": "12. The 25 Laws of Quantum Marketing",
+    "type": "framework",
+    "tags": [
+      "core",
+      "strategy",
+      "raja_rajamannar"
+    ],
+    "filepath": "kb/12_quantum_laws.md",
+    "risk_level": "low"
+  },
+  {
+    "id": "quantum_marketing_2025",
+    "title": "13. Quantum Marketing 2025 (New Paradigms)",
+    "type": "framework",
+    "tags": [
+      "core",
+      "strategy",
+      "2025",
+      "raja_rajamannar"
+    ],
+    "filepath": "kb/13_quantum_marketing_2025.md",
+    "risk_level": "low"
+  }
+]

@@ -1,33 +1,36 @@
 import React from 'react';
-import Link from 'next/link';
 import './globals.css';
+import { getSession } from '@/lib/auth';
+import { Navbar } from '@/components/Navbar';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { UI_COPY } from '@/lib/ui-copy';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: UI_COPY.APP.NAME,
+    description: UI_COPY.APP.TAGLINE,
+};
+
+import { PageShell } from '@/components/layout/PageShell';
+import { Footer } from '@/components/layout/Footer';
 
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    const session = getSession();
+
     return (
-        <html lang="en">
-            <body className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-                <nav className="border-b bg-white">
-                    <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                        <Link href="/" className="font-bold text-xl tracking-tight text-blue-900">
-                            QMM Studio
-                        </Link>
-                        <div className="flex gap-6 text-sm font-medium text-gray-600">
-                            <Link href="/new" className="hover:text-blue-600">New Scenario</Link>
-                            <Link href="/tracker" className="hover:text-blue-600">Experiments</Link>
-                            <Link href="/kb" className="hover:text-blue-600">Knowledge Base</Link>
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs">
-                            MI
-                        </div>
-                    </div>
-                </nav>
-                <main className="container mx-auto px-4 py-8">
-                    {children}
-                </main>
+        <html lang="en" suppressHydrationWarning>
+            <body className="min-h-screen bg-app text-app font-sans antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100">
+                <ThemeProvider defaultTheme="system" storageKey="qmm-theme">
+                    <Navbar session={session} />
+                    <PageShell className={session ? "pt-24 md:pt-32 fade-in" : "fade-in"}>
+                        {children}
+                    </PageShell>
+                    {session && <Footer />}
+                </ThemeProvider>
             </body>
         </html>
     );

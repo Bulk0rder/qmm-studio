@@ -1,0 +1,10 @@
+{
+  "workspace_id": "guest-cf95f654",
+  "display_name": "Guest User",
+  "theme_preference": "system",
+  "defaults": {
+    "market": "Global",
+    "industry": "General",
+    "currency": "USD"
+  }
+}

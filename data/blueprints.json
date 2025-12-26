@@ -1,412 +1,244 @@
 [
   {
-    "source": "generation",
-    "used_scenarios": [],
+    "id": "BP-mjkyvke9",
+    "created_at": "2025-12-25T04:52:57.729Z",
+    "input": {
+      "situation": "Consultant Mode Test",
+      "industry": "SaaS",
+      "objective": "Scale",
+      "risk_level": "low",
+      "constraints": [
+        "Budget"
+      ],
+      "time_horizon": "90 days",
+      "budget_band": "High (> $50k)",
+      "primary_kpi": "ARR",
+      "customer_state": "Conversion"
+    },
+    "sources": {
+      "retrieved_scenarios": [
+        {
+          "scenario_id": "GENERIC-LAUNCH-003",
+          "title": "New Product Launch via 'Observation Effect'",
+          "match_reason": "Industry match"
+        }
+      ],
+      "kb_refs": [
+        {
+          "doc_id": "jtbd_library",
+          "section": "General",
+          "text_snippet": "01. JTBD Library"
+        },
+        {
+          "doc_id": "scenario_catalog",
+          "section": "General",
+          "text_snippet": "04. Scenario Catalog"
+        },
+        {
+          "doc_id": "offer_ladders",
+          "section": "General",
+          "text_snippet": "06. Offer Ladders"
+        }
+      ]
+    },
     "diagnosis": {
-      "constraint": "Generic Market Pressure",
-      "behavioral_barrier": "Attention Scarcity"
-    },
-    "quantum_mapping": {
-      "principles": [
-        "Law 6: Quantum Leaps",
-        "Law 21: The Quantum Ecosystem (2025)"
+      "constraint": "Budget",
+      "behavioral_barrier": "Inertia / Awareness",
+      "root_cause_hypotheses": [
+        "H1: Value proposition is not visible at first glance.",
+        "H2: Trust barrier due to lack of social proof.",
+        "H3: Channel saturation in SaaS"
       ],
-      "rationale": "Selected based on industry constraints and objective."
-    },
-    "options": {
-      "conservative": "Optimize existing channels for Growth using Law 6: Quantum Leaps.",
-      "aggressive": "Disrupt the Retail market with a viral campaign based on Law 21: The Quantum Ecosystem (2025).",
-      "weird": "Partner with a completely unrelated industry/influencer to create a 'Superposition' event."
-    },
-    "orchestration": {
-      "triggers": [
-        "User visits pricing page",
-        "Cart abandonment > 24h"
-      ],
-      "fallback_paths": [
-        "Downsell to newsletter",
-        "Retarget with education"
+      "assumptions": [
+        "Assumption: Target audience is active on Direct Message",
+        "Assumption: Baseline conversion rate is > 1%"
       ]
     },
-    "proof": {
-      "experiment_type": "A/Z Sequence Test (Order Testing)",
-      "kpis": [
-        "Conversion Rate",
-        "Customer Lifetime Value (CLV)",
-        "Net Promoter Score (NPS)"
-      ]
+    "qmm_mapping": {
+      "core_principles": [
+        {
+          "principle": "Law 3: Nonlinear Journeys",
+          "why_applies": "Customer path is not a funnel; requires probabilistic mapping.",
+          "what_it_changes": "Moves from static targeting to dynamic, responsive interactions."
+        },
+        {
+          "principle": "Law 5: Non-Commutativity",
+          "why_applies": "The order of interactions (A then B vs B then A) changes the outcome.",
+          "what_it_changes": "Requires A/Z Sequence testing."
+        }
+      ],
+      "laws_used_optional": []
     },
-    "trust_framework": {
-      "bias_check": "Checked target audience for exclusion bias.",
-      "explainability_note": "Recommendations based on retrieval of similar industry scenarios.",
-      "data_manifesto": "User data used solely for personalization; no third-party sale."
-    },
-    "citations": [
-      {
-        "id": "jtbd_library",
-        "title": "01. JTBD Library",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "customer",
-          "research"
-        ],
-        "filepath": "kb/01_jtbd_library.md",
-        "risk_level": "low"
+    "strategic_options": {
+      "conservative": {
+        "title": "Optimize Current Path",
+        "sequence_variant": "A",
+        "big_bet": "Standard optimization of existing touchpoints will yield incremental gains.",
+        "first_3_tests": [
+          "Subject Line A/B",
+          "CTA Color",
+          "Social Proof Header"
+        ]
       },
-      {
-        "id": "scenario_catalog",
-        "title": "04. Scenario Catalog",
-        "type": "scenario",
-        "tags": [
-          "scenarios",
-          "examples",
-          "strategy"
-        ],
-        "filepath": "kb/04_scenario_catalog.md",
-        "risk_level": "medium"
+      "aggressive": {
+        "title": "Quantum Leap Strategy",
+        "sequence_variant": "Z",
+        "big_bet": "Inverting the funnel (Value before Gate) will double qualification rate.",
+        "first_3_tests": [
+          "Inverted Sequence A/Z",
+          "Viral Loop Incentive",
+          "Zero-Friction Onboarding"
+        ]
       },
-      {
-        "id": "offer_ladders",
-        "title": "06. Offer Ladders",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "pricing"
-        ],
-        "filepath": "kb/06_offer_ladders.md",
-        "risk_level": "low"
+      "weird": {
+        "title": "Superposition Play",
+        "sequence_variant": "Q",
+        "big_bet": "Engaging users in a 'game' state creates higher brand recall than direct selling.",
+        "first_3_tests": [
+          "Gamified Entry",
+          "Mystery Box Offer",
+          "Partner Swaps"
+        ]
       }
-    ],
-    "id": "mjju3hwzk3ca3",
-    "createdAt": "2025-12-24T09:51:23.507Z"
-  },
-  {
-    "source": "generation",
-    "used_scenarios": [],
-    "diagnosis": {
-      "constraint": "Generic Market Pressure",
-      "behavioral_barrier": "Attention Scarcity"
     },
-    "quantum_mapping": {
-      "principles": [
-        "Law 6: Quantum Leaps",
-        "Law 21: The Quantum Ecosystem (2025)"
+    "sequence_map": {
+      "narrative_goal": "Move customer from Awareness to Scale",
+      "steps": [
+        {
+          "step_no": 1,
+          "goal": "Measure intent by clicks (Observation)",
+          "channel": "Teaser Post",
+          "message_angle": "Value-First",
+          "trigger_signal": "Launch Day",
+          "fallback_if_no_signal": "None",
+          "metric": "Conversion %",
+          "expected_time": "Day 1"
+        },
+        {
+          "step_no": 2,
+          "goal": "Quantify desire",
+          "channel": "Waitlist Gate",
+          "message_angle": "Value-First",
+          "trigger_signal": "Click",
+          "fallback_if_no_signal": "Retarget",
+          "metric": "Conversion %",
+          "expected_time": "Day 2"
+        }
       ],
-      "rationale": "Selected based on industry constraints and objective."
-    },
-    "options": {
-      "conservative": "Optimize existing channels for Growth using Law 6: Quantum Leaps.",
-      "aggressive": "Disrupt the Retail market with a viral campaign based on Law 21: The Quantum Ecosystem (2025).",
-      "weird": "Partner with a completely unrelated industry/influencer to create a 'Superposition' event."
-    },
-    "orchestration": {
-      "triggers": [
-        "User visits pricing page",
-        "Cart abandonment > 24h"
-      ],
-      "fallback_paths": [
-        "Downsell to newsletter",
-        "Retarget with education"
+      "variants_for_AZ_testing": [
+        {
+          "variant_id": "A (Standard)",
+          "sequence_steps_order": [
+            1,
+            2,
+            3
+          ],
+          "why": "Logical progression: Awareness -> Action"
+        },
+        {
+          "variant_id": "Z (Inverted)",
+          "sequence_steps_order": [
+            3,
+            1,
+            2
+          ],
+          "why": "Test 'Value First' (Non-Commutative test)"
+        }
       ]
     },
-    "proof": {
-      "experiment_type": "A/Z Sequence Test (Order Testing)",
-      "kpis": [
-        "Conversion Rate",
-        "Customer Lifetime Value (CLV)",
-        "Net Promoter Score (NPS)"
+    "experiments": {
+      "asset_tests": [
+        {
+          "id": "EXP-1766638377729-1",
+          "type": "Asset (A/B/n)",
+          "hypothesis": "Applying Law 3: Nonlinear Journeys to the hero image increases click-through by 15%.",
+          "setup": "A/B test landing page Hero Section.",
+          "cost_to_learn": "Low (Time only)",
+          "stopping_rule": "n=500 visits",
+          "success_threshold": "CTR > 2.5%",
+          "win_action": "Roll out to all traffic",
+          "lose_action": "Revert to control",
+          "linked_step_no": 1
+        },
+        {
+          "id": "EXP-1766638377729-2",
+          "type": "Asset (A/B/n)",
+          "hypothesis": "Social Proof (Law 9) beats Fear of Missing Out (Law 16) for this audience.",
+          "setup": "Email Subject Line test.",
+          "cost_to_learn": "$100 ad spend",
+          "stopping_rule": "n=1000 sends",
+          "success_threshold": "Open Rate > 20%",
+          "win_action": "Adopt winning angle for full sequence",
+          "lose_action": "Test new angle",
+          "linked_step_no": 2
+        }
+      ],
+      "sequence_tests": [
+        {
+          "id": "SEQ-1766638377729-1",
+          "type": "Sequence (A/Z)",
+          "hypothesis": "User journey is Non-Commutative: Showing Price before Value kills conversion.",
+          "setup": "Split traffic 50/50 between Flow A (Value->Price) and Flow Z (Price->Value).",
+          "cost_to_learn": "Medium (Dev time)",
+          "stopping_rule": "100 conversions per arm",
+          "success_threshold": "Variant A > Variant Z by 10%",
+          "win_action": "Hardcode Flow A",
+          "lose_action": "Investigate pricing sensitivity"
+        }
       ]
     },
-    "trust_framework": {
-      "bias_check": "Checked target audience for exclusion bias.",
-      "explainability_note": "Recommendations based on retrieval of similar industry scenarios.",
-      "data_manifesto": "User data used solely for personalization; no third-party sale."
+    "kpi_plan": {
+      "primary_kpi": "Waitlist Signups",
+      "secondary_kpis": [
+        "CTR"
+      ],
+      "measurement_method": "Funnel conversion",
+      "cadence": "Weekly",
+      "targets": "Access baseline required"
     },
-    "citations": [
-      {
-        "id": "jtbd_library",
-        "title": "01. JTBD Library",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "customer",
-          "research"
-        ],
-        "filepath": "kb/01_jtbd_library.md",
-        "risk_level": "low"
+    "trust_governance": {
+      "compliance_flags": [],
+      "privacy_consent_note": "Strictly adhere to 'Consent-First' data collection (Law 16).",
+      "transparency_note": "Explainability required for all AI-driven recommendations.",
+      "bias_check_note": "Ensure creative does not exclude protected groups.",
+      "explainability_note": "Blueprint based on retrieval of similar industry patterns."
+    },
+    "confidence": {
+      "overall": "High",
+      "score": 85,
+      "data_needed_to_increase_confidence": [
+        "Historical conversion benchmarks",
+        "Customer CAC limits"
+      ]
+    },
+    "consultant_voice": {
+      "c_suite": {
+        "summary_card": {
+          "title": "Executive Summary",
+          "subtitle": "ROI & Risk Profile",
+          "focus_point": "Efficiency"
+        },
+        "diagnosis_headline": "Strategic Constraint: Budget",
+        "strategic_angle": "Focus on high-leverage Law 3: Nonlinear Journeys application to maximize yield on High (> $50k) spend."
       },
-      {
-        "id": "scenario_catalog",
-        "title": "04. Scenario Catalog",
-        "type": "scenario",
-        "tags": [
-          "scenarios",
-          "examples",
-          "strategy"
-        ],
-        "filepath": "kb/04_scenario_catalog.md",
-        "risk_level": "medium"
+      "growth": {
+        "summary_card": {
+          "title": "Growth Tactics",
+          "subtitle": "Experiments & Loops",
+          "focus_point": "Velocity"
+        },
+        "diagnosis_headline": "Funnel Friction Blockers",
+        "strategic_angle": "Deploying Law 3: Nonlinear Journeys to unlock virality and reduce CAC in the SaaS sector."
       },
-      {
-        "id": "offer_ladders",
-        "title": "06. Offer Ladders",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "pricing"
-        ],
-        "filepath": "kb/06_offer_ladders.md",
-        "risk_level": "low"
+      "creative": {
+        "summary_card": {
+          "title": "Creative Direction",
+          "subtitle": "brand & Psychology",
+          "focus_point": "Resonance"
+        },
+        "diagnosis_headline": "The Emotional Disconnect",
+        "strategic_angle": "Using Law 3: Nonlinear Journeys to disrupt standard SaaS narratives and create a 'Purple Cow' moment."
       }
-    ],
-    "id": "mjjuerde594y3",
-    "createdAt": "2025-12-24T10:00:08.978Z"
-  },
-  {
-    "source": "generation",
-    "used_scenarios": [],
-    "diagnosis": {
-      "constraint": "Generic Market Pressure",
-      "behavioral_barrier": "Attention Scarcity"
-    },
-    "quantum_mapping": {
-      "principles": [
-        "Law 6: Quantum Leaps",
-        "Law 21: The Quantum Ecosystem (2025)"
-      ],
-      "rationale": "Selected based on industry constraints and objective."
-    },
-    "options": {
-      "conservative": "Optimize existing channels for Growth using Law 6: Quantum Leaps.",
-      "aggressive": "Disrupt the Retail market with a viral campaign based on Law 21: The Quantum Ecosystem (2025).",
-      "weird": "Partner with a completely unrelated industry/influencer to create a 'Superposition' event."
-    },
-    "orchestration": {
-      "triggers": [
-        "User visits pricing page",
-        "Cart abandonment > 24h"
-      ],
-      "fallback_paths": [
-        "Downsell to newsletter",
-        "Retarget with education"
-      ]
-    },
-    "proof": {
-      "experiment_type": "A/Z Sequence Test (Order Testing)",
-      "kpis": [
-        "Conversion Rate",
-        "Customer Lifetime Value (CLV)",
-        "Net Promoter Score (NPS)"
-      ]
-    },
-    "trust_framework": {
-      "bias_check": "Checked target audience for exclusion bias.",
-      "explainability_note": "Recommendations based on retrieval of similar industry scenarios.",
-      "data_manifesto": "User data used solely for personalization; no third-party sale."
-    },
-    "citations": [
-      {
-        "id": "jtbd_library",
-        "title": "01. JTBD Library",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "customer",
-          "research"
-        ],
-        "filepath": "kb/01_jtbd_library.md",
-        "risk_level": "low"
-      },
-      {
-        "id": "scenario_catalog",
-        "title": "04. Scenario Catalog",
-        "type": "scenario",
-        "tags": [
-          "scenarios",
-          "examples",
-          "strategy"
-        ],
-        "filepath": "kb/04_scenario_catalog.md",
-        "risk_level": "medium"
-      },
-      {
-        "id": "offer_ladders",
-        "title": "06. Offer Ladders",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "pricing"
-        ],
-        "filepath": "kb/06_offer_ladders.md",
-        "risk_level": "low"
-      }
-    ],
-    "id": "mjkbesnwpmotx",
-    "createdAt": "2025-12-24T17:56:04.124Z"
-  },
-  {
-    "source": "generation",
-    "used_scenarios": [],
-    "diagnosis": {
-      "constraint": "Generic Market Pressure",
-      "behavioral_barrier": "Attention Scarcity"
-    },
-    "quantum_mapping": {
-      "principles": [
-        "Law 6: Quantum Leaps",
-        "Law 21: The Quantum Ecosystem (2025)"
-      ],
-      "rationale": "Selected based on industry constraints and objective."
-    },
-    "options": {
-      "conservative": "Optimize existing channels for Growth using Law 6: Quantum Leaps.",
-      "aggressive": "Disrupt the Retail market with a viral campaign based on Law 21: The Quantum Ecosystem (2025).",
-      "weird": "Partner with a completely unrelated industry/influencer to create a 'Superposition' event."
-    },
-    "orchestration": {
-      "triggers": [
-        "User visits pricing page",
-        "Cart abandonment > 24h"
-      ],
-      "fallback_paths": [
-        "Downsell to newsletter",
-        "Retarget with education"
-      ]
-    },
-    "proof": {
-      "experiment_type": "A/Z Sequence Test (Order Testing)",
-      "kpis": [
-        "Conversion Rate",
-        "Customer Lifetime Value (CLV)",
-        "Net Promoter Score (NPS)"
-      ]
-    },
-    "trust_framework": {
-      "bias_check": "Checked target audience for exclusion bias.",
-      "explainability_note": "Recommendations based on retrieval of similar industry scenarios.",
-      "data_manifesto": "User data used solely for personalization; no third-party sale."
-    },
-    "citations": [
-      {
-        "id": "jtbd_library",
-        "title": "01. JTBD Library",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "customer",
-          "research"
-        ],
-        "filepath": "kb/01_jtbd_library.md",
-        "risk_level": "low"
-      },
-      {
-        "id": "scenario_catalog",
-        "title": "04. Scenario Catalog",
-        "type": "scenario",
-        "tags": [
-          "scenarios",
-          "examples",
-          "strategy"
-        ],
-        "filepath": "kb/04_scenario_catalog.md",
-        "risk_level": "medium"
-      },
-      {
-        "id": "offer_ladders",
-        "title": "06. Offer Ladders",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "pricing"
-        ],
-        "filepath": "kb/06_offer_ladders.md",
-        "risk_level": "low"
-      }
-    ],
-    "id": "mjkcskexwf311",
-    "createdAt": "2025-12-24T18:34:46.233Z"
-  },
-  {
-    "source": "generation",
-    "used_scenarios": [],
-    "diagnosis": {
-      "constraint": "Generic Market Pressure",
-      "behavioral_barrier": "Attention Scarcity"
-    },
-    "quantum_mapping": {
-      "principles": [
-        "Law 6: Quantum Leaps",
-        "Law 21: The Quantum Ecosystem (2025)"
-      ],
-      "rationale": "Selected based on industry constraints and objective."
-    },
-    "options": {
-      "conservative": "Optimize existing channels for Growth using Law 6: Quantum Leaps.",
-      "aggressive": "Disrupt the Retail market with a viral campaign based on Law 21: The Quantum Ecosystem (2025).",
-      "weird": "Partner with a completely unrelated industry/influencer to create a 'Superposition' event."
-    },
-    "orchestration": {
-      "triggers": [
-        "User visits pricing page",
-        "Cart abandonment > 24h"
-      ],
-      "fallback_paths": [
-        "Downsell to newsletter",
-        "Retarget with education"
-      ]
-    },
-    "proof": {
-      "experiment_type": "A/Z Sequence Test (Order Testing)",
-      "kpis": [
-        "Conversion Rate",
-        "Customer Lifetime Value (CLV)",
-        "Net Promoter Score (NPS)"
-      ]
-    },
-    "trust_framework": {
-      "bias_check": "Checked target audience for exclusion bias.",
-      "explainability_note": "Recommendations based on retrieval of similar industry scenarios.",
-      "data_manifesto": "User data used solely for personalization; no third-party sale."
-    },
-    "citations": [
-      {
-        "id": "jtbd_library",
-        "title": "01. JTBD Library",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "customer",
-          "research"
-        ],
-        "filepath": "kb/01_jtbd_library.md",
-        "risk_level": "low"
-      },
-      {
-        "id": "scenario_catalog",
-        "title": "04. Scenario Catalog",
-        "type": "scenario",
-        "tags": [
-          "scenarios",
-          "examples",
-          "strategy"
-        ],
-        "filepath": "kb/04_scenario_catalog.md",
-        "risk_level": "medium"
-      },
-      {
-        "id": "offer_ladders",
-        "title": "06. Offer Ladders",
-        "type": "framework",
-        "tags": [
-          "strategy",
-          "pricing"
-        ],
-        "filepath": "kb/06_offer_ladders.md",
-        "risk_level": "low"
-      }
-    ],
-    "id": "mjkcx1idb93ok",
-    "createdAt": "2025-12-24T18:38:15.013Z"
+    }
   }
 ]

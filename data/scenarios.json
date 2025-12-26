@@ -1,0 +1,219 @@
+[
+    {
+        "scenario_id": "BANK-CHURN-001",
+        "title": "Bank Churn Prevention via 'Service Recovery Paradox'",
+        "industry": "Banking",
+        "market": "Africa / Global South",
+        "customer_state": "Retention",
+        "objective": "Reduce Churn",
+        "constraints": [
+            "Low Budget",
+            "High Compliance",
+            "SMS/Email only"
+        ],
+        "inputs": {
+            "product": "Savings Account",
+            "audience": "Dormant users > 60 days",
+            "channels": [
+                "SMS",
+                "Email",
+                "In-App"
+            ],
+            "timing": "Monthly cycle"
+        },
+        "signals": [
+            "Zero balance > 60 days",
+            "Failed transaction x2"
+        ],
+        "recommended_qm_principles": [
+            "Indeterminacy",
+            "Non-Commutativity"
+        ],
+        "sequence_map": [
+            {
+                "step": 1,
+                "touchpoint": "SMS Inquiry",
+                "rationale": "Low friction check-in",
+                "trigger": "60 days dormancy",
+                "fallback": "Do nothing"
+            },
+            {
+                "step": 2,
+                "touchpoint": "Email Educate",
+                "rationale": "Value reminder without ask",
+                "trigger": "SMS delivered",
+                "fallback": "Archive user"
+            },
+            {
+                "step": 3,
+                "touchpoint": "In-App Offer",
+                "rationale": "Fee waiver incentive",
+                "trigger": "Email open",
+                "fallback": "SMS Reminder"
+            }
+        ],
+        "kpis": {
+            "primary": "Re-activation Rate",
+            "secondary": [
+                "NPS",
+                "Cost per Rectivation"
+            ],
+            "measurement_plan": "Control group holdout 10%"
+        },
+        "experiment_plan": {
+            "type": "A/Z sequence",
+            "description": "Test if offering incentive FIRST (Variant Z) performs worse than Check-in FIRST (Variant A). (Law of Non-Commutativity)",
+            "tests": [
+                {
+                    "hypothesis": "Sequence A (Care -> Offer) beats Sequence Z (Offer -> Care) by 20%",
+                    "stopping_rule": "n=1000 or p<0.05"
+                }
+            ]
+        },
+        "risks_and_ethics": {
+            "privacy_note": "Do not mention specific balances in SMS.",
+            "bias_check": "Ensure low-income segments aren't excluded from waivers.",
+            "transparency_level": "High - explain why they got the offer."
+        },
+        "last_updated": "2024-05-20"
+    },
+    {
+        "scenario_id": "RETAIL-GROWTH-002",
+        "title": "Retail Expansion via 'Quantum Entanglement' Referral",
+        "industry": "Retail",
+        "market": "Global",
+        "customer_state": "Advocacy",
+        "objective": "Growth / Acquisition",
+        "constraints": [
+            "Viral Loop needed",
+            "Privacy First"
+        ],
+        "inputs": {
+            "product": "Fashion App",
+            "audience": "Power Users (Top 5%)",
+            "channels": [
+                "Social",
+                "Push"
+            ],
+            "assets": [
+                "Referral Code"
+            ]
+        },
+        "signals": [
+            "3 purchases in 30 days",
+            "NPS 9/10"
+        ],
+        "recommended_qm_principles": [
+            "Entanglement",
+            "Superposition"
+        ],
+        "sequence_map": [
+            {
+                "step": 1,
+                "touchpoint": "Surprise Gift",
+                "rationale": "Create reciprocity",
+                "trigger": "3rd Purchase",
+                "fallback": "Standard Loyalty Points"
+            },
+            {
+                "step": 2,
+                "touchpoint": "Double-Sided Referral",
+                "rationale": "Entangle user success with friend success",
+                "trigger": "Gift Redeemed",
+                "fallback": "NPS Survey"
+            }
+        ],
+        "kpis": {
+            "primary": "K-Factor (Viral Coefficient)",
+            "secondary": [
+                "CAC",
+                "LTV"
+            ],
+            "measurement_plan": "Referral tree tracking"
+        },
+        "experiment_plan": {
+            "type": "A/B/n",
+            "description": "Test 'Ego' framing vs 'Altruism' framing.",
+            "tests": [
+                {
+                    "hypothesis": "Altruism ('Give $10') beats Ego ('Get $10') in high-trust networks.",
+                    "stopping_rule": "100 conversions"
+                }
+            ]
+        },
+        "risks_and_ethics": {
+            "privacy_note": "No scraping contact lists.",
+            "bias_check": "Monitor for demographic skew in referral chains.",
+            "transparency_level": "Medium"
+        },
+        "last_updated": "2024-06-15"
+    },
+    {
+        "scenario_id": "GENERIC-LAUNCH-003",
+        "title": "New Product Launch via 'Observation Effect'",
+        "industry": "SaaS",
+        "market": "B2B",
+        "customer_state": "Awareness",
+        "objective": "Reaction / Validation",
+        "constraints": [
+            "Zero Budget",
+            "Speed"
+        ],
+        "inputs": {
+            "product": "Beta SaaS",
+            "audience": "LinkedIn Network",
+            "channels": [
+                "Direct Message",
+                "Post"
+            ],
+            "timing": "1 week"
+        },
+        "signals": [
+            "Profile view",
+            "Comment"
+        ],
+        "recommended_qm_principles": [
+            "Indeterminacy",
+            "Observation Effect"
+        ],
+        "sequence_map": [
+            {
+                "step": 1,
+                "touchpoint": "Teaser Post",
+                "rationale": "Measure intent by clicks (Observation)",
+                "trigger": "Launch Day",
+                "fallback": "None"
+            },
+            {
+                "step": 2,
+                "touchpoint": "Waitlist Gate",
+                "rationale": "Quantify desire",
+                "trigger": "Click",
+                "fallback": "Retarget"
+            }
+        ],
+        "kpis": {
+            "primary": "Waitlist Signups",
+            "secondary": [
+                "CTR"
+            ],
+            "measurement_plan": "Funnel conversion"
+        },
+        "experiment_plan": {
+            "type": "A/B/n",
+            "description": "Smoke test value propositions.",
+            "tests": [
+                {
+                    "hypothesis": "Feature-led copy loses to Benefit-led copy.",
+                    "stopping_rule": "500 views"
+                }
+            ]
+        },
+        "risks_and_ethics": {
+            "privacy_note": "Clear disclaimer it's a beta/waitlist.",
+            "bias_check": "None",
+            "transparency_level": "High"
+        },
+        "last_updated": "2024-01-10"
+    }
+]

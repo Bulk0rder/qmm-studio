@@ -2,13 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  :root {
+    --bg: 250 250 250;
+    /* #fafafa */
+    --fg: 17 24 39;
+    /* gray-900 */
+    --muted: 107 114 128;
+    /* gray-500 */
+    --card: 255 255 255;
+    /* white */
+    --border: 229 231 235;
+    /* gray-200 */
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+
+    /* Notion Accents */
+    --accent-blue: 37 99 235;
+    /* blue-600 */
+  }
+
+  .dark {
+    --bg: 10 10 10;
+    /* near black */
+    --fg: 245 245 245;
+    /* neutral-100 */
+    --muted: 163 163 163;
+    /* neutral-400 */
+    --card: 18 18 18;
+    /* neutral-900 */
+    --border: 38 38 38;
+    /* neutral-800 */
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  body {
+    @apply bg-app text-app antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: white;
+@layer utilities {
+  .bg-app {
+    background-color: rgb(var(--bg));
+  }
+
+  .text-app {
+    color: rgb(var(--fg));
+  }
+
+  .text-muted {
+    color: rgb(var(--muted));
+  }
+
+  .border-app {
+    border-color: rgb(var(--border));
+  }
+
+  .card-surface {
+    background-color: rgb(var(--card));
+    box-shadow: var(--shadow);
+    border: 1px solid rgb(var(--border));
+  }
+
+  /* Minimal scrollbar */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Base Component Overrides to ensure consistency */
+@layer components {
+
+  /* Remove legacy glow artifacts if any remain */
+  .text-glow {
+    text-shadow: none;
+  }
+
+  .glass-panel {
+    @apply bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md border border-app shadow-sm;
+  }
 }

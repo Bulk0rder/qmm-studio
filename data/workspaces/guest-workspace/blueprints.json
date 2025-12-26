@@ -1,0 +1,492 @@
+[
+  {
+    "id": "BP-h9zjpprfa",
+    "scenario_id": "SC-DRAFT-1766697318996",
+    "workspace_id": "guest-workspace",
+    "created_at": "2025-12-25T21:15:18.996Z",
+    "input": {
+      "situation": "Competitor dropped prices. Sales are flat, churn is on the rise. Need a response in 30 days ",
+      "industry": "Retail",
+      "market": "Africa",
+      "objective": "Get sales up again",
+      "customer_state": "Retention",
+      "time_horizon": "30 days",
+      "budget_band": "Mid ($1k - $10k)",
+      "primary_kpi": "",
+      "compliance_risk": "medium",
+      "channel_constraints": [],
+      "baseline_signals": "",
+      "what_was_tried": "",
+      "anchorScenarioId": null
+    },
+    "sources": {
+      "retrieved_scenarios": [],
+      "kb_refs": []
+    },
+    "diagnosis": {
+      "primary_constraint": "Trust/Authority",
+      "behavioral_barrier": "Price Anchoring",
+      "root_cause_hypotheses": [
+        "Customers in Retail default to established players due to risk aversion.",
+        "The current value proposition is too generic and doesn't polarize the audience.",
+        "Friction in the sign-up flow is filtering out high-intent prospects."
+      ],
+      "assumptions": [
+        "CAC can be sustained at < $50.",
+        "Channel intent matches the 'Problem Aware' state.",
+        "Competitor response will be slower than 30 days."
+      ]
+    },
+    "qmm_mapping": {
+      "core_principles": [
+        {
+          "principle": "Non-Commutativity",
+          "why_applies": "The order of 'Value then Price' is critical in this high-consideration journey.",
+          "what_it_changes": "We enforce a strict content sequence (Education -> Proof -> Offer) instead of mixing them."
+        },
+        {
+          "principle": "Superposition",
+          "why_applies": "Input indicates customers are researching (Indecision state).",
+          "what_it_changes": "We use 'Either/Or' framing to collapse the wave function into a decision."
+        }
+      ],
+      "laws_used_optional": [
+        "Law 5",
+        "Law 1"
+      ]
+    },
+    "strategic_options": {
+      "conservative": {
+        "title": "The Optimization Path",
+        "sequence_variant": "A",
+        "big_bet": "Incremental gain via friction reduction.",
+        "first_3_tests": [
+          "Headline A/B",
+          "Button Color",
+          "Email Subject"
+        ]
+      },
+      "aggressive": {
+        "title": "The Pattern Break",
+        "sequence_variant": "Z",
+        "big_bet": "Radical offer change to disrupt the market anchor.",
+        "first_3_tests": [
+          "Offer Structure",
+          "channel Swap",
+          "Influencer Push"
+        ]
+      },
+      "weird": {
+        "title": "The Left-Field",
+        "sequence_variant": "Z",
+        "big_bet": "Use humor/anti-marketing to build trust.",
+        "first_3_tests": [
+          "Ugly Ad Creative",
+          "No-Landing-Page Funnel",
+          "Direct CEO Video"
+        ]
+      }
+    },
+    "sequence_map": {
+      "narrative_goal": "Convert Retention to Next State via Trust Accelerators",
+      "steps": [
+        {
+          "step_no": 1,
+          "goal": "Stop the Scroll",
+          "channel": "TikTok / IG Reels",
+          "message_angle": "Visceral Product Demo (Hook)",
+          "trigger_signal": "Video View > 50%",
+          "fallback_if_no_signal": "Test Static Image",
+          "metric": "Thumbstop Rate",
+          "expected_time": "Day 1"
+        },
+        {
+          "step_no": 2,
+          "goal": "Build Immediate Trust",
+          "channel": "PDP (Product Page)",
+          "message_angle": "Social Proof + Guarantee Stack",
+          "trigger_signal": "Add to Cart",
+          "fallback_if_no_signal": "Retargeting: Unboxing Video",
+          "metric": "ATC Rate",
+          "expected_time": "Day 1"
+        },
+        {
+          "step_no": 3,
+          "goal": "Increase Average Order",
+          "channel": "Checkout Cart",
+          "message_angle": "Bundle Logic ('Most people add...')",
+          "trigger_signal": "Upsell Accept",
+          "fallback_if_no_signal": "Standard Checkout",
+          "metric": "AOV",
+          "expected_time": "Day 1"
+        },
+        {
+          "step_no": 4,
+          "goal": "Post-Purchase High",
+          "channel": "Email / SMS",
+          "message_angle": "You made a great choice (Validation)",
+          "trigger_signal": "Open Rate",
+          "fallback_if_no_signal": "Resend",
+          "metric": "Open Rate",
+          "expected_time": "Day 2"
+        },
+        {
+          "step_no": 5,
+          "goal": "Loop to Loyalty",
+          "channel": "Email",
+          "message_angle": "Join the VIP Community",
+          "trigger_signal": "Join Group / Referral",
+          "fallback_if_no_signal": "Discount Next Order",
+          "metric": "LTV",
+          "expected_time": "Day 14"
+        }
+      ],
+      "variants_for_AZ_testing": [
+        {
+          "variant_id": "Z",
+          "sequence_order": [
+            2,
+            1,
+            3,
+            4,
+            5
+          ],
+          "rationale": "Testing 'Problem Agitation' before 'Disruption' to filter for high intent."
+        }
+      ]
+    },
+    "experiments": {
+      "asset_tests": [
+        {
+          "id": "EXP-pplnw",
+          "title": "Creative Angle Test",
+          "type": "Asset (A/B/n)",
+          "hypothesis": "Social Proof (faces) outperforms Data Proof (charts) for this audience.",
+          "principle_tested": "Social Proof",
+          "setup": "A/B test on Step 1 Ad Creative.",
+          "cost_to_learn": "$200",
+          "stopping_rule": "50 Clicks per variant",
+          "success_threshold": "CTR diff > 20%",
+          "win_action": "Scale winner layout",
+          "lose_action": "Test 'Fear of Loss' angle next",
+          "linked_step_no": 1
+        }
+      ],
+      "sequence_tests": [
+        {
+          "id": "EXP-bb1il",
+          "title": "Sequence Variant Test",
+          "type": "Sequence (A/Z)",
+          "hypothesis": "Showing 'Price' before 'Value' increases drop-off by 40%.",
+          "principle_tested": "Non-Commutativity",
+          "setup": "Variant A: Standard Flow. Variant Z: Pricing Table first.",
+          "cost_to_learn": "$500 ad spend",
+          "stopping_rule": "1000 Visits or 50 conversions in Control",
+          "success_threshold": "Variant Z beats A by >15% confident",
+          "win_action": "Adopt Price-First for high-intent traffic",
+          "lose_action": "Revert to Value-First standard",
+          "linked_step_no": 2
+        }
+      ]
+    },
+    "kpi_plan": {
+      "primary_kpi": "Conversion Rate",
+      "secondary_kpis": [
+        "CAC",
+        "Time to Close"
+      ],
+      "measurement_method": "Cohorted attribution",
+      "cadence": "Weekly",
+      "targets": "+10% MoM"
+    },
+    "trust_governance": {
+      "compliance_flags": [],
+      "privacy_consent_note": "Ensure explicit opt-in for email sequence.",
+      "transparency_note": "Disclose AI usage if chatbot agents are used.",
+      "bias_check_note": "Verify ad targeting excludes protected attributes.",
+      "claims_evidence_required": []
+    },
+    "confidence": {
+      "overall": "Medium",
+      "score": 72,
+      "data_needed_to_increase_confidence": [
+        "Historical CAC data",
+        "Competitor conversion benchmarks"
+      ]
+    },
+    "consultant_voice": {
+      "c_suite": {
+        "summary_card": {
+          "title": "Executive Summary",
+          "subtitle": "Strategic ROI Focus",
+          "focus_point": "Capital Efficiency"
+        },
+        "diagnosis_headline": "Strategic Constraint: Budget Velocity",
+        "strategic_angle": "We are trading speed for efficiency to minimize burn."
+      },
+      "growth": {
+        "summary_card": {
+          "title": "Growth Tactics",
+          "subtitle": "Execution Focus",
+          "focus_point": "Experiment Velocity"
+        },
+        "diagnosis_headline": "Funnel Bottleneck: Top-of-Funnel",
+        "strategic_angle": "Rapid A/Z testing to identify the breakout offer."
+      },
+      "creative": {
+        "summary_card": {
+          "title": "Creative Direction",
+          "subtitle": "Brand Resonance",
+          "focus_point": "Emotional Impact"
+        },
+        "diagnosis_headline": "The Emotional Disconnect",
+        "strategic_angle": "The brand feels too 'corporate'. We need to inject humanity."
+      }
+    }
+  },
+  {
+    "id": "BP-ftw9r1dbi",
+    "scenario_id": "SC-MOCK-2",
+    "workspace_id": "guest-workspace",
+    "created_at": "2025-12-25T23:16:57.676Z",
+    "input": {
+      "situation": "Test scenario",
+      "industry": "Banking",
+      "market": "Nigeria",
+      "objective": "Growth",
+      "customer_state": "",
+      "time_horizon": "30 days",
+      "budget_band": "Low (< $1k)",
+      "primary_kpi": "",
+      "compliance_risk": "low",
+      "channel_constraints": [],
+      "baseline_signals": "None",
+      "what_was_tried": "",
+      "anchorScenarioId": "SC-MOCK-2"
+    },
+    "sources": {
+      "retrieved_scenarios": [],
+      "kb_refs": []
+    },
+    "diagnosis": {
+      "primary_constraint": "Budget Velocity",
+      "behavioral_barrier": "Price Anchoring",
+      "root_cause_hypotheses": [
+        "Customers in Banking default to established players due to risk aversion.",
+        "The current value proposition is too generic and doesn't polarize the audience.",
+        "Friction in the sign-up flow is filtering out high-intent prospects."
+      ],
+      "assumptions": [
+        "CAC can be sustained at < $50.",
+        "Channel intent matches the 'Problem Aware' state.",
+        "Competitor response will be slower than 30 days."
+      ]
+    },
+    "qmm_mapping": {
+      "core_principles": [
+        {
+          "principle": "Non-Commutativity",
+          "why_applies": "The order of 'Value then Price' is critical in this high-consideration journey.",
+          "what_it_changes": "We enforce a strict content sequence (Education -> Proof -> Offer) instead of mixing them."
+        },
+        {
+          "principle": "Superposition",
+          "why_applies": "Input indicates customers are researching (Indecision state).",
+          "what_it_changes": "We use 'Either/Or' framing to collapse the wave function into a decision."
+        }
+      ],
+      "laws_used_optional": [
+        "Law 5",
+        "Law 1"
+      ]
+    },
+    "strategic_options": {
+      "conservative": {
+        "title": "The Optimization Path",
+        "sequence_variant": "A",
+        "big_bet": "Incremental gain via friction reduction.",
+        "first_3_tests": [
+          "Headline A/B",
+          "Button Color",
+          "Email Subject"
+        ]
+      },
+      "aggressive": {
+        "title": "The Pattern Break",
+        "sequence_variant": "Z",
+        "big_bet": "Radical offer change to disrupt the market anchor.",
+        "first_3_tests": [
+          "Offer Structure",
+          "channel Swap",
+          "Influencer Push"
+        ]
+      },
+      "weird": {
+        "title": "The Left-Field",
+        "sequence_variant": "Z",
+        "big_bet": "Use humor/anti-marketing to build trust.",
+        "first_3_tests": [
+          "Ugly Ad Creative",
+          "No-Landing-Page Funnel",
+          "Direct CEO Video"
+        ]
+      }
+    },
+    "sequence_map": {
+      "narrative_goal": "Convert  to Next State via Trust Accelerators",
+      "steps": [
+        {
+          "step_no": 1,
+          "goal": "Disrupt Cognitive Pattern",
+          "channel": "LinkedIn / Meta (Feed)",
+          "message_angle": "The 'Counter-Intuitive' Insight",
+          "trigger_signal": "Click / Dwell > 3s",
+          "fallback_if_no_signal": "Retarget with 'Social Proof' variant",
+          "metric": "CTR / Scroll Depth",
+          "expected_time": "Day 1-3"
+        },
+        {
+          "step_no": 2,
+          "goal": "Reframe the Problem",
+          "channel": "Landing Page (Above Fold)",
+          "message_angle": "It's not your fault, it's the old mechanism.",
+          "trigger_signal": "Time on Site > 45s",
+          "fallback_if_no_signal": "Exit Intent Popup (Lead Magnet)",
+          "metric": "Bounce Rate",
+          "expected_time": "Day 3 (Instant)"
+        },
+        {
+          "step_no": 3,
+          "goal": "Validate Solution Fit",
+          "channel": "Email Sequence / Demo",
+          "message_angle": "The 'New Mechanism' in action.",
+          "trigger_signal": "Reply / Booking",
+          "fallback_if_no_signal": "Downsell to 'Lite' version",
+          "metric": "Conversion Rate",
+          "expected_time": "Day 4-7"
+        },
+        {
+          "step_no": 4,
+          "goal": "Entangle Social Circles",
+          "channel": "Referral / Shared Content",
+          "message_angle": "Who else needs to see this?",
+          "trigger_signal": "Share Count",
+          "fallback_if_no_signal": "N/A",
+          "metric": "K-Factor",
+          "expected_time": "Day 7+"
+        },
+        {
+          "step_no": 5,
+          "goal": "Observation & Feedback",
+          "channel": "Survey / Usage Data",
+          "message_angle": "How did this change your workflow?",
+          "trigger_signal": "Response",
+          "fallback_if_no_signal": "Auto-reminder",
+          "metric": "NPS / CSAT",
+          "expected_time": "Day 14"
+        }
+      ],
+      "variants_for_AZ_testing": [
+        {
+          "variant_id": "Z",
+          "sequence_order": [
+            2,
+            1,
+            3,
+            4,
+            5
+          ],
+          "rationale": "Testing 'Problem Agitation' before 'Disruption' to filter for high intent."
+        }
+      ]
+    },
+    "experiments": {
+      "asset_tests": [
+        {
+          "id": "EXP-ylhor",
+          "title": "Creative Angle Test",
+          "type": "Asset (A/B/n)",
+          "hypothesis": "Social Proof (faces) outperforms Data Proof (charts) for this audience.",
+          "principle_tested": "Social Proof",
+          "setup": "A/B test on Step 1 Ad Creative.",
+          "cost_to_learn": "$200",
+          "stopping_rule": "50 Clicks per variant",
+          "success_threshold": "CTR diff > 20%",
+          "win_action": "Scale winner layout",
+          "lose_action": "Test 'Fear of Loss' angle next",
+          "linked_step_no": 1
+        }
+      ],
+      "sequence_tests": [
+        {
+          "id": "EXP-gbrm3",
+          "title": "Sequence Variant Test",
+          "type": "Sequence (A/Z)",
+          "hypothesis": "Showing 'Price' before 'Value' increases drop-off by 40%.",
+          "principle_tested": "Non-Commutativity",
+          "setup": "Variant A: Standard Flow. Variant Z: Pricing Table first.",
+          "cost_to_learn": "$500 ad spend",
+          "stopping_rule": "1000 Visits or 50 conversions in Control",
+          "success_threshold": "Variant Z beats A by >15% confident",
+          "win_action": "Adopt Price-First for high-intent traffic",
+          "lose_action": "Revert to Value-First standard",
+          "linked_step_no": 2
+        }
+      ]
+    },
+    "kpi_plan": {
+      "primary_kpi": "Conversion Rate",
+      "secondary_kpis": [
+        "CAC",
+        "Time to Close"
+      ],
+      "measurement_method": "Cohorted attribution",
+      "cadence": "Weekly",
+      "targets": "+10% MoM"
+    },
+    "trust_governance": {
+      "compliance_flags": [],
+      "privacy_consent_note": "Ensure explicit opt-in for email sequence.",
+      "transparency_note": "Disclose AI usage if chatbot agents are used.",
+      "bias_check_note": "Verify ad targeting excludes protected attributes.",
+      "claims_evidence_required": []
+    },
+    "confidence": {
+      "overall": "Medium",
+      "score": 72,
+      "data_needed_to_increase_confidence": [
+        "Historical CAC data",
+        "Competitor conversion benchmarks"
+      ]
+    },
+    "consultant_voice": {
+      "c_suite": {
+        "summary_card": {
+          "title": "Executive Summary",
+          "subtitle": "Strategic ROI Focus",
+          "focus_point": "Capital Efficiency"
+        },
+        "diagnosis_headline": "Strategic Constraint: Budget Velocity",
+        "strategic_angle": "We are trading speed for efficiency to minimize burn."
+      },
+      "growth": {
+        "summary_card": {
+          "title": "Growth Tactics",
+          "subtitle": "Execution Focus",
+          "focus_point": "Experiment Velocity"
+        },
+        "diagnosis_headline": "Funnel Bottleneck: Top-of-Funnel",
+        "strategic_angle": "Rapid A/Z testing to identify the breakout offer."
+      },
+      "creative": {
+        "summary_card": {
+          "title": "Creative Direction",
+          "subtitle": "Brand Resonance",
+          "focus_point": "Emotional Impact"
+        },
+        "diagnosis_headline": "The Emotional Disconnect",
+        "strategic_angle": "The brand feels too 'corporate'. We need to inject humanity."
+      }
+    }
+  }
+]

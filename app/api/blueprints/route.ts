@@ -14,7 +14,8 @@ export async function POST(request: Request) {
         }
 
         const blueprint = await generateBlueprint(body);
-        const id = saveBlueprint(blueprint);
+        saveBlueprint(blueprint);
+        const id = blueprint.id;
 
         return NextResponse.json({ id, blueprint }, { status: 201 });
     } catch (error) {

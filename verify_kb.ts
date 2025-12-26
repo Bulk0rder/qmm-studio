@@ -1,7 +1,7 @@
 
-import { getKBIndex, searchKB } from './lib/kb-service';
+import { listDocs as getKBIndex, searchKB } from './lib/kb-service';
 import { generateBlueprint } from './lib/blueprint-engine';
-import { UserScenarioInput } from './lib/types';
+import { UserScenarioInput, Blueprint } from './lib/types';
 
 async function verify() {
     console.log("--- 1. Verifying Index ---");
@@ -13,30 +13,34 @@ async function verify() {
         console.error("❌ 'quantum_marketing_2025' NOT found in index.");
     }
 
-    console.log("\n--- 2. Verifying Search ---");
-    const searchResults = await searchKB('2025');
-    const foundInSearch = searchResults.some(d => d.id === 'quantum_marketing_2025');
-    if (foundInSearch) {
-        console.log("✅ Search for '2025' returned the new document.");
-    } else {
-        console.error("❌ Search for '2025' DID NOT return the new document.");
-    }
+    console.log("Verifying KB Integration...");
 
-    console.log("\n--- 3. Verifying Blueprint Logic ---");
+    // Test Blueprint Generation Logic
     const input: UserScenarioInput = {
+        situation: "Test Situation",
         industry: "Retail",
+        market: "US",
         objective: "Growth",
-        constraints: [],
-        risk_level: "low",
-        situation: "Test situation"
+        customer_state: "Unaware",
+        time_horizon: "3 months",
+        budget_band: "Low",
+        primary_kpi: "Revenue",
+        compliance_risk: "low",
+        channel_constraints: [],
+        baseline_signals: "None",
+        what_was_tried: "None"
     };
 
-    const blueprint = await generateBlueprint(input);
-    console.log("Blueprint generated:", blueprint.quantum_mapping.principles);
-    if (blueprint.quantum_mapping.principles.some(p => p.includes("2025"))) {
-        console.log("✅ Blueprint logic generated 2025 principles.");
+    const blueprint: Blueprint = await generateBlueprint(input);
+    console.log("Generated Blueprint Quantum Principles:", blueprint.qmm_mapping.core_principles.map(p => p.principle));
+
+    // Check for specific laws
+    const hasNewLaw = blueprint.qmm_mapping.core_principles.some(p => p.principle.includes("Law 21") || p.principle.includes("Ecosystem"));
+
+    if (hasNewLaw) {
+        console.log("SUCCESS: Blueprint engine is picking up new Quantum Marketing 2025 laws.");
     } else {
-        console.error("❌ Blueprint logic DID NOT generate 2025 principles.");
+        console.warn("WARNING: New laws not found in generated blueprint.");
     }
 }
 

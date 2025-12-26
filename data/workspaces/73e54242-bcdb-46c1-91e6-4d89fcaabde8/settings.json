@@ -1,0 +1,10 @@
+{
+  "workspace_id": "73e54242-bcdb-46c1-91e6-4d89fcaabde8",
+  "display_name": "migugu",
+  "theme_preference": "system",
+  "defaults": {
+    "market": "Global",
+    "industry": "General",
+    "currency": "USD"
+  }
+}

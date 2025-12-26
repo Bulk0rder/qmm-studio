@@ -1,75 +1,106 @@
-// Server Component
-
+'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import Link from 'next/link';
+import { UI_COPY } from '@/lib/ui-copy';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Input } from '@/components/ui/Input';
+import { Search, Plus, ShieldCheck, Zap } from 'lucide-react';
+import { KBDoc } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
-import { getKBIndex, KBDoc } from '@/lib/kb-service';
 
-// Check if we can use server components or need client side fetch
-// mixing server logic imports in client component might fail if not careful.
-// For simplicity in this demo environment, let's assume we fetch from API or mock.
+import { BackButton } from '@/components/ui/BackButton';
 
-// Since kb-service is server-side (fs), we can't import it directly in 'use client' easily without server actions.
-// But as this is a prototype, let's create a server component page instead?
-// Or mock the data for now if API route isn't ready. 
-// Plan said: `api/kb/route.ts` optional.
+export default function KBPage() {
+    const { TITLE, SUBTITLE, SEARCH_PLACEHOLDER, COVERAGE_EMPTY_TITLE, COVERAGE_EMPTY_BODY, ADD_DOC } = UI_COPY.KB;
+    const [docs, setDocs] = useState<KBDoc[]>([]);
+    const [search, setSearch] = useState('');
+    const [loading, setLoading] = useState(true);
 
-// Let's make this a Server Component (remove 'use client')
-// But wait, my previous pages were 'use client'.
-// For safety/speed, I'll make it a Server Component to use `getKBIndex` directly.
+    useEffect(() => {
+        fetch('/api/kb/list')
+            .then(res => res.json())
+            .then(data => {
+                setDocs(data);
+                setLoading(false);
+            });
+    }, []);
 
-import { getKBIndex as fetchKB } from '@/lib/kb-service';
-
-export default async function KBPage() {
-    const docs = await fetchKB();
+    const filtered = docs.filter(d =>
+        d.title.toLowerCase().includes(search.toLowerCase()) ||
+        d.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
+    );
 
     return (
-        <div className="space-y-8 max-w-5xl mx-auto">
-            <div className="flex items-center justify-between pb-6 border-b">
-                <div>
-                    <h1 className="text-3xl font-bold">Knowledge Base</h1>
-                    <p className="text-gray-500">The "Brain" of the Scenario Librarian.</p>
-                </div>
-                <Button variant="outline">Refresh Index</Button>
-            </div>
-
-            <div className="grid gap-4">
-                {docs.length === 0 ? (
-                    <div className="p-12 text-center text-gray-500 bg-gray-50 rounded border border-dashed">
-                        No documents found. Check <code>/kb</code> directory.
+        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <BackButton />
+            <header className="space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-semibold tracking-tight text-app">{TITLE}</h1>
+                        <p className="text-muted text-lg mt-1">{SUBTITLE}</p>
                     </div>
-                ) : (
-                    docs.map((doc: any) => (
-                        <Card key={doc.id} className="hover:shadow-md transition-shadow cursor-pointer">
-                            <CardContent className="p-6 flex items-start justify-between">
-                                <div>
-                                    <div className="flex gap-2 items-center mb-2">
-                                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                                            {doc.type}
+                    <Button className="rounded-lg h-10 px-4">
+                        <Plus className="mr-2" size={16} />
+                        {ADD_DOC}
+                    </Button>
+                </div>
+
+                <div className="relative max-w-xl">
+                    <Search className="absolute left-3.5 top-3 text-muted" size={18} />
+                    <Input
+                        placeholder={SEARCH_PLACEHOLDER}
+                        className="pl-10 h-10 bg-white dark:bg-zinc-900 border-app text-app rounded-lg shadow-sm"
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                    />
+                </div>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {loading ? (
+                    [1, 2, 3].map(i => <div key={i} className="h-40 bg-zinc-100 dark:bg-zinc-800 rounded-lg animate-pulse"></div>)
+                ) : filtered.length > 0 ? (
+                    filtered.map(doc => (
+                        <Link href={`/kb/${doc.id}`} key={doc.id}>
+                            <Card className="h-full hover:shadow-md transition-all cursor-pointer border-app group bg-white dark:bg-zinc-900">
+                                <CardHeader className="pb-3">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div className={`p-1.5 rounded-md ${doc.type === 'Governance' ? 'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'}`}>
+                                            {doc.type === 'Governance' ? <ShieldCheck size={16} /> : <Zap size={16} />}
+                                        </div>
+                                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${doc.risk_level === 'high' ? 'border-red-200 text-red-600 bg-red-50' : 'border-zinc-200 text-muted bg-zinc-50'}`}>
+                                            {doc.risk_level} RISK
                                         </span>
-                                        {doc.risk_level === 'high' && (
-                                            <span className="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2 py-1 rounded">
-                                                High Risk
-                                            </span>
-                                        )}
                                     </div>
-                                    <h3 className="text-xl font-bold mb-1">{doc.title}</h3>
-                                    <p className="text-sm text-gray-500 font-mono">{doc.filepath}</p>
-                                    <div className="mt-3 flex flex-wrap gap-2">
-                                        {doc.tags?.map((tag: string) => (
-                                            <span key={tag} className="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded">#{tag}</span>
+                                    <CardTitle className="group-hover:text-blue-600 transition-colors text-lg leading-tight">{doc.title}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex flex-wrap gap-2">
+                                        {doc.tags.map(tag => (
+                                            <span key={tag} className="text-xs bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded text-muted">#{tag}</span>
                                         ))}
                                     </div>
-                                </div>
-                                <div className="text-gray-400">
-                                    Read &rarr;
-                                </div>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     ))
+                ) : (
+                    <div className="col-span-full py-20 text-center border-app rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50">
+                        <p className="text-muted font-medium">No documents found matching "{search}"</p>
+                    </div>
                 )}
             </div>
+
+            {!loading && filtered.length > 0 && (
+                <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 dark:bg-emerald-900/10 dark:border-emerald-900/30 p-6 flex gap-4 items-center">
+                    <ShieldCheck className="text-emerald-500 flex-shrink-0" size={24} />
+                    <div>
+                        <h4 className="font-semibold text-emerald-900 dark:text-emerald-100 text-sm">{COVERAGE_EMPTY_TITLE}</h4>
+                        <p className="text-sm text-emerald-800 dark:text-emerald-200 opacity-80 mt-1">{COVERAGE_EMPTY_BODY}</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

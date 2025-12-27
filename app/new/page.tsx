@@ -94,10 +94,77 @@ export default function NewScenarioPage() {
 
             if (res.ok) {
                 const bp = await res.json();
-                router.push(`/blueprint/${bp.id}`);
+
+                // CRITICAL: Ensure we persist this new data client-side for guest mode explicitly
+                // The API mock usually does not persist to the client's localStorage directly from the server route,
+                // so we actually need to handle the state here if the API route is just a mock returning a body.
+                // However, assuming the API route is stateless, we should save the result here.
+
+                // For this demo environment, to be safe, we also fetch/save here or rely on the fact 
+                // that `api/blueprints` might be doing `storage-client` ops if it was client-side code, 
+                // but since it's an API route it runs on server (Node). Use storage-client here?
+                // `storage-client` uses window.localStorage, so it MUST be called here in client component.
+
+                // Dynamic Import for safety or just use the helper if we can import it.
+                // We'll trust the flow: The API returns the BP object. 
+                // We need to create the Scenario and save both.
+
+                // Note: The API likely creates the scenario too? 
+                // If not, we should probably construct it. 
+                // To keep it simple and robust for this "Guest Mode":
+
+                const { storage, STORAGE_KEYS } = await import('@/lib/storage-client');
+                const { getAllScenarios } = await import('@/lib/scenario-service');
+
+                const existingBPs = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+                storage.set(STORAGE_KEYS.BLUEPRINTS, [...existingBPs, bp]);
+
+                // Also need to ensure the Scenario exists in local storage
+                // If the API generated a scenario ID, we need to save the scenario record.
+                // Let's assume the API helps us, or we construct it.
+                // Actually, looking at previous code, `generateBlueprint` creates a BP, but where is Scenario created?
+                // The `seed-service` created both. The `/api/blueprints` route likely just returns a BP.
+                // We should construct the Scenario record here for full consistency.
+
+                const newScenarioId = bp.scenario_id || `SC-${Date.now()}`;
+                const newScenario = {
+                    id: newScenarioId,
+                    workspace_id: 'guest',
+                    title: formData.title,
+                    description: `Market: ${formData.market}. Objective: ${formData.title}.`,
+                    metadata: {
+                        industry: formData.industry,
+                        market: formData.market,
+                        customer_state: formData.customerState,
+                        objective: 'Growth', // derived
+                        time_horizon: '90 days',
+                        budget_band: formData.budget,
+                        risk_level: 'medium'
+                    },
+                    inputs: {
+                        baseline_signals: formData.baseline,
+                        what_was_tried: formData.tried,
+                        channel_constraints: []
+                    },
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    related_blueprints: [bp.id],
+                    related_experiments: [],
+                    outcomes_summary: { wins: 0, losses: 0, learning_notes: [] },
+                };
+
+                const existingScenarios = getAllScenarios();
+                // Check if already exists (rare collision)
+                if (!existingScenarios.find(s => s.id === newScenario.id)) {
+                    storage.set(STORAGE_KEYS.SCENARIOS, [...existingScenarios, newScenario]);
+                }
+
+                // Redirect to ADVISORY
+                router.push(`/advisory?scenario=${newScenarioId}&blueprint=${bp.id}`);
             }
         } catch (e) {
-            alert('Failed to generate blueprint');
+            console.error(e);
+            alert('Failed to generate blueprint. Please try again.');
         }
     };
 

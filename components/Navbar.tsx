@@ -103,7 +103,6 @@ function AboutDropdown({ isActive }: { isActive: boolean }) {
             {isOpen && (
                 <div className="absolute top-[calc(100%+0.5rem)] left-0 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 z-50">
                     <div className="py-1">
-                        <Link href="/about" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-zinc-700 dark:text-zinc-300">About Us</Link>
                         <Link href="/about/how-to-use" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-zinc-700 dark:text-zinc-300">{UI_COPY.NAV.HOW_TO_USE}</Link>
                         <Link href="/about/usefulness" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-zinc-700 dark:text-zinc-300">{UI_COPY.NAV.USEFULNESS}</Link>
                     </div>

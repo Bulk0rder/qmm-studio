@@ -22,9 +22,9 @@ export default function Home() {
         }
     }, []);
 
-    const handleSeed = () => {
+    const handleSeed = async () => {
         if (confirm("This will overwrite your current guest data with 30 sample scenarios. Continue?")) {
-            seedSampleData();
+            await seedSampleData();
             window.location.reload();
         }
     };

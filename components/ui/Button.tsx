@@ -15,11 +15,11 @@ export function Button({
     const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none";
 
     const variants = {
-        primary: "bg-black dark:bg-white text-white dark:text-black hover:opacity-90 shadow-sm",
-        secondary: "bg-transparent border border-app text-app hover:bg-zinc-100 dark:hover:bg-zinc-800",
-        outline: "border border-app bg-transparent text-app hover:bg-zinc-50 dark:hover:bg-zinc-800",
-        ghost: "hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted hover:text-app",
-        danger: "bg-red-500 text-white hover:bg-red-600 shadow-sm",
+        primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+        secondary: "bg-background border border-border text-foreground hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
     };
 
     const sizes = {

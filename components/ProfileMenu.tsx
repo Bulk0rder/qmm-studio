@@ -48,27 +48,27 @@ export function ProfileMenu({ displayName }: ProfileMenuProps) {
 
             {isOpen && (
 
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg hover:shadow-xl transition-all p-1 z-50">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-popover border border-border rounded-xl shadow-lg hover:shadow-xl transition-all p-1 z-50">
                     <div className="p-1">
-                        <div className="px-3 py-1 text-xs text-muted mb-1 font-medium">{UI_COPY.PROFILE_MENU.ITEMS.APPEARANCE}</div>
+                        <div className="px-3 py-1 text-xs text-muted-foreground mb-1 font-medium">{UI_COPY.PROFILE_MENU.ITEMS.APPEARANCE}</div>
                         <div className="grid grid-cols-3 gap-1 px-1">
                             <button
                                 onClick={() => setTheme('light')}
-                                className={`flex flex-col items-center justify-center py-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors ${theme === 'light' ? 'bg-zinc-100 dark:bg-zinc-800 text-blue-600' : 'text-muted'}`}
+                                className={`flex flex-col items-center justify-center py-2 rounded-md hover:bg-accent transition-colors ${theme === 'light' ? 'bg-accent text-primary' : 'text-muted-foreground'}`}
                                 title={UI_COPY.PROFILE_MENU.THEME.LIGHT}
                             >
                                 <Sun size={16} />
                             </button>
                             <button
                                 onClick={() => setTheme('dark')}
-                                className={`flex flex-col items-center justify-center py-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors ${theme === 'dark' ? 'bg-zinc-100 dark:bg-zinc-800 text-blue-600' : 'text-muted'}`}
+                                className={`flex flex-col items-center justify-center py-2 rounded-md hover:bg-accent transition-colors ${theme === 'dark' ? 'bg-accent text-primary' : 'text-muted-foreground'}`}
                                 title={UI_COPY.PROFILE_MENU.THEME.DARK}
                             >
                                 <Moon size={16} />
                             </button>
                             <button
                                 onClick={() => setTheme('system')}
-                                className={`flex flex-col items-center justify-center py-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors ${theme === 'system' ? 'bg-zinc-100 dark:bg-zinc-800 text-blue-600' : 'text-muted'}`}
+                                className={`flex flex-col items-center justify-center py-2 rounded-md hover:bg-accent transition-colors ${theme === 'system' ? 'bg-accent text-primary' : 'text-muted-foreground'}`}
                                 title={UI_COPY.PROFILE_MENU.THEME.SYSTEM}
                             >
                                 <Monitor size={16} />
@@ -76,10 +76,10 @@ export function ProfileMenu({ displayName }: ProfileMenuProps) {
                         </div>
                     </div>
 
-                    <div className="border-t border-zinc-100 dark:border-zinc-800 my-1"></div>
+                    <div className="border-t border-border my-1"></div>
 
                     <div className="p-1">
-                        <div className="px-3 py-1 text-xs text-muted mb-1 font-medium">Workspace</div>
+                        <div className="px-3 py-1 text-xs text-muted-foreground mb-1 font-medium">Workspace</div>
                         <button
                             onClick={() => {
                                 if (confirm('Reset workspace data? Doing this preserves nothing.')) {
@@ -87,21 +87,21 @@ export function ProfileMenu({ displayName }: ProfileMenuProps) {
                                     window.location.reload();
                                 }
                             }}
-                            className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+                            className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent rounded-md transition-colors"
                         >
                             <Users size={16} />
                             Reset Workspace
                         </button>
-                        <button className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors">
+                        <button className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent rounded-md transition-colors">
                             <Settings size={16} />
                             Settings
                         </button>
                     </div>
 
-                    <div className="border-t border-zinc-100 dark:border-zinc-800 my-1"></div>
+                    <div className="border-t border-border my-1"></div>
 
                     <div className="p-1">
-                        <a href="/logout" className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-md transition-colors" role="menuitem">
+                        <a href="/logout" className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors" role="menuitem">
                             <LogOut size={16} />
                             {UI_COPY.PROFILE_MENU.ITEMS.LOGOUT}
                         </a>

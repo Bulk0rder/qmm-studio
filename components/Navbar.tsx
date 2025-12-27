@@ -23,12 +23,12 @@ export function Navbar({ session }: NavbarProps) {
     const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-app h-16 transition-all">
+        <nav className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border h-16 transition-all">
             <div className="max-w-[1200px] mx-auto px-6 h-full flex items-center justify-between">
 
                 {/* LEFT: Navigation Links */}
                 <div className="flex gap-1 items-center overflow-x-auto no-scrollbar mask-gradient-right md:mask-none">
-                    <div className="flex gap-1 items-center bg-zinc-100/50 dark:bg-zinc-900/50 p-1 rounded-full border border-black/5 dark:border-white/5">
+                    <div className="flex gap-1 items-center bg-secondary/50 p-1 rounded-full border border-border">
                         <NavLink href="/new" active={isActive('/new')}>{UI_COPY.NAV.NEW_SCENARIO}</NavLink>
                         <NavLink href="/library" active={isActive('/library')}>{UI_COPY.NAV.SCENARIO_LIBRARY}</NavLink>
                         <NavLink href="/experiments" active={isActive('/experiments')}>{UI_COPY.NAV.EXPERIMENTS}</NavLink>

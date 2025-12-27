@@ -1,6 +1,7 @@
 import { Scenario } from './types';
 import { storage, STORAGE_KEYS } from './storage-client';
-import seeds from '@/data/scenarios.json';
+// Import seed pack
+import seedPack from '@/data/seed-pack.json';
 
 // Simulated Embedding/Vector Search
 export interface ScoredScenario extends Scenario {
@@ -12,80 +13,122 @@ export const getAllScenarios = (): Scenario[] => {
     return storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
 };
 
+import { Blueprint } from './types';
+import { generateBlueprint } from './blueprint-engine';
+
 export const saveScenario = (scenario: Scenario): void => {
     const existing = getAllScenarios();
     storage.set(STORAGE_KEYS.SCENARIOS, [scenario, ...existing]);
 };
 
-// Import Blueprint Type
-import { Blueprint } from './types';
-import { generateBlueprint } from './blueprint-engine';
+export const seedSampleData = async (): Promise<string> => {
+    // 1. Get existing data
+    const existingScenarios = getAllScenarios();
+    const existingExperiments = storage.get<any[]>(STORAGE_KEYS.EXPERIMENTS) || [];
 
-export const seedSampleData = async (): Promise<void> => {
-    const existing = getAllScenarios();
-    if (existing.length > 0) return;
+    // Map for fast lookup
+    const scenarioMap = new Map(existingScenarios.map(s => [s.id, s]));
+    const experimentMap = new Map(existingExperiments.map(e => [e.experiment_id, e]));
 
-    const newScenarios: Scenario[] = [];
+    let addedScenarios = 0;
+    let addedExperiments = 0;
+
     const newBlueprints: Blueprint[] = [];
 
-    for (const s of (seeds as any[])) {
-        // 1. Create Scenario
-        const scenarioId = s.scenario_id;
-        const newScenario: Scenario = {
-            id: scenarioId,
-            workspace_id: 'guest',
-            title: s.title,
-            description: `Market: ${s.market}. Objective: ${s.objective || 'Optimization'}.`,
-            metadata: {
+    // 2. Process Scenarios
+    for (const s of seedPack.scenarios) {
+        if (!scenarioMap.has(s.scenario_id)) {
+            // Create Scenario
+            const newScenario: Scenario = {
+                id: s.scenario_id,
+                workspace_id: 'guest',
+                title: s.title,
+                description: `Market: ${s.market}. Objective: ${s.objective}.`,
+                metadata: {
+                    industry: s.industry,
+                    market: s.market,
+                    customer_state: s.customer_state,
+                    objective: s.objective,
+                    time_horizon: '90 days',
+                    budget_band: s.budget_band,
+                    risk_level: 'medium'
+                },
+                inputs: {
+                    baseline_signals: JSON.stringify(s.baseline_signals),
+                    what_was_tried: 'N/A',
+                    channel_constraints: s.constraints || []
+                },
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                related_blueprints: [],
+                related_experiments: (s as any).related_experiments || [], // Will be populated by linking logic if needed, but we rely on experiment objects having scenario_id
+                outcomes_summary: { wins: 0, losses: 0, learning_notes: [] },
+            };
+
+            // Generate Blueprint
+            const mockInput = {
+                situation: s.title,
                 industry: s.industry,
                 market: s.market,
+                objective: s.objective,
                 customer_state: s.customer_state,
-                objective: s.objective || 'Growth',
                 time_horizon: '90 days',
-                budget_band: 'Variable',
-                risk_level: 'medium'
-            },
-            inputs: {
-                baseline_signals: (s.signals || []).join(', '),
-                what_was_tried: 'N/A',
-                channel_constraints: []
-            },
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            related_blueprints: [],
-            related_experiments: [],
-            outcomes_summary: { wins: Math.floor(Math.random() * 5), losses: 0, learning_notes: [] },
-        };
+                budget_band: s.budget_band,
+                primary_kpi: 'Conversion', // Default
+                compliance_risk: 'medium' as const,
+                channel_constraints: s.channels || [],
+                baseline_signals: JSON.stringify(s.baseline_signals),
+                what_was_tried: '',
+                anchorScenarioId: s.scenario_id,
+                title: s.title
+            };
 
-        // 2. Mock Input for Blueprint Engine
-        const mockInput = {
-            situation: s.title,
-            industry: s.industry,
-            market: s.market,
-            objective: s.objective || 'Growth',
-            customer_state: s.customer_state,
-            time_horizon: '90 days',
-            budget_band: 'Medium',
-            primary_kpi: 'Conversion',
-            compliance_risk: 'medium' as const,
-            channel_constraints: [],
-            baseline_signals: '',
-            what_was_tried: '',
-            anchorScenarioId: scenarioId,
-            title: s.title // Extra field for title
-        };
+            const bp = await generateBlueprint(mockInput);
+            newScenario.related_blueprints.push(bp.id);
+            newBlueprints.push(bp);
 
-        // 3. Generate Blueprint
-        const bp = await generateBlueprint(mockInput);
-        newBlueprints.push(bp);
-
-        // 4. Link
-        newScenario.related_blueprints.push(bp.id);
-        newScenarios.push(newScenario);
+            scenarioMap.set(newScenario.id, newScenario);
+            addedScenarios++;
+        }
     }
 
-    storage.set(STORAGE_KEYS.SCENARIOS, newScenarios);
-    storage.set(STORAGE_KEYS.BLUEPRINTS, newBlueprints);
+    // 3. Process Experiments
+    for (const e of seedPack.experiments) {
+        if (!experimentMap.has(e.experiment_id)) {
+            const newExperiment = {
+                ...e,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                status: 'planned' as const // Enforce default status
+            };
+            experimentMap.set(e.experiment_id, newExperiment);
+            addedExperiments++;
+
+            // Link to Scenario (Bi-directional if needed, but primary link is distinct)
+            // Ideally we update the scenario's related_experiments array too
+            const linkedScenario = scenarioMap.get(e.scenario_id);
+            if (linkedScenario) {
+                if (!linkedScenario.related_experiments) linkedScenario.related_experiments = [];
+                if (!linkedScenario.related_experiments.includes(e.experiment_id)) {
+                    linkedScenario.related_experiments.push(e.experiment_id);
+                }
+            }
+        }
+    }
+
+    // 4. Save
+    if (addedScenarios > 0 || addedExperiments > 0) {
+        storage.set(STORAGE_KEYS.SCENARIOS, Array.from(scenarioMap.values()));
+        storage.set(STORAGE_KEYS.EXPERIMENTS, Array.from(experimentMap.values()));
+
+        // Append new blueprints to existing ones
+        if (newBlueprints.length > 0) {
+            const existingBPs = storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+            storage.set(STORAGE_KEYS.BLUEPRINTS, [...existingBPs, ...newBlueprints]);
+        }
+    }
+
+    return `Seeded ${addedScenarios} scenarios + ${addedExperiments} experiments`;
 };
 
 export function searchScenarios(

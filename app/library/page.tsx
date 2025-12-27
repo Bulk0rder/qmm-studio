@@ -18,9 +18,15 @@ export default function LibraryPage() {
         setLoading(false);
     }, []);
 
-    const handleSeed = () => {
-        seedSampleData();
+    const handleSeed = async () => {
+        setLoading(true);
+        const result = await seedSampleData();
         setScenarios(getAllScenarios());
+        setLoading(false);
+        // Simple alert for now, could be a toast
+        if (result.includes('Seeded')) {
+            alert(result);
+        }
     };
 
     return (

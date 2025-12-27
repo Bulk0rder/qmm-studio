@@ -1,0 +1,1492 @@
+{
+    "seed_version": "2025-12-27",
+    "scenarios": [
+        {
+            "scenario_id": "QMM-SC-001",
+            "title": "CAC spike after competitor promo (no comparative claims)",
+            "industry": "Fintech",
+            "market": "Nigeria/Africa",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Acquisition+Conversion",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "cvr": "1.1%",
+                "cac": "+35%",
+                "kyc_dropoff": "42%",
+                "churn": "stable"
+            },
+            "channels": [
+                "Meta",
+                "Google",
+                "App Store",
+                "Referral"
+            ],
+            "constraints": [
+                "No comparative claims",
+                "30-day response window"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-002",
+            "title": "Transfer delays creating trust crisis",
+            "industry": "Banking",
+            "market": "Nigeria",
+            "customer_state": "Retention",
+            "objective": "Reputation+Retention",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "rating": "3.2→2.9",
+                "churn": "+18%",
+                "tickets": "+40%"
+            },
+            "channels": [
+                "In-app",
+                "Email",
+                "X",
+                "Support"
+            ],
+            "constraints": [
+                "Do not overpromise reliability"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-003",
+            "title": "Price increase causes volume decline; retailers push competitors",
+            "industry": "FMCG",
+            "market": "Africa",
+            "customer_state": "Consideration",
+            "objective": "Share Defense",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "volume": "-15%",
+                "distribution": "-8%",
+                "repeat": "slipping"
+            },
+            "channels": [
+                "Trade",
+                "Radio",
+                "In-store",
+                "WhatsApp"
+            ],
+            "constraints": [
+                "Avoid heavy discounting"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-004",
+            "title": "Checkout abandonment spikes due to delivery uncertainty",
+            "industry": "E-commerce",
+            "market": "Nigeria",
+            "customer_state": "Conversion",
+            "objective": "Conversion Lift",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "cart_to_purchase": "18%→10%",
+                "complaints": "delivery fee/ETA"
+            },
+            "channels": [
+                "Web",
+                "App",
+                "SMS",
+                "Retargeting"
+            ],
+            "constraints": [
+                "21-day sprint"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-005",
+            "title": "Trial-to-paid stuck; usage drops after Day 3",
+            "industry": "SaaS",
+            "market": "Global",
+            "customer_state": "Activation→Retention",
+            "objective": "Activation+Monetization",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "day3_retention": "22%",
+                "trial_to_paid": "4.5%",
+                "adoption": "low"
+            },
+            "channels": [
+                "Lifecycle",
+                "In-app"
+            ],
+            "constraints": [
+                "No major new features"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-006",
+            "title": "Telecom promo fatigue; opt-outs rising",
+            "industry": "Telecom",
+            "market": "Africa",
+            "customer_state": "Awareness→Consideration",
+            "objective": "Engagement+Brand Health",
+            "budget_band": "High",
+            "baseline_signals": {
+                "ctr": "-30%",
+                "optout": "+25%",
+                "recall": "down"
+            },
+            "channels": [
+                "SMS",
+                "USSD",
+                "Social"
+            ],
+            "constraints": [
+                "High frequency history"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-007",
+            "title": "Education leads high but enrollments falling (trust gap)",
+            "industry": "Education",
+            "market": "Nigeria",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Conversion+Credibility",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "lead_to_enroll": "7%→3%",
+                "objections": "rising"
+            },
+            "channels": [
+                "WhatsApp",
+                "Tours",
+                "Instagram"
+            ],
+            "constraints": [
+                "Proof-driven needed"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-008",
+            "title": "Wellness brand cannot make strong claims (compliance constraint)",
+            "industry": "Health/Wellness",
+            "market": "Africa",
+            "customer_state": "Awareness→Consideration",
+            "objective": "Demand Growth (compliant)",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "ctr": "ok",
+                "cvr": "low",
+                "questions": "does it work?"
+            },
+            "channels": [
+                "Content",
+                "Retail",
+                "Influencers"
+            ],
+            "constraints": [
+                "No performance/medical claims"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-009",
+            "title": "B2B deals stall after proposal; stakeholders go quiet",
+            "industry": "B2B Services",
+            "market": "Nigeria/Africa",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Close Rate+Cycle Reduction",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "proposal_to_close": "18%→9%",
+                "cycle": "+40%"
+            },
+            "channels": [
+                "Email",
+                "LinkedIn"
+            ],
+            "constraints": [
+                "Multi-stakeholder approval"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-010",
+            "title": "Hospitality reviews drop; corporate bookings decline",
+            "industry": "Hospitality",
+            "market": "Nigeria",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Reputation+Revenue Recovery",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "reviews": "4.4→4.0",
+                "bookings": "-12%",
+                "complaint": "service speed"
+            },
+            "channels": [
+                "Google",
+                "Email",
+                "Front desk"
+            ],
+            "constraints": [
+                "Fix experience signals"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-011",
+            "title": "Creator growth plateau; shares dropping",
+            "industry": "Media/Creator",
+            "market": "Global",
+            "customer_state": "Awareness→Advocacy",
+            "objective": "Distribution+Virality",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "shares": "-20%",
+                "saves": "down",
+                "watch_time": "stable"
+            },
+            "channels": [
+                "TikTok",
+                "IG",
+                "YouTube",
+                "Newsletter"
+            ],
+            "constraints": [
+                "No gimmicks"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-012",
+            "title": "Donations spike then disappear (no retention model)",
+            "industry": "Nonprofit",
+            "market": "Africa",
+            "customer_state": "Retention→Advocacy",
+            "objective": "Recurring Giving",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "recurring": "8%",
+                "repeat": "low",
+                "open_rate": "ok"
+            },
+            "channels": [
+                "Email",
+                "WhatsApp",
+                "Web"
+            ],
+            "constraints": [
+                "Low budget"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-013",
+            "title": "Insurance quote starts high; policy completion low",
+            "industry": "Insurance",
+            "market": "Nigeria",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Conversion",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "quote_to_buy": "low",
+                "dropoff": "documents stage"
+            },
+            "channels": [
+                "Web",
+                "Agent",
+                "WhatsApp"
+            ],
+            "constraints": [
+                "Trust+complexity"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-014",
+            "title": "Logistics on-time is good but complaints persist (perception gap)",
+            "industry": "Logistics",
+            "market": "Africa",
+            "customer_state": "Retention",
+            "objective": "Experience+Retention",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "on_time": "92%",
+                "complaints": "high",
+                "churn": "rising"
+            },
+            "channels": [
+                "Tracking",
+                "Support",
+                "Email"
+            ],
+            "constraints": [
+                "Perception vs reality"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-015",
+            "title": "Real estate: tours happen, closes don’t (trust/financing friction)",
+            "industry": "Real Estate",
+            "market": "Nigeria",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Close Rate",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "visit_to_close": "low",
+                "decision_time": "long"
+            },
+            "channels": [
+                "IG",
+                "YouTube",
+                "Sales"
+            ],
+            "constraints": [
+                "Title/approval proof needed"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-016",
+            "title": "Ride cancellations rising due to driver shortage",
+            "industry": "Mobility",
+            "market": "Africa",
+            "customer_state": "Retention",
+            "objective": "Reliability+Retention",
+            "budget_band": "High",
+            "baseline_signals": {
+                "cancellations": "up",
+                "ratings": "down"
+            },
+            "channels": [
+                "In-app",
+                "Push"
+            ],
+            "constraints": [
+                "Supply-demand imbalance"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-017",
+            "title": "Utilities: prepaid customers distrust meter readings",
+            "industry": "Utilities",
+            "market": "Nigeria",
+            "customer_state": "Retention",
+            "objective": "Trust+Churn Reduction",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "complaints": "high",
+                "topups": "down"
+            },
+            "channels": [
+                "SMS",
+                "USSD",
+                "Community"
+            ],
+            "constraints": [
+                "Low trust environment"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-018",
+            "title": "Agritech: sign-ups growing but usage near zero (low digital literacy)",
+            "industry": "Agritech",
+            "market": "Africa",
+            "customer_state": "Activation",
+            "objective": "Activation+Retention",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "activation": "low",
+                "repeat": "low"
+            },
+            "channels": [
+                "Field agents",
+                "WhatsApp",
+                "Radio"
+            ],
+            "constraints": [
+                "Low digital literacy"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-019",
+            "title": "Payments: merchant onboarding stalls at KYB compliance stage",
+            "industry": "Payments",
+            "market": "Nigeria",
+            "customer_state": "Conversion",
+            "objective": "Merchant Activation",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "completion": "low",
+                "dropoff": "confusion/docs"
+            },
+            "channels": [
+                "Sales",
+                "WhatsApp",
+                "Web"
+            ],
+            "constraints": [
+                "KYB compliance"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-020",
+            "title": "Pharma: trust low due to counterfeits; awareness high",
+            "industry": "Pharma",
+            "market": "Africa",
+            "customer_state": "Consideration",
+            "objective": "Trust+Conversion",
+            "budget_band": "High",
+            "baseline_signals": {
+                "awareness": "high",
+                "intent": "low"
+            },
+            "channels": [
+                "Retail",
+                "Radio",
+                "In-store"
+            ],
+            "constraints": [
+                "Regulatory claims limits"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-021",
+            "title": "Travel: search traffic up, bookings down (fee shock at payment)",
+            "industry": "Travel",
+            "market": "Global",
+            "customer_state": "Conversion",
+            "objective": "Checkout Conversion",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "traffic": "up",
+                "bookings": "down",
+                "dropoff": "payment"
+            },
+            "channels": [
+                "SEO",
+                "Paid search",
+                "Email"
+            ],
+            "constraints": [
+                "FX/fees volatility"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-022",
+            "title": "Gaming: installs high, Day-1 retention poor (tutorial dropoff)",
+            "industry": "Gaming",
+            "market": "Global",
+            "customer_state": "Activation→Retention",
+            "objective": "Retention",
+            "budget_band": "High",
+            "baseline_signals": {
+                "d1_retention": "low",
+                "tutorial_dropoff": "high"
+            },
+            "channels": [
+                "UA",
+                "In-game"
+            ],
+            "constraints": [
+                "No major content drop"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-023",
+            "title": "Luxury fashion: premium brand, low online conversion (trust gap)",
+            "industry": "Fashion/Luxury",
+            "market": "Nigeria",
+            "customer_state": "Consideration→Conversion",
+            "objective": "Conversion",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "traffic": "ok",
+                "checkout": "low"
+            },
+            "channels": [
+                "IG",
+                "Web",
+                "WhatsApp concierge"
+            ],
+            "constraints": [
+                "High intent; low certainty"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-024",
+            "title": "Food delivery: repeat orders drop after first promo (promo dependency)",
+            "industry": "Food Delivery",
+            "market": "Nigeria",
+            "customer_state": "Retention",
+            "objective": "Repeat Purchase",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "repeat": "down",
+                "promo_share": "high"
+            },
+            "channels": [
+                "Push",
+                "In-app"
+            ],
+            "constraints": [
+                "Protect margin"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-025",
+            "title": "Recruitment: applicants high, quality low (signal-to-noise problem)",
+            "industry": "HR/Recruitment",
+            "market": "Global",
+            "customer_state": "Consideration",
+            "objective": "Quality+Fit",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "applications": "high",
+                "qualified": "low"
+            },
+            "channels": [
+                "LinkedIn",
+                "Job boards",
+                "Community"
+            ],
+            "constraints": [
+                "Reduce noise ethically"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-026",
+            "title": "Edtech: course completion collapsing (drop at week 2)",
+            "industry": "Edtech",
+            "market": "Africa",
+            "customer_state": "Retention",
+            "objective": "Completion+Retention",
+            "budget_band": "Low",
+            "baseline_signals": {
+                "completion": "low",
+                "drop_point": "week 2"
+            },
+            "channels": [
+                "Email",
+                "In-app",
+                "Community"
+            ],
+            "constraints": [
+                "Motivation drop"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-027",
+            "title": "Public campaign: high reach, zero behavior change (low trust + misinformation)",
+            "industry": "Public Sector",
+            "market": "Nigeria",
+            "customer_state": "Awareness→Action",
+            "objective": "Behavior Change",
+            "budget_band": "High",
+            "baseline_signals": {
+                "reach": "high",
+                "action": "low"
+            },
+            "channels": [
+                "Radio",
+                "Community leaders",
+                "SMS"
+            ],
+            "constraints": [
+                "High misinformation risk"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-028",
+            "title": "Manufacturing: distributors delay orders due to cashflow fears",
+            "industry": "Manufacturing",
+            "market": "Africa",
+            "customer_state": "Retention",
+            "objective": "Channel Orders+Retention",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "orders": "down",
+                "payment_delay": "up"
+            },
+            "channels": [
+                "Trade visits",
+                "WhatsApp",
+                "Credit terms"
+            ],
+            "constraints": [
+                "Liquidity concerns"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-029",
+            "title": "Micro-lending: repayments drop after month 1 (defaults rising)",
+            "industry": "Lending",
+            "market": "Nigeria",
+            "customer_state": "Retention",
+            "objective": "Repayment+Retention",
+            "budget_band": "Medium",
+            "baseline_signals": {
+                "defaults": "rising",
+                "repayment": "down"
+            },
+            "channels": [
+                "In-app",
+                "SMS",
+                "Call center"
+            ],
+            "constraints": [
+                "Ethical collections"
+            ]
+        },
+        {
+            "scenario_id": "QMM-SC-030",
+            "title": "Repositioning: brand known for one thing, launching new category",
+            "industry": "Multi-category Brand",
+            "market": "Africa",
+            "customer_state": "Awareness→Consideration",
+            "objective": "Repositioning+Adoption",
+            "budget_band": "High",
+            "baseline_signals": {
+                "association": "narrow",
+                "interest": "uncertain"
+            },
+            "channels": [
+                "PR",
+                "Social",
+                "Experiential",
+                "Retail"
+            ],
+            "constraints": [
+                "Don’t alienate core users"
+            ]
+        }
+    ],
+    "experiments": [
+        {
+            "experiment_id": "QMM-EXP-001",
+            "scenario_id": "QMM-SC-001",
+            "title": "Proof-led vs offer-led acquisition creative",
+            "hypothesis": "Proof-led messaging reduces CAC by improving qualified conversion without comparative claims.",
+            "primary_kpi": "CAC",
+            "secondary_kpis": [
+                "CVR",
+                "KYC completion",
+                "CPI"
+            ],
+            "duration_days": 14,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-002",
+            "scenario_id": "QMM-SC-001",
+            "title": "KYC step order: short-first vs full-first",
+            "hypothesis": "Short-first KYC increases completion and overall conversion.",
+            "primary_kpi": "KYC completion",
+            "secondary_kpis": [
+                "CVR",
+                "Day-7 activation"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-003",
+            "scenario_id": "QMM-SC-002",
+            "title": "In-app status banner vs silent handling",
+            "hypothesis": "Proactive transparency reduces tickets and churn during delays.",
+            "primary_kpi": "Tickets per user",
+            "secondary_kpis": [
+                "Churn",
+                "CSAT"
+            ],
+            "duration_days": 14,
+            "status": "planned",
+            "owner_role": "CX"
+        },
+        {
+            "experiment_id": "QMM-EXP-004",
+            "scenario_id": "QMM-SC-002",
+            "title": "Support SLA page + expectation setting",
+            "hypothesis": "Clear expectations improve trust even when performance varies.",
+            "primary_kpi": "CSAT",
+            "secondary_kpis": [
+                "NPS",
+                "Churn"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "CX"
+        },
+        {
+            "experiment_id": "QMM-EXP-005",
+            "scenario_id": "QMM-SC-003",
+            "title": "Bundle value messaging vs unit value messaging",
+            "hypothesis": "Bundle framing protects volume without heavy discounting.",
+            "primary_kpi": "Units per transaction",
+            "secondary_kpis": [
+                "Repeat rate",
+                "Retail sell-through"
+            ],
+            "duration_days": 28,
+            "status": "planned",
+            "owner_role": "Trade"
+        },
+        {
+            "experiment_id": "QMM-EXP-006",
+            "scenario_id": "QMM-SC-003",
+            "title": "Retail compliance incentive tiers",
+            "hypothesis": "Tiered incentives lift numeric distribution more efficiently than flat incentives.",
+            "primary_kpi": "Numeric distribution",
+            "secondary_kpis": [
+                "Share of shelf",
+                "Volume"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Trade"
+        },
+        {
+            "experiment_id": "QMM-EXP-007",
+            "scenario_id": "QMM-SC-004",
+            "title": "Show delivery ETA on PDP vs at checkout",
+            "hypothesis": "Earlier certainty reduces checkout abandonment.",
+            "primary_kpi": "Checkout completion",
+            "secondary_kpis": [
+                "CVR",
+                "AOV"
+            ],
+            "duration_days": 14,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-008",
+            "scenario_id": "QMM-SC-004",
+            "title": "Flat delivery fee vs threshold free-delivery",
+            "hypothesis": "Simpler shipping policy increases conversion even if AOV changes.",
+            "primary_kpi": "CVR",
+            "secondary_kpis": [
+                "AOV",
+                "Margin"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-009",
+            "scenario_id": "QMM-SC-005",
+            "title": "Task-based onboarding vs guided tour",
+            "hypothesis": "Task-based onboarding improves Aha completion and retention.",
+            "primary_kpi": "Aha completion",
+            "secondary_kpis": [
+                "Day-7 retention",
+                "Trial-to-paid"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-010",
+            "scenario_id": "QMM-SC-005",
+            "title": "Upgrade prompt at value moment vs end-of-trial",
+            "hypothesis": "Value-moment upsell increases trial-to-paid without harming trust.",
+            "primary_kpi": "Trial-to-paid",
+            "secondary_kpis": [
+                "Retention",
+                "Support tickets"
+            ],
+            "duration_days": 28,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-011",
+            "scenario_id": "QMM-SC-006",
+            "title": "Frequency cap vs no cap",
+            "hypothesis": "Reducing message frequency lowers opt-outs without reducing sales.",
+            "primary_kpi": "Opt-out rate",
+            "secondary_kpis": [
+                "Recharge rate",
+                "CTR"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "CRM"
+        },
+        {
+            "experiment_id": "QMM-EXP-012",
+            "scenario_id": "QMM-SC-006",
+            "title": "Segmented relevance messaging vs generic promos",
+            "hypothesis": "Segmented messages restore attention and engagement.",
+            "primary_kpi": "CTR",
+            "secondary_kpis": [
+                "Bundle activation",
+                "Unsubscribes"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "CRM"
+        },
+        {
+            "experiment_id": "QMM-EXP-013",
+            "scenario_id": "QMM-SC-007",
+            "title": "Proof pack nurture vs discount-led nurture",
+            "hypothesis": "Proof-first reduces objections and increases enrollments.",
+            "primary_kpi": "Enroll rate",
+            "secondary_kpis": [
+                "Show-up rate",
+                "Cost per enrollment"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Marketing"
+        },
+        {
+            "experiment_id": "QMM-EXP-014",
+            "scenario_id": "QMM-SC-007",
+            "title": "WhatsApp objection-handling sequence",
+            "hypothesis": "Structured objection handling increases conversion from leads.",
+            "primary_kpi": "Lead-to-enroll",
+            "secondary_kpis": [
+                "Reply rate",
+                "Time-to-decision"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-015",
+            "scenario_id": "QMM-SC-008",
+            "title": "Education-first landing vs direct CTA landing",
+            "hypothesis": "Education-first increases trust and improves CVR under claim limits.",
+            "primary_kpi": "CVR",
+            "secondary_kpis": [
+                "Time on page",
+                "FAQ clicks"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-016",
+            "scenario_id": "QMM-SC-008",
+            "title": "Routine-builder lifecycle vs promo lifecycle",
+            "hypothesis": "Routine-building increases repeat purchases without claims.",
+            "primary_kpi": "Repeat purchase rate",
+            "secondary_kpis": [
+                "Email CTR",
+                "Refund rate"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "CRM"
+        },
+        {
+            "experiment_id": "QMM-EXP-017",
+            "scenario_id": "QMM-SC-009",
+            "title": "Champion kit vs standard follow-up",
+            "hypothesis": "Champion enablement reduces cycle length and increases closes.",
+            "primary_kpi": "Cycle length",
+            "secondary_kpis": [
+                "Close rate",
+                "Stakeholder engagement"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-018",
+            "scenario_id": "QMM-SC-009",
+            "title": "Pilot offer vs full contract",
+            "hypothesis": "Pilot lowers perceived risk and improves proposal acceptance.",
+            "primary_kpi": "Proposal acceptance",
+            "secondary_kpis": [
+                "Close rate",
+                "Expansion rate"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-019",
+            "scenario_id": "QMM-SC-010",
+            "title": "In-stay micro-feedback vs post-stay feedback",
+            "hypothesis": "In-stay feedback catches issues early and lifts ratings.",
+            "primary_kpi": "Average rating",
+            "secondary_kpis": [
+                "Issue resolution time",
+                "Repeat bookings"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Ops"
+        },
+        {
+            "experiment_id": "QMM-EXP-020",
+            "scenario_id": "QMM-SC-010",
+            "title": "Corporate SLA messaging vs promo messaging",
+            "hypothesis": "SLA clarity restores corporate demand better than discounts.",
+            "primary_kpi": "Corporate bookings",
+            "secondary_kpis": [
+                "Revenue",
+                "Net promoter score"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-021",
+            "scenario_id": "QMM-SC-011",
+            "title": "Hook style A vs B (curiosity vs utility)",
+            "hypothesis": "A stronger hook improves shares without sacrificing watch time.",
+            "primary_kpi": "Shares per 1k views",
+            "secondary_kpis": [
+                "Hold rate",
+                "Saves"
+            ],
+            "duration_days": 14,
+            "status": "planned",
+            "owner_role": "Content"
+        },
+        {
+            "experiment_id": "QMM-EXP-022",
+            "scenario_id": "QMM-SC-011",
+            "title": "Series format vs standalone posts",
+            "hypothesis": "Series increases returning viewers and compounding reach.",
+            "primary_kpi": "Returning viewers",
+            "secondary_kpis": [
+                "Saves",
+                "Shares"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Content"
+        },
+        {
+            "experiment_id": "QMM-EXP-023",
+            "scenario_id": "QMM-SC-012",
+            "title": "Impact receipt email vs thank-you only",
+            "hypothesis": "Impact receipts increase repeat donations.",
+            "primary_kpi": "Second donation rate",
+            "secondary_kpis": [
+                "Open rate",
+                "Click rate"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-024",
+            "scenario_id": "QMM-SC-012",
+            "title": "Monthly subscription prompt timing (Day 3 vs Day 14)",
+            "hypothesis": "Early subscription ask increases recurring conversion.",
+            "primary_kpi": "Recurring conversion",
+            "secondary_kpis": [
+                "Churn",
+                "Unsubscribes"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-025",
+            "scenario_id": "QMM-SC-013",
+            "title": "Short quote form vs full quote form",
+            "hypothesis": "Less friction increases completion and purchase intent.",
+            "primary_kpi": "Quote completion",
+            "secondary_kpis": [
+                "Policy purchases",
+                "Time to quote"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-026",
+            "scenario_id": "QMM-SC-013",
+            "title": "Claims-story proof section vs generic benefits section",
+            "hypothesis": "Real proof improves conversion at the final step.",
+            "primary_kpi": "Quote-to-buy",
+            "secondary_kpis": [
+                "Bounce rate",
+                "WhatsApp inquiries"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Marketing"
+        },
+        {
+            "experiment_id": "QMM-EXP-027",
+            "scenario_id": "QMM-SC-014",
+            "title": "Tracking clarity upgrade vs existing tracking",
+            "hypothesis": "Higher certainty reduces complaints even if delivery is unchanged.",
+            "primary_kpi": "Complaints per 100 orders",
+            "secondary_kpis": [
+                "Retention",
+                "CSAT"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-028",
+            "scenario_id": "QMM-SC-014",
+            "title": "Proactive delay alerts vs reactive support",
+            "hypothesis": "Proactive alerts cut tickets and improve trust.",
+            "primary_kpi": "Support tickets",
+            "secondary_kpis": [
+                "Churn",
+                "NPS"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "CX"
+        },
+        {
+            "experiment_id": "QMM-EXP-029",
+            "scenario_id": "QMM-SC-015",
+            "title": "Proof dossier nurture vs lifestyle nurture",
+            "hypothesis": "Compliance/title proof lifts close rate more than lifestyle content.",
+            "primary_kpi": "Close rate",
+            "secondary_kpis": [
+                "Time-to-close",
+                "Qualified leads"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-030",
+            "scenario_id": "QMM-SC-015",
+            "title": "Financing pathway offer vs standard payment plan",
+            "hypothesis": "Clear financing options reduce decision paralysis.",
+            "primary_kpi": "Visit-to-close",
+            "secondary_kpis": [
+                "Lead response time",
+                "Drop-off rate"
+            ],
+            "duration_days": 60,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-031",
+            "scenario_id": "QMM-SC-016",
+            "title": "ETA transparency UI vs current ETA UI",
+            "hypothesis": "Honest ETAs reduce cancellations and complaints.",
+            "primary_kpi": "Cancellation rate",
+            "secondary_kpis": [
+                "Retention",
+                "Rating"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-032",
+            "scenario_id": "QMM-SC-016",
+            "title": "Reliability zones pilot vs citywide defaults",
+            "hypothesis": "Zoned reliability improves experience where supply is strongest.",
+            "primary_kpi": "Completed rides",
+            "secondary_kpis": [
+                "Cancellation",
+                "NPS"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Ops"
+        },
+        {
+            "experiment_id": "QMM-EXP-033",
+            "scenario_id": "QMM-SC-017",
+            "title": "Usage breakdown messaging vs none",
+            "hypothesis": "Education reduces distrust and increases top-ups.",
+            "primary_kpi": "Top-up frequency",
+            "secondary_kpis": [
+                "Complaints",
+                "Churn"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "CRM"
+        },
+        {
+            "experiment_id": "QMM-EXP-034",
+            "scenario_id": "QMM-SC-017",
+            "title": "Community demo sessions vs SMS-only education",
+            "hypothesis": "Trust transfer via community leaders improves sentiment.",
+            "primary_kpi": "Complaint rate",
+            "secondary_kpis": [
+                "Top-ups",
+                "Referral"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Community"
+        },
+        {
+            "experiment_id": "QMM-EXP-035",
+            "scenario_id": "QMM-SC-018",
+            "title": "Voice-note tips vs text tips",
+            "hypothesis": "Voice notes increase engagement for low literacy cohorts.",
+            "primary_kpi": "Weekly active users",
+            "secondary_kpis": [
+                "Retention",
+                "Feature adoption"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-036",
+            "scenario_id": "QMM-SC-018",
+            "title": "Agent-led onboarding vs self-serve onboarding",
+            "hypothesis": "Agent onboarding increases activation and repeat usage.",
+            "primary_kpi": "Activation rate",
+            "secondary_kpis": [
+                "Retention",
+                "NPS"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Ops"
+        },
+        {
+            "experiment_id": "QMM-EXP-037",
+            "scenario_id": "QMM-SC-019",
+            "title": "Guided KYB checklist UI vs current flow",
+            "hypothesis": "Clarity reduces drop-off and speeds time-to-live.",
+            "primary_kpi": "KYB completion",
+            "secondary_kpis": [
+                "Time-to-live",
+                "Merchant activation"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-038",
+            "scenario_id": "QMM-SC-019",
+            "title": "WhatsApp pre-check vs no pre-check",
+            "hypothesis": "Pre-check reduces rework and boosts completion.",
+            "primary_kpi": "Completion rate",
+            "secondary_kpis": [
+                "Time-to-live",
+                "Support tickets"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Sales"
+        },
+        {
+            "experiment_id": "QMM-EXP-039",
+            "scenario_id": "QMM-SC-020",
+            "title": "Verification CTA campaign vs generic brand campaign",
+            "hypothesis": "Authenticity cues improve conversion where counterfeits exist.",
+            "primary_kpi": "Sales lift",
+            "secondary_kpis": [
+                "Purchase intent",
+                "Retailer requests"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Brand"
+        },
+        {
+            "experiment_id": "QMM-EXP-040",
+            "scenario_id": "QMM-SC-020",
+            "title": "Retail trust program pilot vs no program",
+            "hypothesis": "Retailer enablement improves consumer confidence and sell-through.",
+            "primary_kpi": "Retail sell-through",
+            "secondary_kpis": [
+                "Returns",
+                "Repeat"
+            ],
+            "duration_days": 60,
+            "status": "planned",
+            "owner_role": "Trade"
+        },
+        {
+            "experiment_id": "QMM-EXP-041",
+            "scenario_id": "QMM-SC-021",
+            "title": "Total price upfront vs late price reveal",
+            "hypothesis": "Transparency reduces payment-stage dropoffs.",
+            "primary_kpi": "Booking conversion",
+            "secondary_kpis": [
+                "Dropoff rate",
+                "Refunds"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-042",
+            "scenario_id": "QMM-SC-021",
+            "title": "Flexible payment options vs single payment",
+            "hypothesis": "Payment flexibility increases bookings amid fee volatility.",
+            "primary_kpi": "Booking conversion",
+            "secondary_kpis": [
+                "AOV",
+                "Chargebacks"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-043",
+            "scenario_id": "QMM-SC-022",
+            "title": "Short tutorial vs long tutorial",
+            "hypothesis": "Shorter tutorial increases Day-1 retention.",
+            "primary_kpi": "D1 retention",
+            "secondary_kpis": [
+                "Tutorial completion",
+                "Session length"
+            ],
+            "duration_days": 14,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-044",
+            "scenario_id": "QMM-SC-022",
+            "title": "Early win reward vs standard pacing",
+            "hypothesis": "Early reward increases return likelihood.",
+            "primary_kpi": "D1 retention",
+            "secondary_kpis": [
+                "D3 retention",
+                "IAP conversion"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-045",
+            "scenario_id": "QMM-SC-023",
+            "title": "Concierge-first checkout vs standard checkout",
+            "hypothesis": "Concierge reduces uncertainty and increases conversion for premium buyers.",
+            "primary_kpi": "Purchase rate",
+            "secondary_kpis": [
+                "AOV",
+                "Abandonment"
+            ],
+            "duration_days": 21,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-046",
+            "scenario_id": "QMM-SC-023",
+            "title": "Returns clarity block vs no clarity block",
+            "hypothesis": "Clear returns policy increases confidence and checkout completion.",
+            "primary_kpi": "Checkout completion",
+            "secondary_kpis": [
+                "Refund rate",
+                "Support tickets"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "CX"
+        },
+        {
+            "experiment_id": "QMM-EXP-047",
+            "scenario_id": "QMM-SC-024",
+            "title": "Reorder shortcut UI vs promo push",
+            "hypothesis": "Convenience increases repeat orders while protecting margin.",
+            "primary_kpi": "Repeat purchase rate",
+            "secondary_kpis": [
+                "Margin",
+                "Retention"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-048",
+            "scenario_id": "QMM-SC-024",
+            "title": "Taste-profile onboarding vs generic home feed",
+            "hypothesis": "Personalization increases repeat without heavier discounts.",
+            "primary_kpi": "Repeat purchase rate",
+            "secondary_kpis": [
+                "AOV",
+                "Churn"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Growth"
+        },
+        {
+            "experiment_id": "QMM-EXP-049",
+            "scenario_id": "QMM-SC-025",
+            "title": "Self-selection quiz gate vs open apply",
+            "hypothesis": "Quiz gate reduces noise and increases qualified applicants.",
+            "primary_kpi": "Qualified applicant rate",
+            "secondary_kpis": [
+                "Time-to-screen",
+                "Drop-off"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "HR"
+        },
+        {
+            "experiment_id": "QMM-EXP-050",
+            "scenario_id": "QMM-SC-025",
+            "title": "Role realism preview vs standard JD",
+            "hypothesis": "Realism improves fit and reduces low-quality volume ethically.",
+            "primary_kpi": "Qualified rate",
+            "secondary_kpis": [
+                "Interview pass rate",
+                "Offer acceptance"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "HR"
+        },
+        {
+            "experiment_id": "QMM-EXP-051",
+            "scenario_id": "QMM-SC-026",
+            "title": "Cohort-based pacing vs self-paced",
+            "hypothesis": "Cohorts increase completion through community accountability.",
+            "primary_kpi": "Completion rate",
+            "secondary_kpis": [
+                "Retention",
+                "Refunds"
+            ],
+            "duration_days": 60,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-052",
+            "scenario_id": "QMM-SC-026",
+            "title": "Micro-certificates per module vs end-only certificate",
+            "hypothesis": "Micro-credentials increase motivation and progression.",
+            "primary_kpi": "Module completion",
+            "secondary_kpis": [
+                "Course completion",
+                "NPS"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-053",
+            "scenario_id": "QMM-SC-027",
+            "title": "Champion-led activation vs media-led activation",
+            "hypothesis": "Trust transfer improves behavior change where misinformation exists.",
+            "primary_kpi": "Participation rate",
+            "secondary_kpis": [
+                "Completion rate",
+                "Sentiment"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Community"
+        },
+        {
+            "experiment_id": "QMM-EXP-054",
+            "scenario_id": "QMM-SC-027",
+            "title": "Action-step SMS sequence vs single announcement",
+            "hypothesis": "Stepwise guidance reduces friction and increases action.",
+            "primary_kpi": "Action completion",
+            "secondary_kpis": [
+                "Helpdesk calls",
+                "Drop-off"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "CRM"
+        },
+        {
+            "experiment_id": "QMM-EXP-055",
+            "scenario_id": "QMM-SC-028",
+            "title": "Sell-through support vs discount incentives",
+            "hypothesis": "Sell-through support increases reorder frequency sustainably.",
+            "primary_kpi": "Order frequency",
+            "secondary_kpis": [
+                "On-time payments",
+                "Returns"
+            ],
+            "duration_days": 60,
+            "status": "planned",
+            "owner_role": "Trade"
+        },
+        {
+            "experiment_id": "QMM-EXP-056",
+            "scenario_id": "QMM-SC-028",
+            "title": "Flexible reorder terms pilot vs standard terms",
+            "hypothesis": "Flex terms reduce ordering delays without margin collapse.",
+            "primary_kpi": "Orders",
+            "secondary_kpis": [
+                "DSO",
+                "Churn"
+            ],
+            "duration_days": 90,
+            "status": "planned",
+            "owner_role": "Finance"
+        },
+        {
+            "experiment_id": "QMM-EXP-057",
+            "scenario_id": "QMM-SC-029",
+            "title": "Repayment habit plan onboarding vs standard onboarding",
+            "hypothesis": "Habit setup increases repayment consistency.",
+            "primary_kpi": "Repayment rate",
+            "secondary_kpis": [
+                "Delinquency",
+                "Repeat borrowing"
+            ],
+            "duration_days": 60,
+            "status": "planned",
+            "owner_role": "Product"
+        },
+        {
+            "experiment_id": "QMM-EXP-058",
+            "scenario_id": "QMM-SC-029",
+            "title": "Hardship pathway messaging vs generic reminders",
+            "hypothesis": "Ethical hardship options reduce defaults and complaints.",
+            "primary_kpi": "Delinquency",
+            "secondary_kpis": [
+                "CSAT",
+                "Escalations"
+            ],
+            "duration_days": 60,
+            "status": "planned",
+            "owner_role": "Risk"
+        },
+        {
+            "experiment_id": "QMM-EXP-059",
+            "scenario_id": "QMM-SC-030",
+            "title": "Bridge narrative (core→new) vs new-only narrative",
+            "hypothesis": "Bridge story increases consideration without alienating loyalists.",
+            "primary_kpi": "Consideration",
+            "secondary_kpis": [
+                "Recall",
+                "Sentiment"
+            ],
+            "duration_days": 30,
+            "status": "planned",
+            "owner_role": "Brand"
+        },
+        {
+            "experiment_id": "QMM-EXP-060",
+            "scenario_id": "QMM-SC-030",
+            "title": "Sampling/experience activation vs digital-only launch",
+            "hypothesis": "Experience-led proof accelerates trial and adoption for new category.",
+            "primary_kpi": "Trial rate",
+            "secondary_kpis": [
+                "Repeat",
+                "CAC"
+            ],
+            "duration_days": 45,
+            "status": "planned",
+            "owner_role": "Growth"
+        }
+    ]
+}

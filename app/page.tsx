@@ -50,10 +50,7 @@ export default function Home() {
                             </Button>
                         </Link>
                     </div>
-                    <div className="flex gap-6 text-sm text-muted font-medium pt-2">
-                        <Link href="/about/how-to-use" className="hover:text-blue-500 transition-colors underline decoration-dotted underline-offset-4">{HERO.HELPER_1}</Link>
-                        <Link href="/about/usefulness" className="hover:text-blue-500 transition-colors underline decoration-dotted underline-offset-4">{HERO.HELPER_2}</Link>
-                    </div>
+
                 </div>
 
                 {/* Subtle Illustration Panel */}

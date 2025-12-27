@@ -156,6 +156,9 @@ export default function AdvisoryPage() {
                         <Link href={`/blueprint/${blueprint.id}`}>
                             <Button variant="outline" size="sm">Back to Blueprint Report</Button>
                         </Link>
+                        <Button variant="outline" size="sm" onClick={() => window.print()}>
+                            Export PDF
+                        </Button>
                         <Link href={`/experiments?scenario=${scenario.id}`}>
                             <Button variant="outline" size="sm" className="bg-blue-50 dark:bg-blue-900/10 text-blue-600 border-blue-200 hover:bg-blue-100">Go to Experiments</Button>
                         </Link>

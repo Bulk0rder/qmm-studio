@@ -34,7 +34,7 @@ export default function UsefulnessPage() {
                         <BarChart3 className="text-emerald-600 mb-4" size={32} />
                         <h3 className="text-lg font-bold mb-2">Evidence &gt; Opinion</h3>
                         <p className="text-sm text-muted">
-                            Arguments in boardrooms happen because of lack of data. By forcing every strategy to be an "Experiment" with a "Hypothesis", we move to data-driven decision making.
+                            Arguments in boardrooms happen because of lack of data. By forcing every strategy to be an &quot;Experiment&quot; with a &quot;Hypothesis&quot;, we move to data-driven decision making.
                         </p>
                     </div>
                 </div>

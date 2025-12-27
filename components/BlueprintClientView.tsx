@@ -129,7 +129,7 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
                                             <div>
                                                 <span className="text-muted block text-xs uppercase mb-1">Touchpoint</span>
                                                 <div className="font-medium">{step.channel}</div>
-                                                <div className="text-muted mt-1 italic">"{step.message_angle}"</div>
+                                                <div className="text-muted mt-1 italic">&quot;{step.message_angle}&quot;</div>
                                             </div>
                                             <div>
                                                 <span className="text-muted block text-xs uppercase mb-1">Success Signal</span>
@@ -156,7 +156,7 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
                                         <h4 className="font-bold text-lg leading-tight">{exp.title}</h4>
                                     </div>
                                     <p className="text-sm text-muted mb-4 flex-grow">
-                                        hypothesis: <span className="italic">"{exp.hypothesis}"</span>
+                                        hypothesis: <span className="italic">&quot;{exp.hypothesis}&quot;</span>
                                     </p>
                                     <div className="mt-auto pt-4 border-t border-app flex justify-between items-center">
                                         <div className="text-xs font-mono text-muted">{exp.cost_to_learn}</div>

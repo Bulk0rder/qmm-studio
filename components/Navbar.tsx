@@ -34,6 +34,7 @@ export function Navbar({ session }: NavbarProps) {
                         <NavLink href="/library" active={isActive('/library')}>{UI_COPY.NAV.SCENARIO_LIBRARY}</NavLink>
                         <NavLink href="/experiments" active={isActive('/experiments')}>{UI_COPY.NAV.EXPERIMENTS}</NavLink>
                         <NavLink href="/kb" active={isActive('/kb')}>{UI_COPY.NAV.KNOWLEDGE_BASE}</NavLink>
+                        <NavLink href="/advisory" active={isActive('/advisory')}>Advisory</NavLink>
 
                         <AboutDropdown isActive={isActive('/about')} />
                     </div>

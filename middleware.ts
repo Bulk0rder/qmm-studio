@@ -18,6 +18,7 @@ export function middleware(request: NextRequest) {
         pathname.startsWith('/blueprint') ||
         pathname === '/privacy' ||
         pathname === '/terms' ||
+        pathname === '/advisory' ||
         pathname === '/'
     ) {
         return NextResponse.next();

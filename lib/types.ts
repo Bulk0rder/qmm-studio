@@ -151,6 +151,7 @@ export interface Experiment {
     metrics_logged?: Record<string, number>; // e.g., { "ctr": 2.5 }
     learning_notes?: string;
     logged_at?: string;
+    startDate?: string;
 }
 
 // Reuse for Blueprint preview

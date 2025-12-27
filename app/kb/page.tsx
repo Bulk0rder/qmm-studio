@@ -1,106 +1,74 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { UI_COPY } from '@/lib/ui-copy';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import React, { useState } from 'react';
+import { PageShell } from '@/components/layout/PageShell';
 import { Input } from '@/components/ui/Input';
-import { Search, Plus, ShieldCheck, Zap } from 'lucide-react';
-import { KBDoc } from '@/lib/types';
-import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { Library, Search, ChevronRight, Book } from 'lucide-react';
+import Link from 'next/link';
 
-import { BackButton } from '@/components/ui/BackButton';
+interface KBItem {
+    id: string;
+    title: string;
+    category: 'Laws' | 'Ratios' | 'Local Context' | 'Guardrails';
+    summary: string;
+    content: string;
+}
+
+const KB_SEED: KBItem[] = [
+    { id: '1', title: 'The Law of Double Jeopardy', category: 'Laws', summary: 'Smaller brands have fewer buyers who buy less often.', content: 'Marketing science dictates that loyalty is a function of penetration...' },
+    { id: '2', title: '60/40 Rule (Brand vs Activation)', category: 'Ratios', summary: 'The optimal split for long-term efficiency.', content: 'Field and Binet research suggests...' },
+    { id: '3', title: 'Trust Equation in High-Fraud Markets', category: 'Local Context', summary: 'Why verify-first works in Nigeria.', content: 'In low trust markets, verification signals must precede value propositions...' },
+    { id: '4', title: 'Greenwashing Guardrails', category: 'Guardrails', summary: 'Avoid vague sustainability claims.', content: 'Do not use terms like "Eco-friendly" without specific verifiable attributes...' },
+    { id: '5', title: 'Pricing Anchoring', category: 'Laws', summary: 'Humans compare to the nearest reference point.', content: '...' },
+];
 
 export default function KBPage() {
-    const { TITLE, SUBTITLE, SEARCH_PLACEHOLDER, COVERAGE_EMPTY_TITLE, COVERAGE_EMPTY_BODY, ADD_DOC } = UI_COPY.KB;
-    const [docs, setDocs] = useState<KBDoc[]>([]);
-    const [search, setSearch] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [query, setQuery] = useState('');
 
-    useEffect(() => {
-        fetch('/api/kb/list')
-            .then(res => res.json())
-            .then(data => {
-                setDocs(data);
-                setLoading(false);
-            });
-    }, []);
-
-    const filtered = docs.filter(d =>
-        d.title.toLowerCase().includes(search.toLowerCase()) ||
-        d.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
+    const filtered = KB_SEED.filter(item =>
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.summary.toLowerCase().includes(query.toLowerCase())
     );
 
     return (
-        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <BackButton />
-            <header className="space-y-6">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h1 className="text-3xl font-semibold tracking-tight text-app">{TITLE}</h1>
-                        <p className="text-muted text-lg mt-1">{SUBTITLE}</p>
+        <PageShell>
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-app">
+                            <Library className="text-purple-600" size={24} />
+                            <h1 className="text-3xl font-bold tracking-tight">The Physics of Marketing</h1>
+                        </div>
+                        <p className="text-lg text-muted-foreground max-w-2xl">
+                            First principles and mental models that drive our algorithms. These are the laws of gravity for your strategy.
+                        </p>
                     </div>
-                    <Button className="rounded-lg h-10 px-4">
-                        <Plus className="mr-2" size={16} />
-                        {ADD_DOC}
-                    </Button>
                 </div>
 
-                <div className="relative max-w-xl">
-                    <Search className="absolute left-3.5 top-3 text-muted" size={18} />
+                <div className="relative w-full md:w-96">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
                     <Input
-                        placeholder={SEARCH_PLACEHOLDER}
-                        className="pl-10 h-10 bg-white dark:bg-zinc-900 border-app text-app rounded-lg shadow-sm"
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}
+                        placeholder="Search physics..."
+                        className="pl-9 bg-white dark:bg-zinc-900"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
                     />
                 </div>
-            </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {loading ? (
-                    [1, 2, 3].map(i => <div key={i} className="h-40 bg-zinc-100 dark:bg-zinc-800 rounded-lg animate-pulse"></div>)
-                ) : filtered.length > 0 ? (
-                    filtered.map(doc => (
-                        <Link href={`/kb/${doc.id}`} key={doc.id}>
-                            <Card className="h-full hover:shadow-md transition-all cursor-pointer border-app group bg-white dark:bg-zinc-900">
-                                <CardHeader className="pb-3">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <div className={`p-1.5 rounded-md ${doc.type === 'Governance' ? 'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'}`}>
-                                            {doc.type === 'Governance' ? <ShieldCheck size={16} /> : <Zap size={16} />}
-                                        </div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${doc.risk_level === 'high' ? 'border-red-200 text-red-600 bg-red-50' : 'border-zinc-200 text-muted bg-zinc-50'}`}>
-                                            {doc.risk_level} RISK
-                                        </span>
-                                    </div>
-                                    <CardTitle className="group-hover:text-blue-600 transition-colors text-lg leading-tight">{doc.title}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="flex flex-wrap gap-2">
-                                        {doc.tags.map(tag => (
-                                            <span key={tag} className="text-xs bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded text-muted">#{tag}</span>
-                                        ))}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    ))
-                ) : (
-                    <div className="col-span-full py-20 text-center border-app rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50">
-                        <p className="text-muted font-medium">No documents found matching "{search}"</p>
-                    </div>
-                )}
-            </div>
-
-            {!loading && filtered.length > 0 && (
-                <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 dark:bg-emerald-900/10 dark:border-emerald-900/30 p-6 flex gap-4 items-center">
-                    <ShieldCheck className="text-emerald-500 flex-shrink-0" size={24} />
-                    <div>
-                        <h4 className="font-semibold text-emerald-900 dark:text-emerald-100 text-sm">{COVERAGE_EMPTY_TITLE}</h4>
-                        <p className="text-sm text-emerald-800 dark:text-emerald-200 opacity-80 mt-1">{COVERAGE_EMPTY_BODY}</p>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {filtered.map(item => (
+                        <div key={item.id} className="p-6 border border-border bg-card rounded-xl hover:border-purple-500/30 transition-all group cursor-pointer shadow-sm">
+                            <div className="flex justify-between items-start mb-2">
+                                <Badge variant="outline" className="mb-2">{item.category}</Badge>
+                                <ChevronRight className="opacity-0 group-hover:opacity-100 transition-opacity text-purple-600" size={18} />
+                            </div>
+                            <h3 className="text-lg font-bold mb-1 group-hover:text-purple-600 transition-colors">{item.title}</h3>
+                            <p className="text-muted-foreground text-sm">{item.summary}</p>
+                        </div>
+                    ))}
                 </div>
-            )}
-        </div>
+            </div>
+        </PageShell>
     );
 }

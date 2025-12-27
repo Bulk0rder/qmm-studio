@@ -1,15 +1,33 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UI_COPY } from '@/lib/ui-copy';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { ArrowRight, BookOpen, Layers, Lightbulb, Zap, Activity, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, BookOpen, Layers, Lightbulb, Zap, Activity, AlertTriangle, CheckCircle2, Database } from 'lucide-react';
 import Link from 'next/link';
 import { OrbitNodes } from '@/components/illustrations/OrbitNodes';
+import { seedSampleData, getAllScenarios } from '@/lib/scenario-service';
 
 export default function Home() {
     const { HERO, RECENT_BLUEPRINTS, KNOWN_WINNERS, COVERAGE_GAPS, SYSTEM_STATUS, QUICK_ACTIONS } = UI_COPY.HOME;
+    const [stats, setStats] = useState({ scenarios: 0, blueprints: 0 });
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const sc = getAllScenarios();
+            // Estimate blueprints count (approx 1 per scenario for now)
+            const bpCount = localStorage.getItem('qmm-blueprints') ? JSON.parse(localStorage.getItem('qmm-blueprints') || '[]').length : 0;
+            setStats({ scenarios: sc.length, blueprints: bpCount });
+        }
+    }, []);
+
+    const handleSeed = () => {
+        if (confirm("This will overwrite your current guest data with 30 sample scenarios. Continue?")) {
+            seedSampleData();
+            window.location.reload();
+        }
+    };
 
     return (
         <div className="space-y-12 md:space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -38,7 +56,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Subtle Illustration Panel - Contained in Grid Column */}
+                {/* Subtle Illustration Panel */}
                 <div className="relative w-full aspect-square md:aspect-auto md:h-[400px] flex items-center justify-center">
                     <OrbitNodes className="w-full h-full text-slate-400 dark:text-slate-600 opacity-50" />
                 </div>
@@ -62,13 +80,17 @@ export default function Home() {
                                     <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-muted">
                                         <Layers size={14} />
                                     </div>
-                                    <h4 className="font-medium text-app">{RECENT_BLUEPRINTS.EMPTY_TITLE}</h4>
+                                    <h4 className="font-medium text-app">{stats.blueprints > 0 ? "Latest Strategy" : RECENT_BLUEPRINTS.EMPTY_TITLE}</h4>
                                 </div>
-                                <p className="text-sm text-muted max-w-md ml-11">{RECENT_BLUEPRINTS.EMPTY_BODY}</p>
+                                <p className="text-sm text-muted max-w-md ml-11">
+                                    {stats.blueprints > 0
+                                        ? "Your latest blueprint is ready for review in the Advisory."
+                                        : RECENT_BLUEPRINTS.EMPTY_BODY}
+                                </p>
                                 <div className="ml-11 mt-1">
-                                    <Link href="/new">
+                                    <Link href={stats.blueprints > 0 ? "/advisory" : "/new"}>
                                         <Button variant="secondary" size="sm" className="text-xs h-8">
-                                            {RECENT_BLUEPRINTS.EMPTY_CTA}
+                                            {stats.blueprints > 0 ? "Open Advisory" : RECENT_BLUEPRINTS.EMPTY_CTA}
                                         </Button>
                                     </Link>
                                 </div>
@@ -89,14 +111,18 @@ export default function Home() {
                         <CardContent className="p-6 space-y-4">
                             <p className="text-xs font-medium text-muted uppercase tracking-wider">{QUICK_ACTIONS.HELPER}</p>
                             <div className="grid grid-cols-2 gap-3">
-                                <Button variant="outline" className="justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm">
-                                    <Activity size={14} className="mr-2 text-purple-500" />
-                                    {QUICK_ACTIONS.LOG_RESULT}
-                                </Button>
-                                <Button variant="outline" className="justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm">
-                                    <BookOpen size={14} className="mr-2 text-emerald-500" />
-                                    {QUICK_ACTIONS.ADD_KB}
-                                </Button>
+                                <Link href="/experiments">
+                                    <Button variant="outline" className="w-full justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm">
+                                        <Activity size={14} className="mr-2 text-purple-500" />
+                                        {QUICK_ACTIONS.LOG_RESULT}
+                                    </Button>
+                                </Link>
+                                <Link href="/kb">
+                                    <Button variant="outline" className="w-full justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm">
+                                        <BookOpen size={14} className="mr-2 text-emerald-500" />
+                                        {QUICK_ACTIONS.ADD_KB}
+                                    </Button>
+                                </Link>
                             </div>
                         </CardContent>
                     </Card>
@@ -113,9 +139,16 @@ export default function Home() {
                         </CardHeader>
                         <CardContent className="px-5 pb-5">
                             <p className="text-xs text-muted mb-4 leading-relaxed">{KNOWN_WINNERS.SUBTEXT}</p>
-                            <div className="rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/30 p-3">
-                                <p className="text-xs text-yellow-800 dark:text-yellow-200 font-medium">{KNOWN_WINNERS.EMPTY_BODY}</p>
-                            </div>
+                            {stats.scenarios > 0 ? (
+                                <div className="space-y-2">
+                                    <div className="text-2xl font-bold text-app">{stats.scenarios}</div>
+                                    <div className="text-xs text-muted">Patterns Indexed</div>
+                                </div>
+                            ) : (
+                                <div className="rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/30 p-3">
+                                    <p className="text-xs text-yellow-800 dark:text-yellow-200 font-medium">{KNOWN_WINNERS.EMPTY_BODY}</p>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
@@ -151,20 +184,28 @@ export default function Home() {
                         <CardContent className="px-5 pb-5">
                             <div className="space-y-1.5 text-xs text-zinc-400">
                                 <div className="flex justify-between">
-                                    <span>Scenarios</span> <span className="text-white font-mono">0</span>
+                                    <span>Scenarios</span> <span className="text-white font-mono">{stats.scenarios}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span>Blueprints</span> <span className="text-white font-mono">0</span>
+                                    <span>Blueprints</span> <span className="text-white font-mono">{stats.blueprints}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span>KB Docs</span> <span className="text-white font-mono">3</span>
+                                    <span>KB Docs</span> <span className="text-white font-mono">5</span>
                                 </div>
                             </div>
-                            <div className="mt-4 pt-3 border-t border-white/10">
+                            <div className="mt-4 pt-3 border-t border-white/10 flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                     <span className="text-xs font-medium text-emerald-400">{SYSTEM_STATUS.STATUS_PILLS.HEALTHY}</span>
                                 </div>
+
+                                <button
+                                    onClick={handleSeed}
+                                    title="Seed Sample Data"
+                                    className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2 py-1 rounded border border-zinc-700 flex items-center gap-1 transition-colors"
+                                >
+                                    <Database size={10} /> Seed
+                                </button>
                             </div>
                         </CardContent>
                     </Card>

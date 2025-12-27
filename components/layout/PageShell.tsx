@@ -1,24 +1,15 @@
 import React from 'react';
+import { Navbar } from '../Navbar';
+import { Footer } from '../Footer';
 
-interface PageShellProps {
-    children: React.ReactNode;
-    className?: string;
-    as?: 'main' | 'div' | 'section';
-}
-
-/**
- * STRICT PAGE SHELL
- * Enforces consistent horizontal padding and max-width across the application.
- * prevents content from touching viewport borders.
- */
-export function PageShell({ children, className = '', as = 'main' }: PageShellProps) {
-    const Component = as;
-
+export const PageShell = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
     return (
-        <Component
-            className={`mx-auto w-full max-w-[1200px] px-6 md:px-10 lg:px-14 py-10 md:py-12 ${className}`}
-        >
-            {children}
-        </Component>
+        <div className="min-h-screen bg-background flex flex-col font-sans text-foreground">
+            <Navbar />
+            <main className={`flex-1 w-full max-w-[1200px] mx-auto px-6 md:px-10 lg:px-14 py-8 ${className}`}>
+                {children}
+            </main>
+            <Footer />
+        </div>
     );
-}
+};

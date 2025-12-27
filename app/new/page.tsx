@@ -1,342 +1,312 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UI_COPY } from '@/lib/ui-copy';
+import { PageShell } from '@/components/layout/PageShell';
 import { Button } from '@/components/ui/Button';
-import { Card, CardContent } from '@/components/ui/Card';
 import { Input, Label, Textarea } from '@/components/ui/Input';
-import { Loader2, ArrowRight, Pin, Search } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/Card';
+import { ArrowRight, ArrowLeft, Loader2, Sparkles, AlertTriangle } from 'lucide-react';
+import { generateBlueprint } from '@/lib/blueprint-engine';
+import { Badge } from '@/components/ui/Badge';
+import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 import { Scenario } from '@/lib/types';
-import { LibraryStacks } from '@/components/illustrations/LibraryStacks';
-import { BackButton } from '@/components/ui/BackButton';
 
-// Simple debounce hook if not exists
-function useDebounceValue<T>(value: T, delay: number): T {
-    const [debouncedValue, setDebouncedValue] = useState<T>(value);
-    useEffect(() => {
-        const handler = setTimeout(() => setDebouncedValue(value), delay);
-        return () => clearTimeout(handler);
-    }, [value, delay]);
-    return debouncedValue;
-}
+// Mock Seed Data for Retrieval (since we rely on initial seed)
+// Real app would fetch from /api/retrieve
+const MOCK_RETRIEVAL = [
+    { title: "SaaS Churn Reduction", industry: "SaaS", similarity: "High" },
+    { title: "Enterprise Sales Velocity", industry: "B2B", similarity: "Medium" }
+];
 
 export default function NewScenarioPage() {
     const router = useRouter();
-    const { PAGE_TITLE, SUBTITLE, PLACEHOLDERS, HELPERS, CTA_RETRIEVE, CTA_GENERATE, LIBRARIAN, CTA_DRAFT_ANYWAY } = UI_COPY.NEW_SCENARIO;
+    const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [retrieving, setRetrieving] = useState(false);
+    const [retrieved, setRetrieved] = useState<any[]>([]);
 
-    const [formData, setFormData] = useState({
-        title: '',
+    const [form, setForm] = useState({
         industry: '',
-        market: '',
-        customerState: '',
-        budget: '',
-        risk: '',
-        constraints: '',
-        baseline: '',
-        tried: ''
+        market: 'B2B',
+        customerState: 'Aware',
+        symptom: '',
+        objective: '',
+        tried: '',
+        time_horizon: '3 months',
+        budget_band: '< $50k'
     });
 
-    const [isRetrieving, setIsRetrieving] = useState(false);
-    const [scenarios, setScenarios] = useState<Scenario[]>([]);
-    const [hasSearched, setHasSearched] = useState(false);
-    const [pinnedId, setPinnedId] = useState<string | null>(null);
-
-    const debouncedTitle = useDebounceValue(formData.title, 800);
-    const debouncedIndustry = useDebounceValue(formData.industry, 800);
-
-    // Live retrieval effect
-    useEffect(() => {
-        if (debouncedTitle.length > 5) {
-            handleRetrieve(true);
-        }
-    }, [debouncedTitle, debouncedIndustry]);
-
-    const handleRetrieve = async (silent = false) => {
-        if (!silent) setIsRetrieving(true);
-        try {
-            const res = await fetch('/api/retrieve', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    query: formData.title,
-                    industry: formData.industry
-                })
-            });
-            const data = await res.json();
-            setScenarios(data.scenarios || []);
-            setHasSearched(true);
-        } catch (e) {
-            console.error(e);
-        } finally {
-            if (!silent) setIsRetrieving(false);
-        }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async () => {
+    const handleNext = () => setStep(step + 1);
+    const handleBack = () => setStep(step - 1);
+
+    const handleRetrievalReview = () => {
+        setRetrieving(true);
+        // Simulate retrieval
+        setTimeout(() => {
+            setRetrieved(MOCK_RETRIEVAL); // In real app, fetch matches based on form
+            setRetrieving(false);
+            setStep(step + 1); // Go to retrieval step
+        }, 800);
+    };
+
+    const handleGenerate = async () => {
+        setLoading(true);
         try {
-            const res = await fetch('/api/blueprints', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    objective: formData.title,
-                    industry: formData.industry,
-                    market: formData.market,
-                    customerState: formData.customerState,
-                    budget: formData.budget,
-                    risk: formData.risk,
-                    constraints: formData.constraints,
-                    baseline: formData.baseline,
-                    tried: formData.tried,
-                    similarScenarioId: pinnedId
-                })
+            // 1. Generate Blueprint
+            const bp = await generateBlueprint({
+                industry: form.industry,
+                market: form.market,
+                situation: form.symptom,
+                objective: form.objective,
+                customer_state: form.customerState,
+                time_horizon: form.time_horizon,
+                budget_band: form.budget_band,
+                // Defaults for required fields not in form
+                primary_kpi: form.objective,
+                compliance_risk: 'medium',
+                channel_constraints: [],
+                baseline_signals: "Self-Diagnosis",
+                what_was_tried: form.tried
             });
+            // 2. Create Scenario
+            const newScenarioId = bp.scenario_id || `SC-${Date.now()}`;
+            const newScenario: Scenario = {
+                id: newScenarioId,
+                workspace_id: 'guest',
+                title: `${form.objective}: ${form.industry}`,
+                description: form.symptom,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                metadata: {
+                    industry: form.industry,
+                    market: form.market,
+                    objective: form.objective,
+                    budget_band: form.budget_band,
+                    risk_level: 'medium',
+                    time_horizon: form.time_horizon,
+                    customer_state: form.customerState
+                },
+                inputs: {
+                    baseline_signals: "Self-diagnosis",
+                    what_was_tried: form.tried,
+                    channel_constraints: []
+                },
+                related_blueprints: [bp.id],
+                related_experiments: [],
+                outcomes_summary: { wins: 0, losses: 0, learning_notes: [] }
+            };
 
-            if (res.ok) {
-                const bp = await res.json();
-
-                // CRITICAL: Ensure we persist this new data client-side for guest mode explicitly
-                // The API mock usually does not persist to the client's localStorage directly from the server route,
-                // so we actually need to handle the state here if the API route is just a mock returning a body.
-                // However, assuming the API route is stateless, we should save the result here.
-
-                // For this demo environment, to be safe, we also fetch/save here or rely on the fact 
-                // that `api/blueprints` might be doing `storage-client` ops if it was client-side code, 
-                // but since it's an API route it runs on server (Node). Use storage-client here?
-                // `storage-client` uses window.localStorage, so it MUST be called here in client component.
-
-                // Dynamic Import for safety or just use the helper if we can import it.
-                // We'll trust the flow: The API returns the BP object. 
-                // We need to create the Scenario and save both.
-
-                // Note: The API likely creates the scenario too? 
-                // If not, we should probably construct it. 
-                // To keep it simple and robust for this "Guest Mode":
-
-                const { storage, STORAGE_KEYS } = await import('@/lib/storage-client');
-                const { getAllScenarios } = await import('@/lib/scenario-service');
+            // 3. Persist
+            if (typeof window !== 'undefined') {
+                const existingScenarios = storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
+                storage.set(STORAGE_KEYS.SCENARIOS, [newScenario, ...existingScenarios]);
 
                 const existingBPs = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS) || [];
-                storage.set(STORAGE_KEYS.BLUEPRINTS, [...existingBPs, bp]);
-
-                // Also need to ensure the Scenario exists in local storage
-                // If the API generated a scenario ID, we need to save the scenario record.
-                // Let's assume the API helps us, or we construct it.
-                // Actually, looking at previous code, `generateBlueprint` creates a BP, but where is Scenario created?
-                // The `seed-service` created both. The `/api/blueprints` route likely just returns a BP.
-                // We should construct the Scenario record here for full consistency.
-
-                const newScenarioId = bp.scenario_id || `SC-${Date.now()}`;
-                const newScenario = {
-                    id: newScenarioId,
-                    workspace_id: 'guest',
-                    title: formData.title,
-                    description: `Market: ${formData.market}. Objective: ${formData.title}.`,
-                    metadata: {
-                        industry: formData.industry,
-                        market: formData.market,
-                        customer_state: formData.customerState,
-                        objective: 'Growth', // derived
-                        time_horizon: '90 days',
-                        budget_band: formData.budget,
-                        risk_level: 'medium'
-                    },
-                    inputs: {
-                        baseline_signals: formData.baseline,
-                        what_was_tried: formData.tried,
-                        channel_constraints: []
-                    },
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    related_blueprints: [bp.id],
-                    related_experiments: [],
-                    outcomes_summary: { wins: 0, losses: 0, learning_notes: [] },
-                };
-
-                const existingScenarios = getAllScenarios();
-                // Check if already exists (rare collision)
-                if (!existingScenarios.find(s => s.id === newScenario.id)) {
-                    storage.set(STORAGE_KEYS.SCENARIOS, [...existingScenarios, newScenario]);
-                }
-
-                // Redirect to ADVISORY
-                router.push(`/advisory?scenario=${newScenarioId}&blueprint=${bp.id}`);
+                storage.set(STORAGE_KEYS.BLUEPRINTS, [bp, ...existingBPs]);
             }
-        } catch (e) {
-            console.error(e);
-            alert('Failed to generate blueprint. Please try again.');
+
+            // 4. Redirect
+            router.push(`/advisory?scenario=${newScenarioId}&blueprint=${bp.id}`);
+
+        } catch (error) {
+            console.error(error);
+            alert("Failed to generate blueprint. Please try again.");
+            setLoading(false);
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
+    // Render Steps
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-
-                {/* Left Column: Intake */}
-
-                {/* Left Column: Intake */}
-                <div className="lg:col-span-7 space-y-8">
-                    <BackButton />
-                    <header>
-                        <h1 className="text-3xl font-semibold tracking-tight text-app">{PAGE_TITLE}</h1>
-                        <p className="text-muted text-lg mt-2 leading-relaxed">{SUBTITLE}</p>
-                    </header>
-
-                    <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-                        <div className="space-y-4">
-                            <Label className="text-base font-medium">What’s happening?</Label>
-                            <Textarea
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                placeholder={PLACEHOLDERS.WHATS_HAPPENING}
-                                className="min-h-[140px] text-lg leading-relaxed p-4 resize-none shadow-sm"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <Label>Industry</Label>
-                                <Input name="industry" value={formData.industry} onChange={handleChange} placeholder={PLACEHOLDERS.INDUSTRY} />
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Market</Label>
-                                <Input name="market" value={formData.market} onChange={handleChange} placeholder={PLACEHOLDERS.MARKET} />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>Customer State</Label>
-                            <Input name="customerState" value={formData.customerState} onChange={handleChange} placeholder={HELPERS.CUSTOMER_STATE} />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>What have you tried?</Label>
-                            <Textarea
-                                name="tried"
-                                value={formData.tried}
-                                onChange={handleChange}
-                                placeholder={PLACEHOLDERS.TRIED}
-                                className="min-h-[100px]"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <Label>Budget Band</Label>
-                                <Input name="budget" value={formData.budget} onChange={handleChange} placeholder={HELPERS.BUDGET_BAND} />
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Baseline Signals</Label>
-                                <Input name="baseline" value={formData.baseline} onChange={handleChange} placeholder={PLACEHOLDERS.BASELINE_SIGNALS} />
-                            </div>
-                        </div>
-
-                        <div className="pt-6">
-                            <ActionPanel
-                                hasSearched={hasSearched}
-                                isRetrieving={isRetrieving}
-                                onRetrieve={() => handleRetrieve()}
-                                onGenerate={handleSubmit}
-                                labels={{ CTA_RETRIEVE, CTA_DRAFT_ANYWAY, CTA_GENERATE }}
-                            />
-                        </div>
-                    </form>
+        <PageShell>
+            <div className="max-w-2xl mx-auto py-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Progress */}
+                <div className="mb-8 flex justify-between items-center text-sm text-muted">
+                    <span>Step {step} of 5</span>
+                    <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map(i => (
+                            <div key={i} className={`h-1 w-8 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-zinc-200 dark:bg-zinc-800'}`} />
+                        ))}
+                    </div>
                 </div>
 
-                {/* Right Column: Librarian Panel */}
-                <div className="lg:col-span-5 relative">
-                    <div className="sticky top-24">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className={`w-2 h-2 rounded-full ${isRetrieving ? 'bg-blue-500 animate-pulse' : 'bg-emerald-500'}`}></div>
-                            <span className="text-xs font-bold uppercase tracking-wider text-muted">Librarian Active</span>
-                        </div>
+                <Card className="border-app shadow-sm bg-white dark:bg-zinc-900/50">
+                    <CardContent className="p-8 space-y-6">
 
-                        <Card className="min-h-[400px] border-app shadow-sm bg-zinc-50/50 dark:bg-zinc-900/50">
-                            <CardContent className="p-6 space-y-6">
-                                <div className="space-y-1">
-                                    <h3 className="font-semibold text-app">{LIBRARIAN.HEADER}</h3>
-                                    <p className="text-sm text-muted">{LIBRARIAN.SUBTEXT}</p>
+                        {/* STEP 1: ARENA */}
+                        {step === 1 && (
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h1 className="text-2xl font-bold">The Arena</h1>
+                                    <p className="text-muted">Define the physics of the battlefield.</p>
                                 </div>
+                                <div className="grid gap-4">
+                                    <div className="space-y-2">
+                                        <Label>Industry</Label>
+                                        <Input name="industry" value={form.industry} onChange={handleChange} placeholder="e.g. SaaS, Fintech, CPG..." autoFocus />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Market Dynamics</Label>
+                                        <select
+                                            name="market"
+                                            value={form.market}
+                                            onChange={handleChange}
+                                            className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        >
+                                            <option value="B2B">B2B (High Trust)</option>
+                                            <option value="B2C">B2C (High Volume)</option>
+                                            <option value="D2C">D2C (Brand Heavy)</option>
+                                            <option value="Enterprise">Enterprise (Complex Sales)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <Button onClick={handleNext} className="w-full mt-4" disabled={!form.industry}>
+                                    Next: The Problem <ArrowRight size={16} className="ml-2" />
+                                </Button>
+                            </div>
+                        )}
 
-                                <div className="min-h-[300px] relative">
-                                    {scenarios.length > 0 ? (
-                                        <div className="space-y-3 relative z-10">
-                                            {scenarios.map(sc => (
-                                                <div
-                                                    key={sc.id}
-                                                    className={`p-4 rounded-lg border transition-all cursor-pointer ${pinnedId === sc.id ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 ring-1 ring-blue-500/20' : 'bg-white dark:bg-black border-app hover:shadow-md'}`}
-                                                    onClick={() => setPinnedId(sc.id)}
-                                                >
-                                                    <div className="flex justify-between items-start">
-                                                        <h4 className="font-medium text-sm line-clamp-2">{sc.title}</h4>
-                                                        {pinnedId === sc.id && <Pin size={14} className="text-blue-600 fill-blue-600" />}
-                                                    </div>
-                                                    <p className="text-xs text-muted mt-2 line-clamp-2 leading-relaxed">{sc.description}</p>
-                                                    <div className="mt-3 flex gap-2">
-                                                        <span className="text-[10px] uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded text-muted border border-app">{(sc as any).industry || 'General'}</span>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : hasSearched ? (
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4">
-                                            <div className="w-12 h-12 bg-zinc-200 dark:bg-zinc-800 rounded-full flex items-center justify-center text-muted">
-                                                <Search size={20} />
-                                            </div>
-                                            <div className="space-y-1 max-w-xs">
-                                                <h4 className="font-medium text-app">{LIBRARIAN.NONE_FOUND.TITLE}</h4>
-                                                <p className="text-sm text-muted">{LIBRARIAN.NONE_FOUND.BODY}</p>
-                                            </div>
-                                            <div className="pt-2 w-full max-w-xs space-y-2">
-                                                <Button size="sm" variant="outline" onClick={handleSubmit} className="w-full">
-                                                    {LIBRARIAN.NONE_FOUND.CTA_GENERATE}
-                                                </Button>
-                                                <Button size="sm" variant="ghost" className="w-full text-xs text-muted">
-                                                    {LIBRARIAN.NONE_FOUND.CTA_SAVE}
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-60">
-                                            <LibraryStacks className="w-48 h-48 mb-4 text-slate-300 dark:text-slate-700" />
-                                            <p className="text-sm text-muted italic">Type your scenario to see matches...</p>
+                        {/* STEP 2: PROBLEM */}
+                        {step === 2 && (
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h1 className="text-2xl font-bold">The Entropy</h1>
+                                    <p className="text-muted">What is breaking or needs to grow?</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label>The Symptom</Label>
+                                        <Textarea name="symptom" value={form.symptom} onChange={handleChange} placeholder="We are getting traffic but no conversions..." rows={3} autoFocus />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>The Objective</Label>
+                                        <Input name="objective" value={form.objective} onChange={handleChange} placeholder="Increase conversion rate by 20%" />
+                                    </div>
+                                </div>
+                                <div className="flex gap-3">
+                                    <Button variant="outline" onClick={handleBack}>Back</Button>
+                                    <Button onClick={handleNext} className="w-full" disabled={!form.symptom}>
+                                        Next: The Friction <ArrowRight size={16} className="ml-2" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 3: FRICTION */}
+                        {step === 3 && (
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h1 className="text-2xl font-bold">The Friction</h1>
+                                    <p className="text-muted">What have you already tried?</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label>Failed Experiments</Label>
+                                        <Textarea name="tried" value={form.tried} onChange={handleChange} placeholder="We ran FB ads, changed the headline..." rows={4} autoFocus />
+                                    </div>
+                                    {/* Contradiction Check (Mock) */}
+                                    {form.symptom.toLowerCase().includes('traffic') && form.tried.toLowerCase().includes('seo') && (
+                                        <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-900 rounded-lg flex items-start gap-3">
+                                            <AlertTriangle className="text-amber-600 shrink-0 mt-0.5" size={16} />
+                                            <p className="text-xs text-amber-800 dark:text-amber-200">
+                                                <strong>Contradiction Warning:</strong> You mentioned SEO issues but your objective is short-term growth. SEO is a long-term compounder. The Studio will adjust for this.
+                                            </p>
                                         </div>
                                     )}
                                 </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
+                                <div className="flex gap-3">
+                                    <Button variant="outline" onClick={handleBack}>Back</Button>
+                                    <Button onClick={handleNext} className="w-full">
+                                        Next: The Fuel <ArrowRight size={16} className="ml-2" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 4: FUEL */}
+                        {step === 4 && (
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h1 className="text-2xl font-bold">The Fuel</h1>
+                                    <p className="text-muted">Constraints breed creativity.</p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label>Time Horizon</Label>
+                                        <select name="time_horizon" value={form.time_horizon} onChange={handleChange} className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                            <option>1 month</option>
+                                            <option>3 months</option>
+                                            <option>6 months</option>
+                                            <option>1 year+</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Budget Band</Label>
+                                        <select name="budget_band" value={form.budget_band} onChange={handleChange} className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                            <option>{"< $10k"}</option>
+                                            <option>{"$10k - $50k"}</option>
+                                            <option>{"$50k - $200k"}</option>
+                                            <option>{"> $200k"}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="flex gap-3">
+                                    <Button variant="outline" onClick={handleBack}>Back</Button>
+                                    <Button onClick={handleRetrievalReview} className="w-full" disabled={retrieving}>
+                                        {retrieving ? <Loader2 className="animate-spin mr-2" /> : <Sparkles className="mr-2" size={16} />}
+                                        Run Retrieval
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 5: RETRIEVAL REVIEW */}
+                        {step === 5 && (
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <h1 className="text-2xl font-bold">Pattern Match</h1>
+                                    <p className="text-muted">The Studio found similar cases in the library.</p>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {retrieved.map((r, i) => (
+                                        <div key={i} className="p-3 border border-app rounded-lg bg-zinc-50 dark:bg-zinc-800/50 flex justify-between items-center">
+                                            <div>
+                                                <div className="font-semibold text-sm">{r.title}</div>
+                                                <div className="text-xs text-muted">{r.industry}</div>
+                                            </div>
+                                            <Badge variant="outline" className="bg-white dark:bg-black">{r.similarity}</Badge>
+                                        </div>
+                                    ))}
+                                    <div className="text-xs text-center text-muted pt-2">
+                                        The engine will use these patterns to inform your custom blueprint.
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-3 pt-4">
+                                    <Button variant="outline" onClick={handleBack}>Back</Button>
+                                    <Button onClick={handleGenerate} className="w-full text-lg h-12 bg-blue-600 hover:bg-blue-700 font-bold" disabled={loading}>
+                                        {loading ? (
+                                            <>
+                                                <Loader2 className="animate-spin mr-2" /> Generating Strategy...
+                                            </>
+                                        ) : (
+                                            <>
+                                                Generate Blueprint <ArrowRight className="ml-2" />
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                    </CardContent>
+                </Card>
             </div>
-        </div>
+        </PageShell>
     );
-}
-
-function ActionPanel({ hasSearched, isRetrieving, onRetrieve, onGenerate, labels }: any) {
-    if (!hasSearched) {
-        return (
-            <div className="flex items-center gap-4 pt-4 border-t border-app">
-                <Button onClick={onRetrieve} disabled={isRetrieving} className="h-11 px-6 text-base shadow-sm">
-                    {isRetrieving ? <Loader2 className="animate-spin mr-2" size={16} /> : <Search className="mr-2" size={16} />}
-                    {labels.CTA_RETRIEVE}
-                </Button>
-                <Button variant="ghost" onClick={onGenerate} className="h-11 px-6 text-muted hover:text-app">
-                    {labels.CTA_DRAFT_ANYWAY}
-                </Button>
-            </div>
-        )
-    }
-
-    return (
-        <div className="pt-4 border-t border-app">
-            <Button onClick={onGenerate} className="w-full h-12 text-lg font-medium shadow-sm">
-                {labels.CTA_GENERATE} <ArrowRight className="ml-2" size={18} />
-            </Button>
-        </div>
-    )
 }

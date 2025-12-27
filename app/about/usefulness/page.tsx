@@ -1,41 +1,42 @@
+'use client';
+
 import React from 'react';
 import { PageShell } from '@/components/layout/PageShell';
-import { ShieldCheck, History, BarChart3 } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { BrainCircuit, TrendingUp, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 
 export default function UsefulnessPage() {
     return (
         <PageShell>
-            <div className="max-w-3xl mx-auto space-y-12">
-                <section>
-                    <h1 className="text-3xl font-bold tracking-tight text-app mb-6">Why is this useful?</h1>
-                    <p className="text-xl text-muted leading-relaxed">
-                        Most organizations suffer from "Strategy Fog". They react to noise rather than recognizing signal. QMM Studio brings engineering rigor to marketing strategy.
+            <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in delay-100 duration-700">
+                <div className="space-y-4 text-center">
+                    <h1 className="text-4xl font-bold tracking-tight text-app">Why This Exists</h1>
+                    <p className="text-xl text-muted">Combating the entropy of bad decision making.</p>
+                </div>
+
+                <div className="prose dark:prose-invert max-w-none">
+                    <p className="text-lg leading-relaxed">
+                        Most marketing teams suffer from "Strategic Drift". They start with a goal, but get distracted by new channels, competitor noise, and internal politics.
+                        QMM Studio acts as a <strong className="text-blue-600">Strategic Governor</strong>. It forces every decision to pass through the immutable laws of marketing physics.
                     </p>
-                </section>
+                </div>
 
-                <div className="grid gap-6 md:grid-cols-2">
-                    <div className="p-6 rounded-xl border border-app card-surface">
-                        <ShieldCheck className="text-blue-600 mb-4" size={32} />
-                        <h3 className="text-lg font-bold mb-2">Reduces Cognitive Load</h3>
-                        <p className="text-sm text-muted">
-                            Founders are overwhelmed by "possibility space". QMM Studio narrows the focus to the few moves that historically work for your specific scenario constraints.
-                        </p>
+                <div className="grid md:grid-cols-3 gap-6">
+                    <div className="p-6 border border-border rounded-xl bg-card">
+                        <BrainCircuit className="text-blue-500 mb-4" size={32} />
+                        <h3 className="font-bold mb-2">Pattern Matching</h3>
+                        <p className="text-sm text-muted-foreground">Don't reinvent the wheel. We match your symptom to 30+ proven solved scenarios.</p>
                     </div>
-
-                    <div className="p-6 rounded-xl border border-app card-surface">
-                        <History className="text-purple-600 mb-4" size={32} />
-                        <h3 className="text-lg font-bold mb-2">Preserves Institutional Memory</h3>
-                        <p className="text-sm text-muted">
-                            When an employee leaves, their wisdom usually leaves with them. Documenting Scenarios &rarr; Experiments builds a permanent "Brain" for your company.
-                        </p>
+                    <div className="p-6 border border-border rounded-xl bg-card">
+                        <TrendingUp className="text-emerald-500 mb-4" size={32} />
+                        <h3 className="font-bold mb-2">Velocity</h3>
+                        <p className="text-sm text-muted-foreground">Skip the 3-week "strategy planning" phase. Get to a testable hypothesis in 3 minutes.</p>
                     </div>
-
-                    <div className="p-6 rounded-xl border border-app card-surface">
-                        <BarChart3 className="text-emerald-600 mb-4" size={32} />
-                        <h3 className="text-lg font-bold mb-2">Evidence &gt; Opinion</h3>
-                        <p className="text-sm text-muted">
-                            Arguments in boardrooms happen because of lack of data. By forcing every strategy to be an &quot;Experiment&quot; with a &quot;Hypothesis&quot;, we move to data-driven decision making.
-                        </p>
+                    <div className="p-6 border border-border rounded-xl bg-card">
+                        <ShieldCheck className="text-purple-500 mb-4" size={32} />
+                        <h3 className="font-bold mb-2">Governance</h3>
+                        <p className="text-sm text-muted-foreground">Standardized output formats (Boardroom, Operator, Creative) ensure alignment across the org.</p>
                     </div>
                 </div>
             </div>

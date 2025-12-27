@@ -1,116 +1,168 @@
-import { Scenario } from './types';
 import { storage, STORAGE_KEYS } from './storage-client';
-// Import seed pack
-import seedPack from '@/data/seed-pack.json';
+import { Scenario, Blueprint, Experiment } from './types';
+import { SCENARIOS_SEED_JSON, EXPERIMENTS_SEED_JSON } from './seed-data';
 
-// Simulated Embedding/Vector Search
-export interface ScoredScenario extends Scenario {
-    match_score: number;
-    match_reason: string;
-}
-
-export const getAllScenarios = (): Scenario[] => {
-    return storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
-};
-
-import { Blueprint } from './types';
-import { generateBlueprint } from './blueprint-engine';
-
-export const saveScenario = (scenario: Scenario): void => {
-    const existing = getAllScenarios();
-    storage.set(STORAGE_KEYS.SCENARIOS, [scenario, ...existing]);
+// Helper to generate a mock blueprint for a seeded scenario
+const generateMockBlueprint = (scenarioId: string, title: string, industry: string): Blueprint => {
+    return {
+        id: `BP-${scenarioId}`,
+        scenario_id: scenarioId,
+        workspace_id: 'guest',
+        created_at: new Date().toISOString(),
+        consultant_voice: {
+            c_suite: {
+                summary_card: { title: "Executive Brief", subtitle: "Strategic Re-alignment", focus_point: "ROI & Risk" },
+                diagnosis_headline: "Strategic Misalignment detected.",
+                strategic_angle: `In ${industry}, the market has shifted but your strategy has not. We need to realign mechanics.`
+            },
+            growth: {
+                summary_card: { title: "Growth Roadmap", subtitle: "30-Day Sprints", focus_point: "Execution" },
+                diagnosis_headline: "Funnel friction detected.",
+                strategic_angle: "Focus on removing barriers in the first 7 days to unlock velocity."
+            },
+            creative: {
+                summary_card: { title: "The Angle", subtitle: "Narrative & Hook", focus_point: "Differentiation" },
+                diagnosis_headline: "Creative fatigue detected.",
+                strategic_angle: "The story is stale. We need a new villain and a new hero."
+            }
+        },
+        diagnosis: {
+            primary_constraint: "Market Dynamics",
+            behavioral_barrier: "Trust Deficit",
+            root_cause_hypotheses: ["Value not communicated clearly", "High friction in signup"],
+            assumptions: ["Market demand exists", "Pricing is not the primary barrier"]
+        },
+        qmm_mapping: {
+            core_principles: [
+                { principle: "Trust Equation", why_applies: "Low conversion despite high traffic", what_it_changes: "Front-load proof." },
+                { principle: "Friction Cost", why_applies: "Drop-off at checkout", what_it_changes: "Simplify flow." }
+            ],
+            laws_used_optional: ["LAW-1", "LAW-2"]
+        },
+        sequence_map: {
+            narrative_goal: "Standard Funnel Optimization",
+            steps: [
+                { step_no: 1, goal: "Capture Attention", channel: "Paid Social", message_angle: "Pattern Interrupt", expected_time: "Day 1-3", trigger_signal: "Click", fallback_if_no_signal: "Retarget", metric: "CTR" },
+                { step_no: 2, goal: "Build Trust", channel: "Email", message_angle: "Social Proof", expected_time: "Day 4-7", trigger_signal: "Open", fallback_if_no_signal: "Resend", metric: "Open Rate" }
+            ],
+            variants_for_AZ_testing: []
+        },
+        strategic_options: {
+            conservative: { title: "Optimizer", sequence_variant: 'A', big_bet: "Optimize lower funnel", first_3_tests: ["Checkout UI", "Email timing", "Retargeting"] },
+            aggressive: { title: "Challenger", sequence_variant: 'Z', big_bet: "Pivot positioning", first_3_tests: ["New Value Prop", "Pricing Change", "Influencer Blitz"] },
+            weird: { title: "Disruptor", sequence_variant: 'Z', big_bet: "Counter-intuitive offer", first_3_tests: ["Pay what you want", "Anti-marketing", "Community led"] }
+        },
+        experiments: {
+            sequence_tests: [],
+            asset_tests: []
+        },
+        trust_governance: {
+            compliance_flags: ["Check local advertising laws"],
+            privacy_consent_note: "Standard GDPR/NDPR applies.",
+            transparency_note: "Mock Data",
+            bias_check_note: "Mock Data"
+        },
+        confidence: {
+            overall: 'Medium',
+            score: 75,
+            data_needed_to_increase_confidence: ["More historical data"]
+        },
+        kpi_plan: {
+            primary_kpi: "Revenue",
+            secondary_kpis: ["CAC", "LTV"],
+            measurement_method: "Direct Attribution",
+            cadence: "Weekly",
+            targets: "10% MoM"
+        },
+        sources: {
+            kb_refs: [],
+            retrieved_scenarios: []
+        }
+    };
 };
 
 export const seedSampleData = async (): Promise<string> => {
     // 1. Get existing data
-    const existingScenarios = getAllScenarios();
-    const existingExperiments = storage.get<any[]>(STORAGE_KEYS.EXPERIMENTS) || [];
+    const existingScenarios = storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
+    const existingExperiments = storage.get<Experiment[]>(STORAGE_KEYS.EXPERIMENTS) || [];
+    const existingBlueprints = storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
 
     // Map for fast lookup
     const scenarioMap = new Map(existingScenarios.map(s => [s.id, s]));
-    const experimentMap = new Map(existingExperiments.map(e => [e.experiment_id, e]));
+    const experimentMap = new Map(existingExperiments.map(e => [e.id, e]));
+    const blueprintMap = new Map(existingBlueprints.map(b => [b.id, b]));
 
     let addedScenarios = 0;
     let addedExperiments = 0;
 
-    const newBlueprints: Blueprint[] = [];
+    // 2. Process Experiments first to link them (but they need scenario IDs)
+    // We will process scenarios, then look up experiments for them.
 
-    // 2. Process Scenarios
-    for (const s of seedPack.scenarios) {
+    for (const s of SCENARIOS_SEED_JSON) {
         if (!scenarioMap.has(s.scenario_id)) {
-            // Create Scenario
+            // Find related experiments from seed
+            const relatedExps = EXPERIMENTS_SEED_JSON.filter(e => e.scenario_id === s.scenario_id);
+            const relatedExpIds = relatedExps.map(e => e.experiment_id);
+
+            // Create Blueprint for this scenario
+            const newBp = generateMockBlueprint(s.scenario_id, s.title, s.industry);
+            if (!blueprintMap.has(newBp.id)) {
+                blueprintMap.set(newBp.id, newBp);
+            }
+
             const newScenario: Scenario = {
                 id: s.scenario_id,
                 workspace_id: 'guest',
                 title: s.title,
-                description: `Market: ${s.market}. Objective: ${s.objective}.`,
+                description: `${s.industry} - ${s.market}: ${s.symptom}`,
                 metadata: {
                     industry: s.industry,
                     market: s.market,
-                    customer_state: s.customer_state,
-                    objective: s.objective,
-                    time_horizon: '90 days',
-                    budget_band: s.budget_band,
+                    customer_state: s.customer_state as any,
+                    objective: s.objective as any,
+                    time_horizon: s.constraint,
+                    budget_band: s.budget_band as any,
                     risk_level: 'medium'
                 },
                 inputs: {
-                    baseline_signals: JSON.stringify(s.baseline_signals),
-                    what_was_tried: 'N/A',
-                    channel_constraints: s.constraints || []
+                    baseline_signals: s.baseline_signals,
+                    what_was_tried: s.what_tried,
+                    channel_constraints: []
                 },
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
-                related_blueprints: [],
-                related_experiments: (s as any).related_experiments || [], // Will be populated by linking logic if needed, but we rely on experiment objects having scenario_id
-                outcomes_summary: { wins: 0, losses: 0, learning_notes: [] },
+                related_blueprints: [newBp.id],
+                related_experiments: relatedExpIds,
+                outcomes_summary: { wins: 0, losses: 0, learning_notes: [] }
             };
-
-            // Generate Blueprint
-            const mockInput = {
-                situation: s.title,
-                industry: s.industry,
-                market: s.market,
-                objective: s.objective,
-                customer_state: s.customer_state,
-                time_horizon: '90 days',
-                budget_band: s.budget_band,
-                primary_kpi: 'Conversion', // Default
-                compliance_risk: 'medium' as const,
-                channel_constraints: s.channels || [],
-                baseline_signals: JSON.stringify(s.baseline_signals),
-                what_was_tried: '',
-                anchorScenarioId: s.scenario_id,
-                title: s.title
-            };
-
-            const bp = await generateBlueprint(mockInput);
-            newScenario.related_blueprints.push(bp.id);
-            newBlueprints.push(bp);
 
             scenarioMap.set(newScenario.id, newScenario);
             addedScenarios++;
-        }
-    }
 
-    // 3. Process Experiments
-    for (const e of seedPack.experiments) {
-        if (!experimentMap.has(e.experiment_id)) {
-            const newExperiment = {
-                ...e,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-                status: 'planned' as const // Enforce default status
-            };
-            experimentMap.set(e.experiment_id, newExperiment);
-            addedExperiments++;
-
-            // Link to Scenario (Bi-directional if needed, but primary link is distinct)
-            // Ideally we update the scenario's related_experiments array too
-            const linkedScenario = scenarioMap.get(e.scenario_id);
-            if (linkedScenario) {
-                if (!linkedScenario.related_experiments) linkedScenario.related_experiments = [];
-                if (!linkedScenario.related_experiments.includes(e.experiment_id)) {
-                    linkedScenario.related_experiments.push(e.experiment_id);
+            // Add the experiments to map
+            for (const e of relatedExps) {
+                if (!experimentMap.has(e.experiment_id)) {
+                    const newExp: Experiment = {
+                        id: e.experiment_id, // Map seed's experiment_id to type's id
+                        scenario_id: e.scenario_id,
+                        blueprint_id: newBp.id,
+                        workspace_id: 'guest',
+                        title: e.hypothesis.split(' because')[0]?.replace('If we ', '') || "Experiment",
+                        type: 'Asset (A/B/n)', // Default
+                        hypothesis: e.hypothesis,
+                        status: (e.status as any) || 'planned',
+                        // outcome: 'inconclusive', // Optional in type?
+                        setup: "A/B Test",
+                        principle_tested: "Unknown",
+                        stopping_rule: "100 clicks",
+                        success_threshold: "10%",
+                        win_action: "Scale",
+                        lose_action: "Kill",
+                        cost_to_learn: "$100",
+                        startDate: new Date().toISOString()
+                    };
+                    experimentMap.set(newExp.id, newExp);
+                    addedExperiments++;
                 }
             }
         }
@@ -120,59 +172,45 @@ export const seedSampleData = async (): Promise<string> => {
     if (addedScenarios > 0 || addedExperiments > 0) {
         storage.set(STORAGE_KEYS.SCENARIOS, Array.from(scenarioMap.values()));
         storage.set(STORAGE_KEYS.EXPERIMENTS, Array.from(experimentMap.values()));
-
-        // Append new blueprints to existing ones
-        if (newBlueprints.length > 0) {
-            const existingBPs = storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
-            storage.set(STORAGE_KEYS.BLUEPRINTS, [...existingBPs, ...newBlueprints]);
-        }
+        storage.set(STORAGE_KEYS.BLUEPRINTS, Array.from(blueprintMap.values()));
     }
 
-    return `Seeded ${addedScenarios} scenarios + ${addedExperiments} experiments`;
+    return `Librarian instantiated: ${addedScenarios} scenarios, ${addedExperiments} experiments loaded.`;
 };
 
-export function searchScenarios(
-    query: string,
-    industry: string
-): ScoredScenario[] {
-    const allScenarios = getAllScenarios();
+// Re-export other services
+export const getAllScenarios = (): Scenario[] => {
+    return storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
+};
 
-    // Cold Start Handling handled by caller checking empty state usually, but here we return empty or seeds
-    if (allScenarios.length === 0) {
-        return [];
+export const getAllBlueprints = (): Blueprint[] => {
+    return storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+};
+
+export const saveScenario = (scenario: Scenario): void => {
+    const scenarios = getAllScenarios();
+    const index = scenarios.findIndex(s => s.id === scenario.id);
+    if (index >= 0) {
+        scenarios[index] = scenario;
+    } else {
+        scenarios.push(scenario);
     }
+    storage.set(STORAGE_KEYS.SCENARIOS, scenarios);
+};
 
-    const scored = allScenarios.map(s => {
-        let score = 0;
-        const reasons: string[] = [];
+export const searchScenarios = async (query: string, industry?: string): Promise<Scenario[]> => {
+    const scenarios = getAllScenarios();
+    const q = query.toLowerCase();
+    const ind = industry?.toLowerCase();
 
-        // Industry Match (High weight)
-        if (s.metadata.industry.toLowerCase() === industry.toLowerCase()) {
-            score += 30;
-            reasons.push("Industry match");
+    return scenarios.filter(s => {
+        const matchesQuery = s.title.toLowerCase().includes(q) ||
+            s.metadata.industry.toLowerCase().includes(q) ||
+            s.description?.toLowerCase().includes(q);
+
+        if (ind && ind !== 'general') {
+            return matchesQuery && s.metadata.industry.toLowerCase() === ind;
         }
-
-        // Text Overlap (Title/Desc vs Query)
-        const queryTerms = query.toLowerCase().split(' ').filter(w => w.length > 3);
-        const scenarioText = (s.title + ' ' + s.description + ' ' + s.metadata.objective).toLowerCase();
-
-        const matchCount = queryTerms.reduce((acc, term) => acc + (scenarioText.includes(term) ? 1 : 0), 0);
-        if (matchCount > 0) {
-            score += matchCount * 10;
-            reasons.push(`Key terms match (${matchCount})`);
-        }
-
-        // Win History Boost
-        if (s.outcomes_summary && s.outcomes_summary.wins > 0) {
-            score += 15;
-            reasons.push("Known Winner history");
-        }
-
-        return { ...s, match_score: score, match_reason: reasons.join(", ") || "General Relevance" };
+        return matchesQuery;
     });
-
-    return scored
-        .filter(s => s.match_score > 0)
-        .sort((a, b) => b.match_score - a.match_score)
-        .slice(0, 5);
-}
+};

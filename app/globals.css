@@ -4,40 +4,125 @@
 
 @layer base {
   :root {
+    --background: #ffffff;
+    --foreground: #09090b;
     --bg: 255 255 255;
-    /* #ffffff */
-    --fg: 23 23 23;
-    /* neutral-900 */
-    --muted: 115 115 115;
-    /* neutral-500 */
-    --card: 255 255 255;
-    /* white */
-    --border: 229 229 229;
-    /* neutral-200 */
-    --shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --fg: 9 9 11;
 
-    /* Notion Accents */
-    --accent-blue: 37 99 235;
-    /* blue-600 */
+    --card: #ffffff;
+    --card-foreground: #09090b;
+
+    --popover: #ffffff;
+    --popover-foreground: #09090b;
+
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+
+    --muted: #71717a;
+    --muted-foreground: #71717a;
+
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #18181b;
   }
 
   .dark {
-    --bg: 10 10 10;
-    /* near black */
-    --fg: 245 245 245;
-    /* neutral-100 */
-    --muted: 163 163 163;
-    /* neutral-400 */
-    --card: 18 18 18;
-    /* neutral-900 */
-    --border: 38 38 38;
-    /* neutral-800 */
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.35);
+    --background: #09090b;
+    --foreground: #fafafa;
+    --card: #09090b;
+    --card-foreground: #fafafa;
+    --popover: #09090b;
+    --popover-foreground: #fafafa;
+    --primary: #fafafa;
+    --primary-foreground: #18181b;
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
+    --muted: #a1a1aa;
+    --muted-foreground: #a1a1aa;
+    --accent: #27272a;
+    --accent-foreground: #fafafa;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fafafa;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #d4d4d8;
   }
 
   body {
     @apply bg-app text-app antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--border));
+  }
+
+
+}
+
+/* Print Styles for PDF Export */
+@media print {
+  @page {
+    margin: 1cm;
+    size: A4;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide UI elements */
+  nav,
+  footer,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ensure content is visible and formatted */
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  /* Ensure PageShell constraint is ignored for full width */
+  .max-w-\[1200px\] {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Force dark text */
+  .text-muted,
+  .text-muted-foreground {
+    color: #555 !important;
+  }
+
+  /* Break pages nicely */
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  .card,
+  .p-6 {
+    page-break-inside: avoid;
   }
 }
 

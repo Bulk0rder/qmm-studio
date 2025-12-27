@@ -10,7 +10,7 @@ import { SessionPayload } from '@/lib/auth'; // Ensure this uses a type we can i
 // Actually lib/auth might pull in Node.js stuff. Let's just define the prop type cleanly.
 
 interface NavbarProps {
-    session: {
+    session?: {
         displayName: string;
         role: string;
     } | null;
@@ -18,10 +18,9 @@ interface NavbarProps {
 
 export function Navbar({ session }: NavbarProps) {
     const pathname = usePathname();
+    const userSession = session || { displayName: 'Guest', role: 'guest' };
 
     const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
-
-    if (!session) return null;
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-app h-16 transition-all">
@@ -45,7 +44,7 @@ export function Navbar({ session }: NavbarProps) {
                     <Link href="/" className="font-semibold text-lg tracking-tight text-app flex items-center gap-2 hover:opacity-80 transition-opacity">
                         <div className="w-6 h-6 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-lg shadow-sm"></div>
                         <span className="hidden sm:inline">{UI_COPY.APP.NAME}</span>
-                        {session.role === 'guest' && (
+                        {userSession.role === 'guest' && (
                             <div className="hidden md:flex items-center px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800">
                                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse mr-1.5"></div>
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
@@ -57,7 +56,7 @@ export function Navbar({ session }: NavbarProps) {
 
                     <div className="h-6 w-px bg-zinc-200 dark:bg-zinc-800 mx-1"></div>
 
-                    <ProfileMenu displayName={session.displayName} />
+                    <ProfileMenu displayName={userSession.displayName} />
                 </div>
             </div>
         </nav>

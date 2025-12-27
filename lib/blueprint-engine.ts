@@ -130,92 +130,83 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
 
         diagnosis: {
             // Dynamic diagnosis based on inputs
-            primary_constraint: input.budget_band?.includes('Low') ? "Budget Velocity" :
-                (input.customer_state === 'Unaware' ? "Market Attention" : "Trust/Authority"),
-            behavioral_barrier: input.customer_state === 'Unaware' ? "Inertia / Status Quo Bias" :
-                (input.customer_state === 'Problem Aware' ? "Solution Skepticism" : "Price Anchoring"),
+            primary_constraint: input.channel_constraints?.[0] || "Capital Efficiency",
+            behavioral_barrier: "High Cognitive Load",
             root_cause_hypotheses: [
-                `Customers in ${input.industry} default to established players due to risk aversion.`,
-                "The current value proposition is too generic and doesn't polarize the audience.",
-                "Friction in the sign-up flow is filtering out high-intent prospects."
+                "User lacks clear signal of value",
+                "Competing priorities dilute attention"
             ],
             assumptions: [
-                `CAC can be sustained at < $${input.budget_band.includes('High') ? '100' : '50'}.`,
-                "Channel intent matches the 'Problem Aware' state.",
-                "Competitor response will be slower than 30 days."
+                "Traffic intent is high",
+                "Offer is competitive"
             ]
         },
-
         qmm_mapping: {
             core_principles: [
                 {
-                    principle: CORE_PRINCIPLES.NON_COMMUTATIVITY.name,
-                    why_applies: "The order of 'Value then Price' is critical in this high-consideration journey.",
-                    what_it_changes: "We enforce a strict content sequence (Education -> Proof -> Offer) instead of mixing them."
+                    principle: "The Law of Double Jeopardy",
+                    why_applies: "Your small market share implies lower loyalty naturally.",
+                    what_it_changes: "Stop fighting for loyalty first. Fight for penetration."
                 },
                 {
-                    principle: CORE_PRINCIPLES.SUPERPOSITION.name,
-                    why_applies: "Input indicates customers are researching (Indecision state).",
-                    what_it_changes: "We use 'Either/Or' framing to collapse the wave function into a decision."
+                    principle: "Signal Cost Theory",
+                    why_applies: "Low trust environment.",
+                    what_it_changes: "Invest in high-cost signals (partnerships) over cheap talk (ads)."
+                },
+                {
+                    principle: "Friction Physics",
+                    why_applies: "Conversion rate < 1%",
+                    what_it_changes: "Radical simplification of the signup flow."
                 }
             ],
-            laws_used_optional: ["Law 5", "Law 1"]
+            laws_used_optional: ["LAW-1", "LAW-5"]
         },
-
-        strategic_options: {
-            conservative: {
-                title: "The Optimization Path",
-                sequence_variant: "A",
-                big_bet: "Incremental gain via friction reduction.",
-                first_3_tests: ["Headline A/B", "Button Color", "Email Subject"]
-            },
-            aggressive: {
-                title: "The Pattern Break",
-                sequence_variant: "Z",
-                big_bet: "Radical offer change to disrupt the market anchor.",
-                first_3_tests: ["Offer Structure", "channel Swap", "Influencer Push"]
-            },
-            weird: {
-                title: "The Left-Field",
-                sequence_variant: "Z", // Using non-standard sequence
-                big_bet: "Use humor/anti-marketing to build trust.",
-                first_3_tests: ["Ugly Ad Creative", "No-Landing-Page Funnel", "Direct CEO Video"]
-            }
-        },
-
         sequence_map: {
-            narrative_goal: `Convert ${input.customer_state} to Next State via Trust Accelerators`,
+            narrative_goal: "Disrupt, Validate, Scale",
             steps: sequenceSteps,
             variants_for_AZ_testing: [
                 {
+                    variant_id: "A",
+                    sequence_order: [1, 2, 3],
+                    rationale: "Standard Flow"
+                },
+                {
                     variant_id: "Z",
-                    sequence_order: [2, 1, 3, 4, 5],
-                    rationale: "Testing 'Problem Agitation' before 'Disruption' to filter for high intent."
+                    sequence_order: [2, 1, 3],
+                    rationale: "Price-First Test"
                 }
             ]
         },
-
+        strategic_options: {
+            conservative: {
+                title: "The Optimizer",
+                sequence_variant: 'A',
+                big_bet: "Optimization of current rails",
+                first_3_tests: ["Pricing Page Audit", "Email Subject Lines", "Retargeting Frequency"]
+            },
+            aggressive: {
+                title: "The Challenger",
+                sequence_variant: 'Z',
+                big_bet: "New Channel Expansion",
+                first_3_tests: ["Influencer Seeding", "Podcast Sponsorship", "Competitor Conquesting"]
+            },
+            weird: {
+                title: "The Disruptor",
+                sequence_variant: 'Z',
+                big_bet: "The 'Trojan Horse' Strategy",
+                first_3_tests: ["Free Tool Launch", "Viral Quiz", "Fake Documentary"]
+            }
+        },
         experiments: {
-            asset_tests: [assetTest],
-            sequence_tests: [seqTest]
+            sequence_tests: [seqTest],
+            asset_tests: [assetTest]
         },
-
-        kpi_plan: {
-            primary_kpi: input.primary_kpi || "Conversion Rate",
-            secondary_kpis: ["CAC", "Time to Close"],
-            measurement_method: "Cohorted attribution",
-            cadence: "Weekly",
-            targets: "+10% MoM"
-        },
-
         trust_governance: {
-            compliance_flags: input.compliance_risk === 'high' ? ["Claims Verification", "Legal Review"] : [],
-            privacy_consent_note: "Ensure explicit opt-in for email sequence.",
-            transparency_note: "Disclose AI usage if chatbot agents are used.",
-            bias_check_note: "Verify ad targeting excludes protected attributes.",
-            claims_evidence_required: input.compliance_risk === 'high' ? ["Clinical Data", "Whitepaper"] : []
+            compliance_flags: ["Claims Check Required"],
+            privacy_consent_note: "Standard GDPR/NDPR applies.",
+            transparency_note: "AI generated based on user input and simulated patterns.",
+            bias_check_note: "Standard safeguards applied."
         },
-
         confidence: {
             overall: "Medium",
             score: 72,
@@ -223,6 +214,13 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
                 "Historical CAC data",
                 "Competitor conversion benchmarks"
             ]
+        },
+        kpi_plan: {
+            primary_kpi: input.primary_kpi || "ROI",
+            secondary_kpis: ["CAC", "LTV"],
+            measurement_method: "Attribution Win-Window",
+            cadence: "Weekly",
+            targets: "+20%"
         },
 
         consultant_voice: {

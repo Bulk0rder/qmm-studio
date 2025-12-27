@@ -111,9 +111,6 @@ export default function NewScenarioPage() {
 
                 {/* Left Column: Intake */}
 
-                // ... other imports
-
-                // Inside component
                 {/* Left Column: Intake */}
                 <div className="lg:col-span-7 space-y-8">
                     <BackButton />

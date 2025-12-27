@@ -35,7 +35,7 @@ export function ProfileMenu({ displayName }: ProfileMenuProps) {
     };
 
     return (
-        <div className="relative" ref={menuRef} onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+        <div className="relative" ref={menuRef}>
             <button
                 onClick={toggleMenu}
                 onKeyDown={handleKeyDown}

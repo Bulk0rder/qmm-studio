@@ -1,50 +1,58 @@
 import React from 'react';
-import { UI_COPY } from '@/lib/ui-copy';
 import Link from 'next/link';
+import { UI_COPY } from '@/lib/ui-copy';
 
 export function Footer() {
+    const currentYear = new Date().getFullYear();
+
     return (
-        <footer className="border-t border-app bg-zinc-50 dark:bg-zinc-900/50 py-12 px-6">
-            <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-md shadow-sm"></div>
-                        <span className="font-semibold text-app">{UI_COPY.APP.NAME}</span>
+        <footer className="border-t border-app bg-zinc-50 dark:bg-zinc-950 mt-auto">
+            <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-14 py-12">
+                <div className="grid md:grid-cols-4 gap-8 mb-8">
+                    <div className="col-span-1 md:col-span-2">
+                        <div className="font-bold text-xl mb-4 text-app flex items-center gap-2">
+                            <div className="w-5 h-5 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded shadow-sm"></div>
+                            {UI_COPY.APP.NAME}
+                        </div>
+                        <p className="text-sm text-muted max-w-sm mb-6">
+                            The Scenario Librarian. Turn unclear business situations into validated strategies using QMM (JTBD × Lean × AIDA).
+                        </p>
+                        <div className="flex items-center gap-2 text-xs font-mono text-muted">
+                            <span className="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 rounded">v0.1.0-beta</span>
+                            <span>Guest Mode Active</span>
+                        </div>
                     </div>
-                    <p className="text-sm text-muted">
-                        AI-powered Qualitative Model Management Studio.
-                    </p>
-                    <p className="text-xs text-muted">v0.1.0 Beta</p>
+
+                    <div>
+                        <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-muted">Platform</h4>
+                        <ul className="space-y-2 text-sm">
+                            <li><Link href="/new" className="text-muted hover:text-app transition-colors">New Scenario</Link></li>
+                            <li><Link href="/library" className="text-muted hover:text-app transition-colors">Scenario Library</Link></li>
+                            <li><Link href="/experiments" className="text-muted hover:text-app transition-colors">Experiments</Link></li>
+                            <li><Link href="/kb" className="text-muted hover:text-app transition-colors">Knowledge Base</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-muted">Company</h4>
+                        <ul className="space-y-2 text-sm">
+                            <li><Link href="/about" className="text-muted hover:text-app transition-colors">About Us</Link></li>
+                            <li><Link href="/privacy" className="text-muted hover:text-app transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/terms" className="text-muted hover:text-app transition-colors">Terms of Service</Link></li>
+                            <li><a href="mailto:hello@antigravity.studio" className="text-muted hover:text-app transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div>
-                    <h4 className="font-semibold text-sm mb-4 text-app">Product</h4>
-                    <ul className="space-y-2 text-sm text-muted">
-                        <li><Link href="/new" className="hover:text-app transition-colors">New Scenario</Link></li>
-                        <li><Link href="/library" className="hover:text-app transition-colors">Library</Link></li>
-                        <li><Link href="/experiments" className="hover:text-app transition-colors">Experiments</Link></li>
-                    </ul>
+                <div className="border-t border-zinc-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted">
+                    <div>
+                        &copy; {currentYear} Antigravity Studios. All rights reserved.
+                    </div>
+                    <div className="flex gap-6">
+                        <span>Local Storage Mode</span>
+                        <span>No Tracking</span>
+                    </div>
                 </div>
-
-                <div>
-                    <h4 className="font-semibold text-sm mb-4 text-app">Resources</h4>
-                    <ul className="space-y-2 text-sm text-muted">
-                        <li><Link href="/kb" className="hover:text-app transition-colors">Knowledge Base</Link></li>
-                        <li><Link href="/about/how-to-use" className="hover:text-app transition-colors">How to Use</Link></li>
-                        <li><Link href="/about/usefulness" className="hover:text-app transition-colors">Usefulness</Link></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 className="font-semibold text-sm mb-4 text-app">Legal</h4>
-                    <ul className="space-y-2 text-sm text-muted">
-                        <li><span className="cursor-not-allowed">Privacy Policy</span></li>
-                        <li><span className="cursor-not-allowed">Terms of Service</span></li>
-                    </ul>
-                </div>
-            </div>
-            <div className="max-w-[1200px] mx-auto mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-800 text-center text-xs text-muted">
-                &copy; {new Date().getFullYear()} {UI_COPY.APP.NAME}. All rights reserved.
             </div>
         </footer>
     );

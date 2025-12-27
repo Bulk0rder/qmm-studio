@@ -117,7 +117,7 @@ export interface Blueprint {
         score: number;
         data_needed_to_increase_confidence: string[];
     };
-    consultant_voice?: {
+    consultant_voice: {
         c_suite: VoiceContent;
         growth: VoiceContent;
         creative: VoiceContent;

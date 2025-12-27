@@ -4,8 +4,8 @@ import {
     SequenceStep,
     ExperimentCard
 } from './types';
-import { getScenarioById, GUEST_WORKSPACE_ID } from './storage';
-import { searchKB } from './kb-service';
+// import { getScenarioById, GUEST_WORKSPACE_ID } from './storage';
+// import { searchKB } from './kb-service';
 
 // --- CORE QMM PRINCIPLES ---
 const CORE_PRINCIPLES = {
@@ -36,16 +36,16 @@ const CORE_PRINCIPLES = {
     }
 };
 
-export async function generateBlueprint(input: UserScenarioInput & { anchorScenarioId?: string }): Promise<Blueprint> {
+export async function generateBlueprint(input: UserScenarioInput & { anchorScenarioId?: string, title?: string }): Promise<Blueprint> {
 
-    // 1. RETRIEVAL CONTEXT
+    // 1. RETRIEVAL CONTEXT (Mocked for Client Side Seeding)
     let retrievedContext = { scenarios: [], kb: [] };
-    let anchor: any = null;
-    if (input.anchorScenarioId) {
-        anchor = getScenarioById(input.anchorScenarioId, GUEST_WORKSPACE_ID);
-        // In a real app, we'd use this to seed the LLM prompt
-    }
-    const relatedKB = await searchKB(input.objective + ' ' + input.industry);
+
+    // In strict client mode, we skip complex KB retrieval
+    // const relatedKB = await searchKB(input.objective + ' ' + input.industry);
+    const relatedKB: any[] = [];
+
+
 
     // 2. GENERATE ID
     const blueprintId = `BP-${Math.random().toString(36).substr(2, 9)}`;
@@ -116,9 +116,9 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
         input: input,
 
         sources: {
-            retrieved_scenarios: input.anchorScenarioId && anchor ? [{
+            retrieved_scenarios: input.anchorScenarioId ? [{
                 scenario_id: input.anchorScenarioId,
-                title: anchor.title, // Real title from storage
+                title: input.title || input.anchorScenarioId, // Use passed title or ID
                 match_reason: "User Pinned"
             }] : [],
             kb_refs: relatedKB.map(d => ({

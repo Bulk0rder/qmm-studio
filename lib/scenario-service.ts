@@ -1,25 +1,102 @@
 import { Scenario } from './types';
-import { getScenarios, GUEST_WORKSPACE_ID } from './storage';
+import { storage, STORAGE_KEYS } from './storage-client';
+import seeds from '@/data/scenarios.json';
 
 // Simulated Embedding/Vector Search
-// In a real app, this would use OpenAI embeddings + Pinecone
-// Here we use a keyword overlap + industry match scoring system.
-
 export interface ScoredScenario extends Scenario {
     match_score: number;
     match_reason: string;
 }
 
+export const getAllScenarios = (): Scenario[] => {
+    return storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
+};
+
+export const saveScenario = (scenario: Scenario): void => {
+    const existing = getAllScenarios();
+    storage.set(STORAGE_KEYS.SCENARIOS, [scenario, ...existing]);
+};
+
+// Import Blueprint Type
+import { Blueprint } from './types';
+import { generateBlueprint } from './blueprint-engine';
+
+export const seedSampleData = async (): Promise<void> => {
+    const existing = getAllScenarios();
+    if (existing.length > 0) return;
+
+    const newScenarios: Scenario[] = [];
+    const newBlueprints: Blueprint[] = [];
+
+    for (const s of (seeds as any[])) {
+        // 1. Create Scenario
+        const scenarioId = s.scenario_id;
+        const newScenario: Scenario = {
+            id: scenarioId,
+            workspace_id: 'guest',
+            title: s.title,
+            description: `Market: ${s.market}. Objective: ${s.objective || 'Optimization'}.`,
+            metadata: {
+                industry: s.industry,
+                market: s.market,
+                customer_state: s.customer_state,
+                objective: s.objective || 'Growth',
+                time_horizon: '90 days',
+                budget_band: 'Variable',
+                risk_level: 'medium'
+            },
+            inputs: {
+                baseline_signals: (s.signals || []).join(', '),
+                what_was_tried: 'N/A',
+                channel_constraints: []
+            },
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            related_blueprints: [],
+            related_experiments: [],
+            outcomes_summary: { wins: Math.floor(Math.random() * 5), losses: 0, learning_notes: [] },
+        };
+
+        // 2. Mock Input for Blueprint Engine
+        const mockInput = {
+            situation: s.title,
+            industry: s.industry,
+            market: s.market,
+            objective: s.objective || 'Growth',
+            customer_state: s.customer_state,
+            time_horizon: '90 days',
+            budget_band: 'Medium',
+            primary_kpi: 'Conversion',
+            compliance_risk: 'medium' as const,
+            channel_constraints: [],
+            baseline_signals: '',
+            what_was_tried: '',
+            anchorScenarioId: scenarioId,
+            title: s.title // Extra field for title
+        };
+
+        // 3. Generate Blueprint
+        const bp = await generateBlueprint(mockInput);
+        newBlueprints.push(bp);
+
+        // 4. Link
+        newScenario.related_blueprints.push(bp.id);
+        newScenarios.push(newScenario);
+    }
+
+    storage.set(STORAGE_KEYS.SCENARIOS, newScenarios);
+    storage.set(STORAGE_KEYS.BLUEPRINTS, newBlueprints);
+};
+
 export function searchScenarios(
     query: string,
-    industry: string,
-    workspaceId: string = GUEST_WORKSPACE_ID
+    industry: string
 ): ScoredScenario[] {
-    const allScenarios = getScenarios(workspaceId);
+    const allScenarios = getAllScenarios();
 
-    // Default "Bank" of scenarios if empty (Cold Start)
+    // Cold Start Handling handled by caller checking empty state usually, but here we return empty or seeds
     if (allScenarios.length === 0) {
-        return getColdStartScenarios(query, industry);
+        return [];
     }
 
     const scored = allScenarios.map(s => {
@@ -55,56 +132,4 @@ export function searchScenarios(
         .filter(s => s.match_score > 0)
         .sort((a, b) => b.match_score - a.match_score)
         .slice(0, 5);
-}
-
-// Cold Start Data (So the app isn't empty)
-function getColdStartScenarios(query: string, industry: string): ScoredScenario[] {
-    // Return mock data that looks like it came from the DB
-    return [
-        {
-            id: 'SC-MOCK-1',
-            workspace_id: 'system',
-            title: 'SaaS Churn Reduction via Law 3',
-            description: 'Reduced churn by 15% using non-linear re-engagement loops.',
-            metadata: {
-                industry: 'SaaS',
-                market: 'Global',
-                customer_state: 'Retention',
-                objective: 'Reduce Churn',
-                time_horizon: '30 days',
-                budget_band: '$1k - $5k',
-                risk_level: 'low'
-            },
-            inputs: { baseline_signals: '', what_was_tried: '', channel_constraints: [] },
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            related_blueprints: [],
-            related_experiments: [],
-            outcomes_summary: { wins: 2, losses: 0, learning_notes: ['Sequence matters more than offer'] },
-            match_score: 90,
-            match_reason: 'System Template: High relevance to general queries'
-        },
-        {
-            id: 'SC-MOCK-2',
-            workspace_id: 'system',
-            title: 'Fintech Trust Building (Nigeria)',
-            description: 'Launched new savings product using "Law 16: Trust Velocity".',
-            metadata: {
-                industry: 'Fintech',
-                customer_state: 'Consideration',
-                market: 'Nigeria',
-                objective: 'Acquisition',
-                time_horizon: '60 days',
-                budget_band: '$10k+',
-                risk_level: 'medium'
-            },
-            inputs: { baseline_signals: '', what_was_tried: '', channel_constraints: [] },
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            related_blueprints: [],
-            related_experiments: [],
-            match_score: 85,
-            match_reason: 'System Template: Regional best practice'
-        }
-    ];
 }

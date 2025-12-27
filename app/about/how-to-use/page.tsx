@@ -1,42 +1,67 @@
-'use client';
-
 import React from 'react';
-import { UI_COPY } from '@/lib/ui-copy';
-import { ArrowRight, Lightbulb } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/Card';
+import { PageShell } from '@/components/layout/PageShell';
+import { ArrowRight, PlayCircle, PenTool, Database, Beaker } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HowToUsePage() {
-    const { TITLE, INTRO, STEPS, FOOTER_TIP } = UI_COPY.ABOUT_HOW_TO_USE;
-
     return (
-        <div className="max-w-2xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <header className="space-y-4">
-                <h1 className="text-4xl font-bold tracking-tight text-app">{TITLE}</h1>
-                <p className="text-xl text-muted font-light">{INTRO}</p>
-            </header>
+        <PageShell>
+            <div className="max-w-3xl mx-auto space-y-12">
+                <section>
+                    <h1 className="text-3xl font-bold tracking-tight text-app mb-4">How to use QMM Studio</h1>
+                    <p className="text-lg text-muted">A step-by-step guide to turning ambiguity into validated strategy.</p>
+                </section>
 
-            <div className="space-y-8 relative before:absolute before:left-[19px] before:top-4 before:bottom-4 before:w-0.5 before:bg-zinc-200 dark:before:bg-zinc-800">
-                {STEPS.map((step, index) => (
-                    <div key={index} className="flex gap-6 relative">
-                        <div className="flex-none w-10 h-10 rounded-full bg-white dark:bg-black border border-app flex items-center justify-center font-bold shadow-sm z-10 text-sm">
-                            {index + 1}
-                        </div>
-                        <div className="space-y-1 pt-2">
-                            <h3 className="font-semibold text-lg">{step.TITLE}</h3>
-                            <p className="text-muted leading-relaxed">{step.BODY}</p>
-                        </div>
+                <div className="space-y-8">
+                    {/* Step 1 */}
+                    <div className="group relative pl-8 border-l-2 border-zinc-200 dark:border-zinc-800 pb-8 last:pb-0">
+                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-black border-2 border-blue-600 group-hover:bg-blue-600 transition-colors"></div>
+                        <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <PenTool size={20} className="text-blue-600" />
+                            1. Define the Scenario
+                        </h3>
+                        <p className="text-muted mb-4">
+                            Go to <Link href="/new" className="text-blue-600 hover:underline">New Scenario</Link>. Be specific about your market conditions, customer segment, and the core problem. "We are a B2B SaaS losing deals to a cheaper competitor" is better than "Growth is slow".
+                        </p>
                     </div>
-                ))}
-            </div>
 
-            <Card className="bg-blue-50/50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30">
-                <CardContent className="flex gap-4 items-start p-6">
-                    <Lightbulb className="text-blue-500 mt-1 flex-shrink-0" size={20} />
-                    <p className="text-sm text-blue-900 dark:text-blue-100 font-medium">
-                        {FOOTER_TIP}
-                    </p>
-                </CardContent>
-            </Card>
-        </div>
+                    {/* Step 2 */}
+                    <div className="group relative pl-8 border-l-2 border-zinc-200 dark:border-zinc-800 pb-8 last:pb-0">
+                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-black border-2 border-purple-600 group-hover:bg-purple-600 transition-colors"></div>
+                        <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <Database size={20} className="text-purple-600" />
+                            2. Review Retrieval
+                        </h3>
+                        <p className="text-muted mb-4">
+                            The Studio will find familiar patterns in the Knowledge Base. Review these matches to understand the "Physics" of your situation before acting.
+                        </p>
+                    </div>
+
+                    {/* Step 3 */}
+                    <div className="group relative pl-8 border-l-2 border-zinc-200 dark:border-zinc-800 pb-8 last:pb-0">
+                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-black border-2 border-emerald-600 group-hover:bg-emerald-600 transition-colors"></div>
+                        <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <PlayCircle size={20} className="text-emerald-600" />
+                            3. Generate Blueprint
+                        </h3>
+                        <p className="text-muted mb-4">
+                            Click <strong>Generate Blueprint</strong>. You will get a 7-part advisory report including a Diagnosis, Strategy, and Roadmap. Toggle between <strong>Boardroom</strong> voice (for executives) and <strong>Operator</strong> voice (for execution).
+                        </p>
+                    </div>
+
+                    {/* Step 4 */}
+                    <div className="group relative pl-8 border-l-2 border-zinc-200 dark:border-zinc-800 pb-8 last:pb-0">
+                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-black border-2 border-orange-600 group-hover:bg-orange-600 transition-colors"></div>
+                        <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <Beaker size={20} className="text-orange-600" />
+                            4. Run Experiments
+                        </h3>
+                        <p className="text-muted mb-4">
+                            The blueprint suggests experiments. Go to the <Link href="/experiments" className="text-blue-600 hover:underline">Experiments</Link> tab to log them. Track your hypothesis, run the test, and log the result to learn what actually works.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </PageShell>
     );
 }

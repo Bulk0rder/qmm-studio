@@ -10,9 +10,10 @@ import Link from 'next/link';
 
 interface ScenarioLibraryClientProps {
     scenarios: Scenario[];
+    onSeed?: () => void;
 }
 
-export default function ScenarioLibraryClient({ scenarios }: ScenarioLibraryClientProps) {
+export default function ScenarioLibraryClient({ scenarios, onSeed }: ScenarioLibraryClientProps) {
     const [filter, setFilter] = useState('');
 
     const filteredScenarios = scenarios.filter(s =>
@@ -56,9 +57,16 @@ export default function ScenarioLibraryClient({ scenarios }: ScenarioLibraryClie
                     <div className="text-center py-20 border border-app rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50">
                         <h3 className="text-lg font-semibold text-app mb-2">{UI_COPY.SCENARIOS.EMPTY_TITLE}</h3>
                         <p className="text-muted mb-6">{UI_COPY.SCENARIOS.EMPTY_BODY}</p>
-                        <Link href="/new">
-                            <Button variant="outline" className="bg-white dark:bg-zinc-800 shadow-sm">{UI_COPY.SCENARIOS.EMPTY_CTA}</Button>
-                        </Link>
+                        <div className="flex justify-center gap-4">
+                            <Link href="/new">
+                                <Button variant="outline" className="bg-white dark:bg-zinc-800 shadow-sm">{UI_COPY.SCENARIOS.EMPTY_CTA}</Button>
+                            </Link>
+                            {onSeed && (
+                                <Button onClick={onSeed} className="bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                                    Seed Sample Data
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

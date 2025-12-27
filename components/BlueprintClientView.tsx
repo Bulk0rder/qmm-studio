@@ -1,223 +1,218 @@
 'use client';
 
-import React from 'react';
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import React, { useState } from 'react';
 import { Blueprint } from '@/lib/types';
 import { UI_COPY } from '@/lib/ui-copy';
-import { OrbitNodes } from '@/components/illustrations/OrbitNodes';
-import { TimelineArc } from '@/components/illustrations/TimelineArc';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { ArrowLeft, Share2, Printer, Briefcase, Zap, Feather, ShieldAlert, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-export default function BlueprintClientView({ blueprint }: { blueprint: Blueprint }) {
-    const handleExport = async () => {
-        try {
-            window.open(`/api/export/pdf?id=${blueprint.id}`, '_blank');
-        } catch (e) {
-            alert('Export failed');
+interface BlueprintClientViewProps {
+    blueprint: Blueprint;
+}
+
+export default function BlueprintClientView({ blueprint }: BlueprintClientViewProps) {
+    const [voice, setVoice] = useState<'boardroom' | 'operator' | 'creative'>('boardroom');
+
+    const voiceContent = {
+        boardroom: {
+            title: "Boardroom Strategy",
+            icon: <Briefcase size={16} />,
+            diagnosis: blueprint.consultant_voice.c_suite.diagnosis_headline,
+            angle: blueprint.consultant_voice.c_suite.strategic_angle,
+            tone: "Executive, ROI-focused, Risk-managed"
+        },
+        operator: {
+            title: "Operator Plan",
+            icon: <Zap size={16} />,
+            diagnosis: blueprint.consultant_voice.growth.diagnosis_headline,
+            angle: blueprint.consultant_voice.growth.strategic_angle,
+            tone: "Action-oriented, Metric-driven, Tactical"
+        },
+        creative: {
+            title: "Creative Angles",
+            icon: <Feather size={16} />,
+            diagnosis: blueprint.consultant_voice.creative.diagnosis_headline,
+            angle: blueprint.consultant_voice.creative.strategic_angle,
+            tone: "Emotional, Brand-focused, Narrative"
         }
     };
 
-    return (
-        <div className="space-y-16 animate-in fade-in duration-700">
+    const activeVoice = voiceContent[voice];
 
-            {/* TOP STRIP: SOURCES */}
-            <div className="rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 border border-app bg-white dark:bg-zinc-900 shadow-sm">
-                <div className="space-y-2">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
-                        {UI_COPY.BLUEPRINT.TOP_STRIP.LABEL}
-                    </h2>
-                    <div className="flex flex-wrap gap-6 text-sm text-app font-medium">
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            {UI_COPY.BLUEPRINT.TOP_STRIP.STATS(
-                                blueprint.sources?.retrieved_scenarios?.length || 0,
-                                blueprint.sources?.kb_refs?.length || 0,
-                                blueprint.diagnosis?.assumptions?.length || 0,
-                                blueprint.confidence?.overall || 'Low'
-                            ).split(' / ')[0]}
-                        </span>
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                            {UI_COPY.BLUEPRINT.TOP_STRIP.STATS(
-                                blueprint.sources?.retrieved_scenarios?.length || 0,
-                                blueprint.sources?.kb_refs?.length || 0,
-                                blueprint.diagnosis?.assumptions?.length || 0,
-                                blueprint.confidence?.overall || 'Low'
-                            ).split(' / ')[1]}
-                        </span>
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                            Confidence: {blueprint.confidence?.overall || 'Low'}
-                        </span>
+    return (
+        <div className="space-y-12 pb-20 animate-in fade-in zoom-in-95 duration-500">
+            {/* Nav / Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <div className="flex items-center gap-2 mb-2">
+                        <Link href="/library" className="text-muted hover:text-app transition-colors">
+                            <ArrowLeft size={20} />
+                        </Link>
+                        <Badge variant="outline" className="text-xs uppercase tracking-widest">{blueprint.id}</Badge>
+                        <Badge variant={blueprint.confidence.score > 70 ? 'success' : 'warning'}>
+                            Confidence: {blueprint.confidence.score}%
+                        </Badge>
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-app">
+                        {blueprint.input.title || "Untitled Strategy"}
+                    </h1>
+                    <div className="text-muted flex items-center gap-2 mt-2 text-sm">
+                        Generated for <span className="font-semibold text-app">{blueprint.input.industry}</span> • {new Date(blueprint.created_at).toLocaleDateString()}
                     </div>
                 </div>
-                <div className="flex gap-3 items-center">
-                    <div className="flex items-center gap-2 mr-4 bg-zinc-50 dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-app">
-                        <span className="text-xs font-bold text-muted uppercase tracking-wider">Voice:</span>
-                        <select className="bg-transparent text-sm font-medium text-app focus:outline-none cursor-pointer" defaultValue="Professional">
-                            <option>Professional</option>
-                            <option>Casual</option>
-                            <option>Urgent</option>
-                            <option>Empathetic</option>
-                        </select>
-                    </div>
 
-                    <Button variant="outline" size="sm" onClick={handleExport} className="shadow-sm bg-white dark:bg-zinc-800">
-                        {UI_COPY.BLUEPRINT.TOP_STRIP.BUTTONS.EXPORT}
-                    </Button>
-                    <Button size="sm" className="shadow-sm">
-                        {UI_COPY.BLUEPRINT.TOP_STRIP.BUTTONS.SAVE}
-                    </Button>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={() => window.print()}><Printer size={16} className="mr-2" /> Print</Button>
+                    <Button variant="primary" size="sm"><Share2 size={16} className="mr-2" /> Share</Button>
                 </div>
             </div>
 
-            {/* A. DIAGNOSIS */}
-            <section className="space-y-6">
-                <div className="border-b border-app pb-4">
-                    <h3 className="text-2xl font-semibold text-app">{UI_COPY.BLUEPRINT.SECTIONS.A.TITLE.split('(')[0]}</h3>
-                    <p className="text-muted text-lg mt-1">{UI_COPY.BLUEPRINT.SECTIONS.A.TITLE.split('(')[1].replace(')', '')}</p>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                    <Card className="border-app shadow-sm bg-white dark:bg-zinc-900">
-                        <CardHeader className="pb-2"><CardTitle className="text-sm text-red-600 dark:text-red-400 uppercase tracking-widest font-bold">Primary Constraint</CardTitle></CardHeader>
-                        <CardContent>
-                            <p className="text-xl font-medium text-app leading-relaxed">{blueprint.diagnosis?.primary_constraint}</p>
-                            <p className="text-xs text-muted mt-3 py-2 border-t border-app">{UI_COPY.BLUEPRINT.SECTIONS.A.HELPERS.CONSTRAINT}</p>
-                        </CardContent>
-                    </Card>
-                    <Card className="border-app shadow-sm bg-white dark:bg-zinc-900">
-                        <CardHeader className="pb-2"><CardTitle className="text-sm text-orange-600 dark:text-orange-400 uppercase tracking-widest font-bold">Behavioral Barrier</CardTitle></CardHeader>
-                        <CardContent>
-                            <p className="text-xl font-medium text-app leading-relaxed">{blueprint.diagnosis?.behavioral_barrier}</p>
-                            <p className="text-xs text-muted mt-3 py-2 border-t border-app">{UI_COPY.BLUEPRINT.SECTIONS.A.HELPERS.BARRIER}</p>
-                        </CardContent>
-                    </Card>
-                </div>
-            </section>
-
-            {/* D. SEQUENCE MAP (Centerpiece) */}
-            <section className="space-y-8">
-                <div className="border-b border-app pb-4">
-                    <h3 className="text-2xl font-semibold text-app">{UI_COPY.BLUEPRINT.SECTIONS.D.TITLE.split('(')[0]}</h3>
-                    <p className="text-muted text-lg mt-1">{UI_COPY.BLUEPRINT.SECTIONS.D.SUBHEADER}</p>
-                </div>
-
-                <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-app rounded-2xl p-8 md:p-12 relative overflow-hidden">
-
-                    <TimelineArc className="absolute top-0 right-0 w-full h-full opacity-[0.05]" />
-
-                    <div className="absolute left-[39px] md:left-[50%] top-12 bottom-12 w-px bg-zinc-300 dark:bg-zinc-700"></div>
-
-                    <div className="space-y-16 relative">
-                        {blueprint.sequence_map?.steps?.map((step: any, i: number) => (
-                            <div key={i} className={`flex flex-col md:flex-row gap-10 relative items-center ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                                {/* Node */}
-                                <div className="absolute left-[20px] md:left-[50%] md:-translate-x-1/2 w-10 h-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-sm font-bold z-10 shadow-sm text-app">
-                                    {i + 1}
-                                </div>
-
-                                <div className="ml-16 md:ml-0 md:w-1/2">
-                                    <Card className="border-app bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow">
-                                        <CardContent className="p-6">
-                                            <div className="flex justify-between items-start mb-3">
-                                                <h5 className="font-bold text-lg text-app leading-tight">{step.goal}</h5>
-                                                <span className="text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded text-muted">{step.channel}</span>
-                                            </div>
-                                            <p className="text-sm text-muted italic mb-5 leading-relaxed pl-3 border-l-2 border-zinc-200 dark:border-zinc-700">"{step.message_angle}"</p>
-                                            <div className="flex justify-between items-center text-xs pt-4 border-t border-app">
-                                                <span className="text-red-500 font-medium">Fallback: {step.fallback_if_no_signal}</span>
-                                                <span className="font-mono font-bold text-app bg-zinc-50 dark:bg-zinc-800 px-2 py-1 rounded">{step.metric}</span>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                                <div className="hidden md:block md:w-1/2"></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* B. QMM MAPPING */}
-            <section className="space-y-6">
-                <div className="border-b border-app pb-4">
-                    <h3 className="text-xl font-semibold text-app">{UI_COPY.BLUEPRINT.SECTIONS.B.TITLE.split('(')[0]}</h3>
-                    <p className="text-muted text-sm mt-1">{UI_COPY.BLUEPRINT.SECTIONS.B.SUBHEADER}</p>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {blueprint.qmm_mapping?.core_principles?.map((p: any, i: number) => (
-                        <Card key={i} className="border-app bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow">
-                            <CardHeader className="pb-3"><CardTitle className="text-blue-600 dark:text-blue-500 text-lg leading-tight">{p.principle}</CardTitle></CardHeader>
-                            <CardContent className="space-y-4">
-                                <div>
-                                    <span className="block text-xs uppercase text-muted font-bold mb-1 tracking-wider">Why it applies</span>
-                                    <p className="text-sm text-app leading-relaxed">{p.why_applies}</p>
-                                </div>
-                                <div className="pt-3 border-t border-app">
-                                    <span className="block text-xs uppercase text-blue-600 dark:text-blue-500 font-bold mb-1 tracking-wider">What changes</span>
-                                    <p className="text-sm font-medium text-app leading-relaxed">{p.what_it_changes}</p>
-                                </div>
-                            </CardContent>
-                        </Card>
+            {/* VOICE TOGGLE */}
+            <div className="border-b border-app">
+                <div className="flex gap-6">
+                    {(['boardroom', 'operator', 'creative'] as const).map((v) => (
+                        <button
+                            key={v}
+                            onClick={() => setVoice(v)}
+                            className={`pb-3 text-sm font-medium flex items-center gap-2 border-b-2 transition-all ${voice === v ? 'border-blue-600 text-blue-600' : 'border-transparent text-muted hover:text-app'}`}
+                        >
+                            {voiceContent[v].icon}
+                            {voiceContent[v].title}
+                        </button>
                     ))}
                 </div>
-            </section>
+            </div>
 
-            {/* E. PROOF (EXPERIMENTS) */}
-            <section className="space-y-6">
-                <div className="border-b border-app pb-4">
-                    <h3 className="text-xl font-semibold text-app">{UI_COPY.BLUEPRINT.SECTIONS.E.TITLE.split('(')[0]}</h3>
-                    <p className="text-muted text-sm mt-1">{UI_COPY.BLUEPRINT.SECTIONS.E.SUBHEADER}</p>
-                </div>
+            {/* MAIN CONTENT GRID */}
+            <div className="grid lg:grid-cols-3 gap-8">
 
-                <div className="space-y-8">
-                    <div>
-                        <h4 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest mb-4">Sequence Tests (A/Z)</h4>
-                        <div className="grid gap-4">
-                            {blueprint.experiments?.sequence_tests?.map((exp: any) => (
-                                <Card key={exp.id} className="bg-purple-50/50 dark:bg-purple-900/10 border-purple-100 dark:border-purple-900/30 shadow-sm">
-                                    <CardContent className="p-6 flex flex-col md:flex-row gap-8 justify-between items-center">
-                                        <div className="space-y-2 max-w-2xl">
-                                            <h5 className="font-bold text-lg text-app leading-tight">{exp.hypothesis}</h5>
-                                            <p className="text-sm text-muted leading-relaxed">{exp.setup}</p>
-                                            <div className="flex gap-4 text-xs font-mono mt-3">
-                                                <span className="text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded">Stop: {exp.stopping_rule}</span>
-                                                <span className="text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">Win: {exp.success_threshold}</span>
+                {/* LEFT COLUMN (Strategy) */}
+                <div className="lg:col-span-2 space-y-8">
+
+                    {/* 1. Executive Diagnosis */}
+                    <section className="bg-white dark:bg-zinc-900 border border-app rounded-xl p-8 shadow-sm">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">01 Executive Diagnosis</h2>
+                        <h3 className="text-2xl font-bold text-app mb-2">{activeVoice.diagnosis}</h3>
+                        <p className="text-lg text-app/80 leading-relaxed mb-6">
+                            {activeVoice.angle}
+                        </p>
+                        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                            <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+                                <ShieldAlert size={14} className="text-amber-500" /> Root Cause Hypothesis
+                            </h4>
+                            <ul className="list-disc pl-5 space-y-1 text-sm text-muted">
+                                {blueprint.diagnosis.root_cause_hypotheses.map((h, i) => (
+                                    <li key={i}>{h}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+
+                    {/* 2. The Causal Chain (Sequence) */}
+                    <section>
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-muted mb-6">02 The Causal Chain</h2>
+                        <div className="relative border-l-2 border-zinc-200 dark:border-zinc-800 ml-4 space-y-10 pl-8 py-2">
+                            {blueprint.sequence_map.steps.map((step, idx) => (
+                                <div key={idx} className="relative">
+                                    <div className="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-white dark:bg-black border-2 border-blue-600 flex items-center justify-center text-[10px] font-bold z-10">
+                                        {step.step_no}
+                                    </div>
+                                    <div className=" p-5 bg-white dark:bg-zinc-900 border border-app rounded-xl shadow-sm hover:border-blue-400/50 transition-colors">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <h4 className="font-bold text-lg">{step.goal}</h4>
+                                            <Badge variant="outline" className="text-[10px]">{step.expected_time}</Badge>
+                                        </div>
+                                        <div className="grid md:grid-cols-2 gap-4 text-sm">
+                                            <div>
+                                                <span className="text-muted block text-xs uppercase mb-1">Touchpoint</span>
+                                                <div className="font-medium">{step.channel}</div>
+                                                <div className="text-muted mt-1 italic">"{step.message_angle}"</div>
+                                            </div>
+                                            <div>
+                                                <span className="text-muted block text-xs uppercase mb-1">Success Signal</span>
+                                                <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-medium">
+                                                    <Zap size={12} /> {step.trigger_signal}
+                                                </div>
+                                                <div className="text-xs text-muted mt-1">Metric: {step.metric}</div>
                                             </div>
                                         </div>
-                                        <Button
-                                            className="bg-purple-600 hover:bg-purple-700 text-white shadow-sm shrink-0"
-                                            onClick={() => alert(`Launching test sequence for ${exp.hypothesis}... done!`)}
-                                        >
-                                            Launch Test
-                                        </Button>
-                                    </CardContent>
-                                </Card>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* 3. Experiments */}
+                    <section>
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-muted mb-6">03 Recommended Experiments</h2>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {[...blueprint.experiments.sequence_tests, ...blueprint.experiments.asset_tests].map((exp, i) => (
+                                <div key={i} className="p-6 bg-white dark:bg-zinc-900 border border-app rounded-xl shadow-sm flex flex-col">
+                                    <div className="mb-4">
+                                        <Badge variant="secondary" className="mb-2">{exp.type}</Badge>
+                                        <h4 className="font-bold text-lg leading-tight">{exp.title}</h4>
+                                    </div>
+                                    <p className="text-sm text-muted mb-4 flex-grow">
+                                        hypothesis: <span className="italic">"{exp.hypothesis}"</span>
+                                    </p>
+                                    <div className="mt-auto pt-4 border-t border-app flex justify-between items-center">
+                                        <div className="text-xs font-mono text-muted">{exp.cost_to_learn}</div>
+                                        <Link href="/experiments" className="text-sm font-medium text-blue-600 hover:underline flex items-center gap-1">
+                                            Run Test <ArrowRight size={14} />
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </div>
+
+                {/* RIGHT COLUMN (Principles & Governance) */}
+                <div className="space-y-8">
+
+                    {/* QMM Principles */}
+                    <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+                        <h3 className="font-bold mb-4 flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                            <Zap size={18} /> Applied Physics
+                        </h3>
+                        <div className="space-y-4">
+                            {blueprint.qmm_mapping.core_principles.map((p, i) => (
+                                <div key={i}>
+                                    <div className="text-xs font-bold uppercase text-muted mb-1">{p.principle}</div>
+                                    <p className="text-sm leading-snug">{p.why_applies}</p>
+                                </div>
                             ))}
                         </div>
                     </div>
-                </div>
-            </section>
 
-            {/* F. TRUST */}
-            <section className="mt-12 bg-zinc-50 dark:bg-zinc-900/30 p-8 rounded-2xl border border-app">
-                <h3 className="text-base font-bold text-app mb-6 uppercase tracking-wider">{UI_COPY.BLUEPRINT.SECTIONS.F.TITLE.split('(')[0]}</h3>
-                <div className="grid md:grid-cols-3 gap-8 text-sm">
-                    <div>
-                        <span className="block text-muted font-bold mb-2 text-xs uppercase tracking-wider">Privacy & Consent</span>
-                        <p className="text-app leading-relaxed">{blueprint.trust_governance?.privacy_consent_note}</p>
-                    </div>
-                    <div>
-                        <span className="block text-muted font-bold mb-2 text-xs uppercase tracking-wider">Bias Check</span>
-                        <p className="text-app leading-relaxed">{blueprint.trust_governance?.bias_check_note}</p>
-                    </div>
-                    <div>
-                        <span className="block text-muted font-bold mb-2 text-xs uppercase tracking-wider">Explainability</span>
-                        <p className="text-app leading-relaxed">{blueprint.trust_governance?.transparency_note}</p>
+                    {/* 90 Day Roadmap */}
+                    <div className="p-6 bg-white dark:bg-zinc-900 border border-app rounded-xl">
+                        <h3 className="font-bold mb-4">90-Day Roadmap</h3>
+                        <div className="space-y-4 relative">
+                            <div className="absolute left-1.5 top-2 bottom-2 w-px bg-zinc-200 dark:bg-zinc-800"></div>
+
+                            <div className="relative pl-6">
+                                <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-blue-500 border-2 border-white dark:border-zinc-900"></div>
+                                <h4 className="text-sm font-bold">Weeks 1-2: Validation</h4>
+                                <p className="text-xs text-muted mt-1">Launch A/Z Sequence Test. Validate CTR &gt; 1.5%.</p>
+                            </div>
+                            <div className="relative pl-6">
+                                <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-zinc-300 dark:bg-zinc-700 border-2 border-white dark:border-zinc-900"></div>
+                                <h4 className="text-sm font-bold">Weeks 3-6: Iteration</h4>
+                                <p className="text-xs text-muted mt-1">Scale winning variants. Optimize landing page conversion.</p>
+                            </div>
+                            <div className="relative pl-6">
+                                <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-zinc-300 dark:bg-zinc-700 border-2 border-white dark:border-zinc-900"></div>
+                                <h4 className="text-sm font-bold">Weeks 7-12: Scale</h4>
+                                <p className="text-xs text-muted mt-1">Integration into evergreen automation.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     );
 }

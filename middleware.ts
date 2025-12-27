@@ -5,8 +5,21 @@ import { SESSION_COOKIE_NAME } from './lib/constants';
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Public paths
-    if (pathname.startsWith('/login') || pathname.startsWith('/_next') || pathname.startsWith('/static')) {
+    // Public paths - Allow guests to browse freely
+    if (
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/static') ||
+        pathname.startsWith('/kb') ||
+        pathname.startsWith('/library') ||
+        pathname.startsWith('/experiments') ||
+        pathname.startsWith('/new') ||
+        pathname.startsWith('/about') ||
+        pathname.startsWith('/blueprint') ||
+        pathname === '/privacy' ||
+        pathname === '/terms' ||
+        pathname === '/'
+    ) {
         return NextResponse.next();
     }
 

@@ -26,36 +26,29 @@ export function Navbar({ session }: NavbarProps) {
         <nav className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border h-16 transition-all">
             <div className="max-w-[1200px] mx-auto px-6 h-full flex items-center justify-between">
 
-                {/* LEFT: Navigation Links */}
-                <div className="flex gap-1 items-center overflow-x-auto no-scrollbar mask-gradient-right md:mask-none">
-                    <div className="flex gap-1 items-center bg-secondary/50 p-1 rounded-full border border-border">
+                {/* LEFT: Branding & Navigation */}
+                <div className="flex items-center gap-6">
+                    <Link href="/" className="font-semibold text-lg tracking-tight text-app flex items-center gap-2 hover:opacity-80 transition-opacity">
+                        {/* Atom Icon */}
+                        <div className="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center relative">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full absolute"></div>
+                        </div>
+                        <span className="hidden sm:inline">{UI_COPY.APP.NAME}</span>
+                    </Link>
+
+                    {/* Desktop Nav */}
+                    <div className="hidden md:flex gap-1 items-center">
                         <NavLink href="/new" active={isActive('/new')}>{UI_COPY.NAV.NEW_SCENARIO}</NavLink>
                         <NavLink href="/library" active={isActive('/library')}>{UI_COPY.NAV.SCENARIO_LIBRARY}</NavLink>
                         <NavLink href="/experiments" active={isActive('/experiments')}>{UI_COPY.NAV.EXPERIMENTS}</NavLink>
                         <NavLink href="/kb" active={isActive('/kb')}>{UI_COPY.NAV.KNOWLEDGE_BASE}</NavLink>
                         <NavLink href="/advisory" active={isActive('/advisory')}>Advisory</NavLink>
-
                         <AboutDropdown isActive={isActive('/about')} />
                     </div>
                 </div>
 
-                {/* RIGHT: Brand + Profile */}
+                {/* RIGHT: Profile */}
                 <div className="flex items-center gap-4 pl-4">
-                    <Link href="/" className="font-semibold text-lg tracking-tight text-app flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <div className="w-6 h-6 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-lg shadow-sm"></div>
-                        <span className="hidden sm:inline">{UI_COPY.APP.NAME}</span>
-                        {userSession.role === 'guest' && (
-                            <div className="hidden md:flex items-center px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800">
-                                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse mr-1.5"></div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
-                                    Guest Mode (Local Only)
-                                </span>
-                            </div>
-                        )}
-                    </Link>
-
-                    <div className="h-6 w-px bg-zinc-200 dark:bg-zinc-800 mx-1"></div>
-
                     <ProfileMenu displayName={userSession.displayName} />
                 </div>
             </div>
@@ -103,8 +96,11 @@ function AboutDropdown({ isActive }: { isActive: boolean }) {
             {isOpen && (
                 <div className="absolute top-[calc(100%+0.5rem)] left-0 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 z-50">
                     <div className="py-1">
-                        <Link href="/about/how-to-use" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-zinc-700 dark:text-zinc-300">{UI_COPY.NAV.HOW_TO_USE}</Link>
-                        <Link href="/about/usefulness" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-zinc-700 dark:text-zinc-300">{UI_COPY.NAV.USEFULNESS}</Link>
+                        <Link href="/about/how-to-use" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm">{UI_COPY.NAV.HOW_TO_USE}</Link>
+                        <Link href="/about/usefulness" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm">{UI_COPY.NAV.USEFULNESS}</Link>
+                        <div className="h-px bg-border my-1" />
+                        <Link href="/privacy" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-muted-foreground">{UI_COPY.NAV.PRIVACY}</Link>
+                        <Link href="/terms" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-sm text-muted-foreground">{UI_COPY.NAV.TERMS}</Link>
                     </div>
                 </div>
             )}

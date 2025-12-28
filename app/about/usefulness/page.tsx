@@ -1,43 +1,40 @@
 'use client';
 
-import React from 'react';
 import { PageShell } from '@/components/layout/PageShell';
 import { Button } from '@/components/ui/Button';
-import { BrainCircuit, TrendingUp, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export default function UsefulnessPage() {
     return (
         <PageShell>
-            <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in delay-100 duration-700">
-                <div className="space-y-4 text-center">
-                    <h1 className="text-4xl font-bold tracking-tight text-app">Why This Exists</h1>
-                    <p className="text-xl text-muted">Combating the entropy of bad decision making.</p>
-                </div>
-
-                <div className="prose dark:prose-invert max-w-none">
-                    <p className="text-lg leading-relaxed">
-                        Most marketing teams suffer from "Strategic Drift". They start with a goal, but get distracted by new channels, competitor noise, and internal politics.
-                        QMM Studio acts as a <strong className="text-blue-600">Strategic Governor</strong>. It forces every decision to pass through the immutable laws of marketing physics.
+            <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+                <div className="space-y-4">
+                    <h1 className="text-4xl font-bold tracking-tight text-foreground">Usefulness Statement</h1>
+                    <p className="text-xl text-muted-foreground leading-relaxed">
+                        Why this tool exists and the philosophy of "The Librarian".
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6">
-                    <div className="p-6 border border-border rounded-xl bg-card">
-                        <BrainCircuit className="text-blue-500 mb-4" size={32} />
-                        <h3 className="font-bold mb-2">Pattern Matching</h3>
-                        <p className="text-sm text-muted-foreground">Don't reinvent the wheel. We match your symptom to 30+ proven solved scenarios.</p>
-                    </div>
-                    <div className="p-6 border border-border rounded-xl bg-card">
-                        <TrendingUp className="text-emerald-500 mb-4" size={32} />
-                        <h3 className="font-bold mb-2">Velocity</h3>
-                        <p className="text-sm text-muted-foreground">Skip the 3-week "strategy planning" phase. Get to a testable hypothesis in 3 minutes.</p>
-                    </div>
-                    <div className="p-6 border border-border rounded-xl bg-card">
-                        <ShieldCheck className="text-purple-500 mb-4" size={32} />
-                        <h3 className="font-bold mb-2">Governance</h3>
-                        <p className="text-sm text-muted-foreground">Standardized output formats (Boardroom, Operator, Creative) ensure alignment across the org.</p>
-                    </div>
+                <hr className="border-border" />
+
+                <div className="prose dark:prose-invert max-w-none text-foreground leading-7">
+                    <h3 className="text-2xl font-bold">The Problem: Strategic Amnesia</h3>
+                    <p>
+                        Organizations suffer from "Strategic Amnesia." They solve the same problems over and over again, forgetting what worked and what failed.
+                        New leaders arrive and replay the "Cautionary Tales" of their predecessors because the data is buried in PDFs and slide decks nobody reads.
+                    </p>
+
+                    <h3 className="text-2xl font-bold mt-8">The Solution: An Operating System</h3>
+                    <p>
+                        QMM Studio is not just a form; it is an Operating System for decision making. It forces a structured "Physics" (QMM) onto messy market data.
+                        By standardizing the inputs (Arena, Entropy, Friction) and structuralizing the outputs (Blueprints), we make strategy <strong>comparable</strong> and <strong>retrievable</strong>.
+                    </p>
+
+                    <h3 className="text-2xl font-bold mt-8">The Librarian Archetype</h3>
+                    <p>
+                        We do not "generate" creative writing. We "retrieve" successful patterns. The Librarian is a dispassionate observer of the market physics.
+                        It does not care about your ego or your "pet project." It cares about what has historically worked in this specific configuration of variables.
+                    </p>
                 </div>
             </div>
         </PageShell>

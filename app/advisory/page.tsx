@@ -88,54 +88,91 @@ export default function AdvisoryPage() {
         { id: 'creative', icon: <Feather size={18} />, label: 'Creative', desc: 'Idea-first. Angles, hooks, narrative frames.' }
     ];
 
-    const voiceContent = {
-        boardroom: {
-            title: "Boardroom Strategy",
-            diagnosis: blueprint.consultant_voice.c_suite.diagnosis_headline,
-            angle: blueprint.consultant_voice.c_suite.strategic_angle,
-        },
-        operator: {
-            title: "Operator Plan",
-            diagnosis: blueprint.consultant_voice.growth.diagnosis_headline,
-            angle: blueprint.consultant_voice.growth.strategic_angle,
-        },
-        creative: {
-            title: "Creative Angles",
-            diagnosis: blueprint.consultant_voice.creative.diagnosis_headline,
-            angle: blueprint.consultant_voice.creative.strategic_angle,
-        }
+    const getVoiceContent = (v: VoiceType) => {
+        const base = blueprint.consultant_voice[v === 'operator' ? 'growth' : v === 'boardroom' ? 'c_suite' : 'creative'];
+
+        // Voice-specific flavors for other sections
+        const flavors = {
+            boardroom: {
+                title: UI_COPY.BLUEPRINT.VOICES.BOARDROOM,
+                diagnosis: base.diagnosis_headline,
+                angle: base.strategic_angle,
+                principles_header: "Core Leverage Points",
+                roadmap_header: "Execution Critical Path",
+                options_header: "Strategic Trade-offs",
+                risk_header: "Governance & Liability",
+                kpi_label: "Primary ROI Metric"
+            },
+            operator: {
+                title: UI_COPY.BLUEPRINT.VOICES.OPERATOR,
+                diagnosis: base.diagnosis_headline,
+                angle: base.strategic_angle,
+                principles_header: "Operating Mechanics",
+                roadmap_header: "Implementation Sequence",
+                options_header: "Tactical Approaches",
+                risk_header: "Compliance Guardrails",
+                kpi_label: "North Star Metric"
+            },
+            creative: {
+                title: UI_COPY.BLUEPRINT.VOICES.CREATIVE,
+                diagnosis: base.diagnosis_headline,
+                angle: base.strategic_angle,
+                principles_header: "Narrative Laws",
+                roadmap_header: "Story Arc",
+                options_header: "Creative Angles",
+                risk_header: "Brand Safety",
+                kpi_label: "Engagement Signal"
+            }
+        };
+
+        return flavors[v];
     };
 
-    const activeVoice = voiceContent[voice];
+    const activeVoice = getVoiceContent(voice);
 
     return (
         <PageShell>
             <div className="max-w-4xl mx-auto space-y-12 pb-32 animate-in fade-in slide-in-from-bottom-2 duration-500">
 
+                {/* CONFIDENCE STRIP */}
+                <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900 rounded-lg p-3 flex flex-wrap justify-between items-center text-xs text-blue-800 dark:text-blue-300">
+                    <div className="font-medium">
+                        {UI_COPY.BLUEPRINT.TOP_STRIP.STATS(
+                            blueprint.sources.retrieved_scenarios.length,
+                            5, // Mock KB refs count for now
+                            blueprint.diagnosis.assumptions.length,
+                            "High (87%)"
+                        )}
+                    </div>
+                    <div className="flex gap-4">
+                        <button className="hover:underline">{UI_COPY.BLUEPRINT.TOP_STRIP.LINK}</button>
+                    </div>
+                </div>
+
                 {/* STEP NAVIGATOR */}
                 <div className="sticky top-20 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-app py-4 -mx-4 px-4 md:mx-0 md:px-0">
                     <div className="flex justify-between items-center max-w-3xl mx-auto text-sm font-medium">
-                        <Link href="/new" className="flex items-center gap-2 text-muted hover:text-blue-600 transition-colors">
-                            <span className="w-6 h-6 rounded-full border border-muted hover:border-blue-600 flex items-center justify-center text-xs">1</span>
-                            Define
+                        <Link href="/new" className="flex items-center gap-2 text-muted hover:text-primary transition-colors">
+                            <span className="w-6 h-6 rounded-full border border-muted hover:border-primary flex items-center justify-center text-xs">1</span>
+                            {UI_COPY.NEW_SCENARIO.STEPS.ARENA}
                         </Link>
-                        <div className="h-px w-8 bg-zinc-200 dark:bg-zinc-800" />
+                        <div className="h-px w-8 bg-border" />
 
-                        <button onClick={() => scrollToSection('retrieval')} className={`flex items-center gap-2 transition-colors ${activeSection === 'retrieval' ? 'text-blue-600' : 'text-muted hover:text-app'}`}>
-                            <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs ${activeSection === 'retrieval' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-muted'}`}>2</span>
+                        <button onClick={() => scrollToSection('retrieval')} className={`flex items-center gap-2 transition-colors ${activeSection === 'retrieval' ? 'text-primary' : 'text-muted hover:text-foreground'}`}>
+                            <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs ${activeSection === 'retrieval' ? 'border-primary bg-secondary' : 'border-muted'}`}>2</span>
                             Retrieval
                         </button>
-                        <div className="h-px w-8 bg-zinc-200 dark:bg-zinc-800" />
+                        <div className="h-px w-8 bg-border" />
 
-                        <button onClick={() => scrollToSection('blueprint')} className={`flex items-center gap-2 transition-colors ${activeSection === 'blueprint' ? 'text-blue-600' : 'text-muted hover:text-app'}`}>
-                            <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs ${activeSection === 'blueprint' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-muted'}`}>3</span>
+                        <button onClick={() => scrollToSection('blueprint')} className={`flex items-center gap-2 transition-colors ${activeSection === 'blueprint' ? 'text-primary' : 'text-muted hover:text-foreground'}`}>
+                            <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs ${activeSection === 'blueprint' ? 'border-primary bg-secondary' : 'border-muted'}`}>3</span>
                             Blueprint
                         </button>
-                        <div className="h-px w-8 bg-zinc-200 dark:bg-zinc-800" />
+                        <div className="h-px w-8 bg-border" />
 
-                        <Link href={`/experiments?scenario=${scenario.id}`} className="flex items-center gap-2 text-muted hover:text-blue-600 transition-colors">
-                            <span className="w-6 h-6 rounded-full border border-muted hover:border-blue-600 flex items-center justify-center text-xs">4</span>
-                            Experiments
+                        <Link href={`/experiments?scenario=${scenario.id}`} className="flex items-center gap-2 text-muted hover:text-primary transition-colors">
+                            <span className="w-6 h-6 rounded-full border border-muted hover:border-primary flex items-center justify-center text-xs">4</span>
+                            Experiment
                         </Link>
                     </div>
                 </div>
@@ -143,142 +180,145 @@ export default function AdvisoryPage() {
                 {/* HEADER */}
                 <header className="space-y-4 pt-4">
                     <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className="text-xs">{scenario.metadata.industry}</Badge>
-                        <Badge variant="outline" className="text-xs">{scenario.metadata.objective}</Badge>
+                        <Badge variant="outline" className="text-xs font-mono">{scenario.metadata.industry}</Badge>
+                        <Badge variant="outline" className="text-xs font-mono">{scenario.metadata.objective}</Badge>
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold tracking-tight text-app">Advisory</h1>
-                        <p className="text-2xl text-muted mt-2 font-light">
-                            Your Blueprint becomes action here.
+                        <h1 className="text-4xl font-bold tracking-tight text-foreground">Advisory Board</h1>
+                        <p className="text-xl text-muted-foreground mt-2 font-light">
+                            Strategy generated from {blueprint.sources.retrieved_scenarios.length} similar scenarios.
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-4 pt-4">
                         <Link href={`/blueprint/${blueprint.id}`}>
-                            <Button variant="outline" size="sm">Back to Blueprint Report</Button>
+                            <Button variant="outline" size="sm">View Raw Data</Button>
                         </Link>
                         <Button variant="outline" size="sm" onClick={() => window.print()}>
-                            Export PDF
+                            {UI_COPY.BLUEPRINT.TOP_STRIP.BUTTONS.EXPORT}
                         </Button>
-                        <Link href={`/experiments?scenario=${scenario.id}`}>
-                            <Button variant="outline" size="sm" className="bg-blue-50 dark:bg-blue-900/10 text-blue-600 border-blue-200 hover:bg-blue-100">Go to Experiments</Button>
-                        </Link>
                     </div>
                 </header>
 
-                <hr className="border-app" />
+                <hr className="border-border" />
 
                 {/* SECTION 2: RETRIEVAL REVIEW */}
                 <section id="retrieval" className="scroll-mt-32 space-y-6">
                     <div className="space-y-2">
                         <h2 className="text-xl font-bold flex items-center gap-2">
-                            <BookOpen className="text-blue-600" size={24} /> Retrieval Review
+                            <BookOpen className="text-primary" size={20} /> Retrieval Review
                         </h2>
-                        <p className="text-muted leading-relaxed max-w-2xl">
-                            The Studio found familiar patterns in the Knowledge Base. Review these matches to understand the ‘physics’ of your situation before acting.
+                        <p className="text-muted-foreground leading-relaxed max-w-2xl">
+                            The Librarian matched these historical patterns to your situation.
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                         {blueprint.sources.retrieved_scenarios.length > 0 ? blueprint.sources.retrieved_scenarios.map((match, i) => (
-                            <div key={i} className="p-4 rounded-xl border border-app bg-zinc-50 dark:bg-zinc-900/50">
+                            <div key={i} className="p-5 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors cursor-pointer group">
                                 <div className="flex justify-between items-start mb-2">
-                                    <h3 className="font-semibold text-app">{match.title}</h3>
-                                    <Badge variant="outline" className="bg-white dark:bg-zinc-800 text-[10px]">Similar</Badge>
+                                    <h3 className="font-semibold text-foreground group-hover:underline decoration-1 underline-offset-4">{match.title}</h3>
+                                    <Badge variant="secondary" className="text-[10px]">Similar</Badge>
                                 </div>
-                                <p className="text-sm text-muted mb-2">{match.match_reason}</p>
+                                <p className="text-sm text-muted-foreground mb-2">{match.match_reason}</p>
                             </div>
                         )) : (
-                            <div className="col-span-2 p-6 rounded-xl border border-dashed border-app text-center text-muted italic">
+                            <div className="col-span-2 p-6 rounded-xl border border-dashed border-border text-center text-muted-foreground italic">
                                 No close scenario matches found. This is a novel situation for your KB.
                             </div>
                         )}
                     </div>
                 </section>
 
-                <hr className="border-app" />
+                <hr className="border-border" />
 
                 {/* SECTION 3: BLUEPRINT SUMMARY & VOICE */}
                 <section id="blueprint" className="scroll-mt-32 space-y-8">
                     <div className="space-y-2">
                         <h2 className="text-xl font-bold flex items-center gap-2">
-                            <Zap className="text-amber-500" size={24} /> Blueprint Summary
+                            <Zap className="text-primary" size={20} /> Blueprint
                         </h2>
-                        <p className="text-muted">
-                            Control how QMM Studio delivers your blueprint—boardroom-ready, operator-clear, or creatively provocative.
+                        <p className="text-muted-foreground">
+                            Toggle the delivery voice. The content rewrites to match the stakeholder.
                         </p>
                     </div>
 
-                    {/* Vioce Toggle */}
+                    {/* Voice Toggle */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {voices.map((v) => (
                             <button
                                 key={v.id}
                                 onClick={() => handleVoiceChange(v.id as VoiceType)}
-                                className={`relative p-4 rounded-lg border-2 text-left transition-all hover:scale-[1.01] focus:outline-none ${voice === v.id ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-900/10' : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black'}`}
+                                className={`relative p-4 rounded-lg border text-left transition-all hover:scale-[1.01] focus:outline-none ${voice === v.id ? 'border-foreground bg-secondary ring-1 ring-foreground' : 'border-border bg-card'}`}
                             >
                                 <div className="flex items-center gap-2 mb-2">
-                                    <div className={`${voice === v.id ? 'text-blue-600' : 'text-muted'}`}>{v.icon}</div>
-                                    <span className={`font-bold ${voice === v.id ? 'text-blue-700 dark:text-blue-400' : 'text-app'}`}>{v.label}</span>
+                                    <div className={`${voice === v.id ? 'text-foreground' : 'text-muted-foreground'}`}>{v.icon}</div>
+                                    <span className={`font-bold ${voice === v.id ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                        {v.id === 'boardroom' ? UI_COPY.BLUEPRINT.VOICES.BOARDROOM :
+                                            v.id === 'operator' ? UI_COPY.BLUEPRINT.VOICES.OPERATOR :
+                                                UI_COPY.BLUEPRINT.VOICES.CREATIVE}
+                                    </span>
                                 </div>
-                                {voice === v.id && <div className="absolute top-4 right-4 text-blue-600"><Check size={16} /></div>}
+                                {voice === v.id && <div className="absolute top-4 right-4 text-foreground"><Check size={16} /></div>}
                             </button>
                         ))}
                     </div>
 
-                    {/* 7-Part Report (Refined for Advisory View) */}
+                    {/* 7-Part Report */}
                     <div className="space-y-12">
 
                         {/* 1. Diagnosis */}
-                        <div className="bg-white dark:bg-zinc-900 border border-app rounded-xl p-8 shadow-sm">
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">01 Diagnosis</h3>
-                            <h4 className="text-2xl font-bold text-app mb-3">{activeVoice.diagnosis}</h4>
-                            <p className="text-lg text-app/80 leading-relaxed indent-0 border-l-4 border-blue-500 pl-4 py-1">
+                        <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">{UI_COPY.BLUEPRINT.SECTIONS.A.TITLE}</h3>
+                            <h4 className="text-2xl font-bold text-foreground mb-4 leading-tight">{activeVoice.diagnosis}</h4>
+                            <p className="text-lg text-foreground/80 leading-relaxed indent-0 border-l-2 border-primary pl-6 py-1">
                                 {activeVoice.angle}
                             </p>
-                            <div className="mt-6 pt-6 border-t border-app grid md:grid-cols-2 gap-6 text-sm">
+                            <div className="mt-8 pt-8 border-t border-border grid md:grid-cols-2 gap-8 text-sm">
                                 <div>
-                                    <span className="block font-semibold mb-1">Primary Constraint</span>
-                                    <span className="text-muted">{blueprint.diagnosis.primary_constraint}</span>
+                                    <span className="block font-semibold mb-1 text-foreground">Primary Constraint</span>
+                                    <span className="text-muted-foreground">{blueprint.diagnosis.primary_constraint} <span className="text-xs block opacity-70 mt-1">{UI_COPY.BLUEPRINT.SECTIONS.A.HELPERS.CONSTRAINT}</span></span>
                                 </div>
                                 <div>
-                                    <span className="block font-semibold mb-1">Behavioral Barrier</span>
-                                    <span className="text-muted">{blueprint.diagnosis.behavioral_barrier}</span>
+                                    <span className="block font-semibold mb-1 text-foreground">Behavioral Barrier</span>
+                                    <span className="text-muted-foreground">{blueprint.diagnosis.behavioral_barrier} <span className="text-xs block opacity-70 mt-1">{UI_COPY.BLUEPRINT.SECTIONS.A.HELPERS.BARRIER}</span></span>
                                 </div>
                             </div>
                         </div>
 
                         {/* 2. Quantum Principles */}
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold">02 Quantum Principles</h3>
+                            <h3 className="text-lg font-bold text-foreground">{activeVoice.principles_header}</h3>
+                            <p className="text-muted-foreground text-sm">{UI_COPY.BLUEPRINT.SECTIONS.B.SUBHEADER}</p>
                             <div className="grid md:grid-cols-2 gap-4">
                                 {blueprint.qmm_mapping.core_principles.map((p, i) => (
-                                    <div key={i} className="p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                                        <div className="text-xs font-bold uppercase text-blue-600 mb-2">{p.principle}</div>
-                                        <p className="text-sm font-medium mb-1">Why: {p.why_applies}</p>
-                                        <p className="text-sm text-muted">Change: {p.what_it_changes}</p>
+                                    <div key={i} className="p-5 bg-secondary/30 rounded-lg border border-border">
+                                        <div className="text-xs font-bold uppercase text-primary mb-2">{p.principle}</div>
+                                        <p className="text-sm font-medium mb-1 text-foreground">Why: {p.why_applies}</p>
+                                        <p className="text-sm text-muted-foreground">Change: {p.what_it_changes}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        {/* 3 Strategy (Implied in Voice Angle) + 4 Roadmap */}
+                        {/* 3 Strategy & 4 Roadmap */}
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold">03 Strategy & 04 Roadmap</h3>
-                            <div className="bg-white dark:bg-zinc-900 border border-app rounded-xl overflow-hidden">
+                            <h3 className="text-lg font-bold text-foreground">{activeVoice.roadmap_header}</h3>
+                            <p className="text-muted-foreground text-sm">{UI_COPY.BLUEPRINT.SECTIONS.D.SUBHEADER}</p>
+                            <div className="bg-card border border-border rounded-xl overflow-hidden">
                                 {blueprint.sequence_map.steps.map((step, idx) => (
-                                    <div key={idx} className="flex gap-4 p-5 border-b border-app last:border-0 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
-                                        <div className="font-mono text-muted/50 text-xl font-bold">0{idx + 1}</div>
+                                    <div key={idx} className="flex gap-4 p-5 border-b border-border last:border-0 hover:bg-secondary/20 transition-colors">
+                                        <div className="font-mono text-muted-foreground/30 text-xl font-bold">0{idx + 1}</div>
                                         <div className="grid md:grid-cols-3 gap-6 w-full">
                                             <div className="md:col-span-1">
-                                                <h4 className="font-bold">{step.goal}</h4>
-                                                <div className="text-xs text-muted mt-1 uppercase tracking-wider">{step.expected_time}</div>
+                                                <h4 className="font-bold text-foreground">{step.goal}</h4>
+                                                <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{step.expected_time}</div>
                                             </div>
                                             <div className="md:col-span-2 space-y-2">
-                                                <div className="text-sm">
-                                                    <span className="font-semibold text-app">Touchpoint:</span> <span className="text-muted">{step.channel}</span>
+                                                <div className="text-sm text-foreground">
+                                                    <span className="font-semibold">Touchpoint:</span> <span className="text-muted-foreground">{step.channel}</span>
                                                 </div>
-                                                <div className="text-sm">
-                                                    <span className="font-semibold text-app">Angle:</span> <span className="italic text-muted">"{step.message_angle}"</span>
+                                                <div className="text-sm text-foreground">
+                                                    <span className="font-semibold">Angle:</span> <span className="italic text-muted-foreground">"{step.message_angle}"</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -289,17 +329,17 @@ export default function AdvisoryPage() {
 
                         {/* 5 Options */}
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold">05 Strategic Options</h3>
+                            <h3 className="text-lg font-bold text-foreground">{activeVoice.options_header}</h3>
                             <div className="grid md:grid-cols-3 gap-4">
-                                <OptionCard title="Conservative" option={blueprint.strategic_options.conservative} />
-                                <OptionCard title="Aggressive" option={blueprint.strategic_options.aggressive} />
-                                <OptionCard title="Weird / Plausible" option={blueprint.strategic_options.weird} />
+                                <OptionCard title={UI_COPY.BLUEPRINT.SECTIONS.C.OPTIONS.CONSERVATIVE} option={blueprint.strategic_options.conservative} />
+                                <OptionCard title={UI_COPY.BLUEPRINT.SECTIONS.C.OPTIONS.AGGRESSIVE} option={blueprint.strategic_options.aggressive} />
+                                <OptionCard title={UI_COPY.BLUEPRINT.SECTIONS.C.OPTIONS.WEIRD} option={blueprint.strategic_options.weird} />
                             </div>
                         </div>
 
                         {/* 7 Governance */}
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold">07 Trust & Governance</h3>
+                            <h3 className="text-lg font-bold text-foreground">{activeVoice.risk_header}</h3>
                             <div className="p-5 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 rounded-lg text-sm text-amber-900 dark:text-amber-100">
                                 <div className="font-bold mb-2 flex items-center gap-2"><ShieldAlert size={14} /> Risk & Compliance</div>
                                 <ul className="space-y-1 list-disc pl-4 opacity-90">
@@ -311,33 +351,33 @@ export default function AdvisoryPage() {
                     </div>
                 </section>
 
-                <hr className="border-app" />
+                <hr className="border-border" />
 
                 {/* SECTION 4: RECOMMENDED EXPERIMENTS */}
                 <section className="space-y-6">
                     <div className="space-y-2">
                         <h2 className="text-xl font-bold flex items-center gap-2">
-                            <Beaker className="text-purple-600" size={24} /> Recommended Experiments
+                            <Beaker className="text-primary" size={20} /> {UI_COPY.BLUEPRINT.SECTIONS.E.TITLE}
                         </h2>
-                        <p className="text-muted">
-                            Blueprints are just better hypotheses. Prove what works by launching these experiments.
+                        <p className="text-muted-foreground">
+                            {UI_COPY.BLUEPRINT.SECTIONS.E.SUBHEADER}
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...blueprint.experiments.sequence_tests, ...blueprint.experiments.asset_tests].slice(0, 6).map((exp, i) => (
-                            <div key={i} className="flex flex-col p-6 rounded-xl border border-app bg-white dark:bg-zinc-900 shadow-sm hover:border-purple-500/50 transition-all group">
+                            <div key={i} className="flex flex-col p-6 rounded-xl border border-border bg-card shadow-sm hover:border-primary/50 transition-all group">
                                 <Badge variant="secondary" className="w-fit mb-3">{exp.type}</Badge>
-                                <h4 className="font-bold text-app leading-tight mb-2 group-hover:text-purple-600 transition-colors">{exp.title}</h4>
-                                <p className="text-sm text-muted italic mb-4 flex-grow">"{exp.hypothesis}"</p>
+                                <h4 className="font-bold text-foreground leading-tight mb-2 group-hover:text-primary transition-colors">{exp.title}</h4>
+                                <p className="text-sm text-muted-foreground italic mb-4 flex-grow">"{exp.hypothesis}"</p>
 
-                                <div className="mt-auto space-y-3 pt-4 border-t border-app">
-                                    <div className="flex justify-between text-xs font-medium text-muted">
+                                <div className="mt-auto space-y-3 pt-4 border-t border-border">
+                                    <div className="flex justify-between text-xs font-medium text-muted-foreground">
                                         <span>Cost: {exp.cost_to_learn}</span>
                                     </div>
                                     <Link href={`/experiments?scenario=${scenario.id}&action=create&title=${encodeURIComponent(exp.title)}`}>
-                                        <Button size="sm" className="w-full bg-purple-600 hover:bg-purple-700 text-white border-none">
-                                            Add to Experiments
+                                        <Button size="sm" className="w-full">
+                                            {UI_COPY.EXPERIMENTS.BUTTONS.CREATE}
                                         </Button>
                                     </Link>
                                 </div>
@@ -347,10 +387,10 @@ export default function AdvisoryPage() {
                 </section>
 
                 {/* FOOTER */}
-                <div className="pt-12 text-center">
+                <div className="pt-12 text-center pb-20">
                     <Link href={`/experiments?scenario=${scenario.id}`}>
-                        <Button size="lg" className="px-12 h-14 text-lg shadow-lg shadow-blue-900/20">
-                            Proceed to Experiments <ArrowRight className="ml-2" />
+                        <Button size="lg" className="px-12 h-14 text-lg shadow-lg">
+                            {UI_COPY.BLUEPRINT.FOOTER.CTA_DEPLOY} <ArrowRight className="ml-2" />
                         </Button>
                     </Link>
                 </div>

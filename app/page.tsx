@@ -36,7 +36,7 @@ export default function Home() {
                 <div className="space-y-8">
                     <div className="space-y-4">
                         <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-app leading-[1.1]">{HERO.TITLE}</h1>
-                        <p className="text-lg md:text-xl text-muted font-normal leading-relaxed max-w-lg">{HERO.SUBTITLE}</p>
+                        <p className="text-lg md:text-xl text-muted-foreground font-normal leading-relaxed max-w-lg">{HERO.SUBTITLE}</p>
                     </div>
                     <div className="flex flex-wrap gap-4 pt-2">
                         <Link href="/new">
@@ -45,7 +45,7 @@ export default function Home() {
                             </Button>
                         </Link>
                         <Link href="/kb">
-                            <Button variant="outline" size="lg" className="h-12 px-6 text-base border-app text-muted hover:text-app">
+                            <Button variant="outline" size="lg" className="h-12 px-6 text-base border-app text-muted-foreground hover:text-app">
                                 {HERO.SECONDARY_CTA}
                             </Button>
                         </Link>
@@ -55,7 +55,7 @@ export default function Home() {
 
                 {/* Subtle Illustration Panel */}
                 <div className="relative w-full aspect-square md:aspect-auto md:h-[400px] flex items-center justify-center">
-                    <OrbitNodes className="w-full h-full text-slate-400 dark:text-slate-600 opacity-50" />
+                    <OrbitNodes className="w-full h-full text-zinc-400/50 dark:text-zinc-600/50" />
                 </div>
             </section>
 

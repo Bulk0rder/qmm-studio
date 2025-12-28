@@ -50,6 +50,24 @@ export function ProfileMenu({ displayName }: ProfileMenuProps) {
 
                 <div className="absolute right-0 top-full mt-2 w-56 bg-popover border border-border rounded-xl shadow-lg hover:shadow-xl transition-all p-1 z-50">
                     <div className="p-1">
+                        <div className="px-3 py-1 text-xs text-muted-foreground mb-1 font-medium">{UI_COPY.PROFILE_MENU.ITEMS.PROFILE}</div>
+                        <button className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent rounded-md transition-colors" disabled>
+                            <User size={16} /> Update Profile
+                        </button>
+                    </div>
+
+                    <div className="border-t border-border my-1"></div>
+
+                    <div className="p-1">
+                        <div className="px-3 py-1 text-xs text-muted-foreground mb-1 font-medium">{UI_COPY.PROFILE_MENU.ITEMS.SETTINGS}</div>
+                        <button className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent rounded-md transition-colors" disabled>
+                            <Settings size={16} /> Global Settings
+                        </button>
+                    </div>
+
+                    <div className="border-t border-border my-1"></div>
+
+                    <div className="p-1">
                         <div className="px-3 py-1 text-xs text-muted-foreground mb-1 font-medium">{UI_COPY.PROFILE_MENU.ITEMS.APPEARANCE}</div>
                         <div className="grid grid-cols-3 gap-1 px-1">
                             <button

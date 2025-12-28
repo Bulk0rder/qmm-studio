@@ -1,11 +1,11 @@
 export const UI_COPY = {
     APP: {
         NAME: "QMM Studio",
-        TAGLINE: "Retrieve similar scenarios → prescribe the path → prove it with tests → learn into a library of winners.",
+        TAGLINE: "The Scenario Librarian Strategic Decision OS.",
         EMPTY_STATE: {
             TITLE: "Nothing here yet.",
-            BODY: "Create your first {thing}. QMM Studio gets smarter as you log outcomes.",
-            CTA: "Start new scenario",
+            BODY: "Create your first scenario. QMM Studio gets smarter as you log outcomes.",
+            CTA: "Consult the Librarian",
         },
         TOASTS: {
             SAVED: "Saved.",
@@ -23,21 +23,21 @@ export const UI_COPY = {
         ABOUT: "About",
         HOW_TO_USE: "How to Use",
         USEFULNESS: "Usefulness",
+        PRIVACY: "Privacy Policy",
+        TERMS: "Terms of Service",
     },
     HOME: {
         HERO: {
-            TITLE: "Scenario Librarian Studio",
-            SUBTITLE: "Turn unclear business situations into validated strategies using QMM (JTBD × Lean × AIDA).",
-            PRIMARY_CTA: "Start new scenario",
-            SECONDARY_CTA: "Browse knowledge base",
-            HELPER_1: "How to use",
-            HELPER_2: "What about usefulness?",
+            TITLE: "Stop Guessing. Start Validating.",
+            SUBTITLE: "The Scenario Librarian turns market ambiguity into boardroom-ready strategy, actionable roadmaps, and proven playbooks.",
+            PRIMARY_CTA: "Consult the Librarian",
+            SECONDARY_CTA: "Browse Proven Winners",
         },
         RECENT_BLUEPRINTS: {
-            HEADER: "Recent blueprints",
-            EMPTY_TITLE: "No blueprints yet.",
-            EMPTY_BODY: "Start with a real situation. We’ll retrieve similar scenarios and prescribe a testable path.",
-            EMPTY_CTA: "Start new scenario",
+            HEADER: "Your Strategic Workbench",
+            EMPTY_TITLE: "No active strategies.",
+            EMPTY_BODY: "The market is moving—start a diagnosis to catch up.",
+            EMPTY_CTA: "Consult the Librarian",
         },
         KNOWN_WINNERS: {
             HEADER: "Known winners",
@@ -53,10 +53,10 @@ export const UI_COPY = {
             EMPTY_BODY: "Your library coverage looks healthy for recent usage.",
         },
         QUICK_ACTIONS: {
-            HEADER: "Quick actions",
+            HEADER: "Institutional Memory",
             LOG_RESULT: "Log result",
             ADD_KB: "Add KB doc",
-            HELPER: "Fast updates that improve future recommendations.",
+            HELPER: "Don’t reinvent the wheel. See what’s working right now.",
         },
         SYSTEM_STATUS: {
             HEADER: "System status",
@@ -107,8 +107,14 @@ export const UI_COPY = {
         },
     },
     NEW_SCENARIO: {
-        PAGE_TITLE: "New scenario",
-        SUBTITLE: "Tell us what’s happening. We’ll retrieve similar scenarios and prescribe the path.",
+        PAGE_TITLE: "The Diagnostic",
+        SUBTITLE: "Tell us the symptoms. We’ll identify the physics at play.",
+        STEPS: {
+            ARENA: "The Arena",
+            ENTROPY: "The Problem Constraint",
+            FRICTION: "The Friction",
+            FUEL: "The Fuel",
+        },
         PLACEHOLDERS: {
             WHATS_HAPPENING: "E.g., Competitor dropped prices. Sign-ups are flat. CAC is up. We need a response in 30 days.",
             INDUSTRY: "e.g., Banking, Fintech, FMCG",
@@ -122,9 +128,9 @@ export const UI_COPY = {
             COMPLIANCE_RISK: "High risk enables claims checks and stricter language.",
             CHANNEL_CONSTRAINTS: "What can’t you use? (e.g., influencers, comparative claims, SMS, etc.)",
         },
-        CTA_RETRIEVE: "Retrieve scenarios",
-        CTA_DRAFT_ANYWAY: "Generate draft anyway",
-        CTA_GENERATE: "Generate blueprint",
+        CTA_RETRIEVE: "Scan Institutional Memory",
+        CTA_DRAFT_ANYWAY: "Generate draft",
+        CTA_GENERATE: "Run Diagnosis & Generate Blueprint",
         LIBRARIAN: {
             HEADER: "Closest scenarios found",
             SUBTEXT: "Grounded matches from your library. Pin one as the anchor.",
@@ -150,6 +156,11 @@ export const UI_COPY = {
             },
             STATS: (scenarios: number, kb: number, assumptions: number, confidence: string) =>
                 `Scenarios: ${scenarios} / KB refs: ${kb} / Assumptions: ${assumptions} / Confidence: ${confidence}`,
+        },
+        VOICES: {
+            BOARDROOM: "Executive Brief",
+            OPERATOR: "30-Day Roadmap",
+            CREATIVE: "The Angle",
         },
         SECTIONS: {
             A: {
@@ -197,11 +208,12 @@ export const UI_COPY = {
         FOOTER: {
             CONFIDENCE: "Confidence & next inputs",
             IMPROVE: "What would make this smarter on the next run?",
+            CTA_DEPLOY: "Deploy to Experiments"
         },
     },
     EXPERIMENTS: {
-        TITLE: "Experiments",
-        SUBTITLE: "Turn tests into decisions. Turn decisions into reusable winners.",
+        TITLE: "The Logic Lab",
+        SUBTITLE: "Turn hypotheses into company assets. If it wins, we save it forever.",
         BUTTONS: {
             CREATE: "Create experiment",
             LOG: "Log result",
@@ -223,8 +235,8 @@ export const UI_COPY = {
         EMPTY_CTA: "Start new scenario",
     },
     KB: {
-        TITLE: "Knowledge base",
-        SUBTITLE: "Your reference layer: QMM principles, patterns, and playbooks.",
+        TITLE: "The Physics of Marketing",
+        SUBTITLE: "First principles and mental models that drive our algorithms. These are the laws of gravity for your strategy.",
         SEARCH_PLACEHOLDER: "Search KB (principles, experiments, governance, channels…)",
         COVERAGE_EMPTY_TITLE: "No gaps detected.",
         COVERAGE_EMPTY_BODY: "Your KB coverage is strong for recent usage.",

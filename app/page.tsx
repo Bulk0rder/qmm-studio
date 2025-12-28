@@ -55,7 +55,8 @@ export default function Home() {
 
                 {/* Subtle Illustration Panel */}
                 <div className="relative w-full aspect-square md:aspect-auto md:h-[400px] flex items-center justify-center">
-                    <OrbitNodes className="w-full h-full text-zinc-400/50 dark:text-zinc-600/50" />
+                    {/* Increased visibility: stronger zinc in dark mode, stronger opacity */}
+                    <OrbitNodes className="w-full h-full text-zinc-500/80 dark:text-zinc-400/90" />
                 </div>
             </section>
 
@@ -67,19 +68,19 @@ export default function Home() {
                     <Card className="h-full border-app bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow">
                         <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-app/40">
                             <CardTitle className="flex items-center gap-2">
-                                <Layers size={18} className="text-muted" />
+                                <Layers size={18} className="text-zinc-500 dark:text-zinc-400" />
                                 {RECENT_BLUEPRINTS.HEADER}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-6">
                             <div className="flex flex-col items-start gap-3">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-muted">
+                                    <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-muted-foreground">
                                         <Layers size={14} />
                                     </div>
                                     <h4 className="font-medium text-app">{stats.blueprints > 0 ? "Latest Strategy" : RECENT_BLUEPRINTS.EMPTY_TITLE}</h4>
                                 </div>
-                                <p className="text-sm text-muted max-w-md ml-11">
+                                <p className="text-sm text-muted-foreground max-w-md ml-11">
                                     {stats.blueprints > 0
                                         ? "Your latest blueprint is ready for review in the Advisory."
                                         : RECENT_BLUEPRINTS.EMPTY_BODY}
@@ -106,16 +107,16 @@ export default function Home() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 space-y-4">
-                            <p className="text-xs font-medium text-muted uppercase tracking-wider">{QUICK_ACTIONS.HELPER}</p>
+                            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{QUICK_ACTIONS.HELPER}</p>
                             <div className="grid grid-cols-2 gap-3">
                                 <Link href="/experiments">
-                                    <Button variant="outline" className="w-full justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm">
+                                    <Button variant="outline" className="w-full justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm transition-all hover:border-blue-200">
                                         <Activity size={14} className="mr-2 text-purple-500" />
                                         {QUICK_ACTIONS.LOG_RESULT}
                                     </Button>
                                 </Link>
                                 <Link href="/kb">
-                                    <Button variant="outline" className="w-full justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm">
+                                    <Button variant="outline" className="w-full justify-start h-10 bg-white dark:bg-zinc-800 border-app hover:bg-zinc-50 shadow-sm transition-all hover:border-emerald-200">
                                         <BookOpen size={14} className="mr-2 text-emerald-500" />
                                         {QUICK_ACTIONS.ADD_KB}
                                     </Button>
@@ -135,11 +136,11 @@ export default function Home() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="px-5 pb-5">
-                            <p className="text-xs text-muted mb-4 leading-relaxed">{KNOWN_WINNERS.SUBTEXT}</p>
+                            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{KNOWN_WINNERS.SUBTEXT}</p>
                             {stats.scenarios > 0 ? (
                                 <div className="space-y-2">
                                     <div className="text-2xl font-bold text-app">{stats.scenarios}</div>
-                                    <div className="text-xs text-muted">Patterns Indexed</div>
+                                    <div className="text-xs text-muted-foreground">Patterns Indexed</div>
                                 </div>
                             ) : (
                                 <div className="rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/30 p-3">
@@ -160,7 +161,7 @@ export default function Home() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="px-5 pb-5">
-                            <p className="text-xs text-muted mb-4 leading-relaxed">{COVERAGE_GAPS.SUBTEXT}</p>
+                            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{COVERAGE_GAPS.SUBTEXT}</p>
                             <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30">
                                 <CheckCircle2 size={16} className="text-emerald-500" />
                                 <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">{COVERAGE_GAPS.EMPTY_TITLE}</span>
@@ -199,9 +200,9 @@ export default function Home() {
                                 <button
                                     onClick={handleSeed}
                                     title="Seed Sample Data"
-                                    className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2 py-1 rounded border border-zinc-700 flex items-center gap-1 transition-colors"
+                                    className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded border border-zinc-700 flex items-center gap-1 transition-colors font-medium"
                                 >
-                                    <Database size={10} /> Seed
+                                    <Database size={12} /> Seed Data
                                 </button>
                             </div>
                         </CardContent>

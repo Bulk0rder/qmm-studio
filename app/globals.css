@@ -17,7 +17,8 @@
     /* Zinc-100 */
     --secondary-foreground: 24 24 27;
     --muted: 244 244 245;
-    --muted-foreground: 113 113 122;
+    --muted-foreground: 82 82 91;
+    /* Zinc-600 (was Zinc-500) for better readability */
     /* Zinc-500 */
     --accent: 244 244 245;
     --accent-foreground: 24 24 27;
@@ -45,7 +46,7 @@
     --secondary-foreground: 255 255 255;
     --muted: 39 39 42;
     --muted-foreground: 161 161 170;
-    /* Zinc-400 */
+    /* Zinc-400 is okay, but 300 might be safer. Let's keep 400 but avoid opacity on top. */
     --accent: 39 39 42;
     --accent-foreground: 255 255 255;
     --destructive: 127 29 29;

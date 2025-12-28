@@ -3,7 +3,7 @@ import { Scenario, Blueprint, Experiment } from './types';
 import { SCENARIOS_SEED_JSON, EXPERIMENTS_SEED_JSON } from './seed-data';
 
 // Helper to generate a mock blueprint for a seeded scenario
-const generateMockBlueprint = (scenarioId: string, title: string, industry: string): Blueprint => {
+export const generateMockBlueprint = (scenarioId: string, title?: string, industry?: string): Blueprint => {
     return {
         id: `BP-${scenarioId}`,
         scenario_id: scenarioId,

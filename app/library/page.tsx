@@ -8,13 +8,16 @@ import { Badge } from '@/components/ui/Badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 import { Search, BookOpen, AlertCircle, Sparkles, Filter, ChevronDown, Check } from 'lucide-react';
 import Link from 'next/link';
-import { getAllScenarios, getAllBlueprints } from '@/lib/scenario-service';
+import { Database } from 'lucide-react';
+import { getAllScenarios, getAllBlueprints, generateMockBlueprint } from '@/lib/scenario-service';
+import { getLargeScenarioSeed } from '@/lib/seed-data';
 import { Scenario, Blueprint } from '@/lib/types';
 import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 
 export default function LibraryPage() {
     const [scenarios, setScenarios] = useState<Scenario[]>([]);
     const [blueprints, setBlueprints] = useState<Blueprint[]>([]);
+
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTab, setActiveTab] = useState('all');
 
@@ -56,18 +59,60 @@ export default function LibraryPage() {
     });
 
     const getLinkForScenario = (scenario: Scenario) => {
-        // Find latest blueprint for this scenario
-        // In this simple model, scenarios have related_blueprints array of IDs.
-        // We take the last one or find it in our blueprints list.
         const bpId = scenario.related_blueprints?.[scenario.related_blueprints.length - 1];
-
-        // Fallback: search blueprints array for one matching scenario_id
         const foundBp = blueprints.find(b => b.scenario_id === scenario.id || b.id === bpId);
 
         if (foundBp) {
             return `/advisory?scenario=${scenario.id}&blueprint=${foundBp.id}`;
         }
-        return `/advisory?scenario=${scenario.id}`; // Advisory will handle missing blueprint
+        return `/advisory?scenario=${scenario.id}`;
+    };
+
+    const handleSeed60 = () => {
+        if (!confirm('This will seed 60 sample scenarios and blueprints. Continue?')) return;
+
+        const largeSeed = getLargeScenarioSeed();
+        const newScenarios: Scenario[] = largeSeed.map(s => ({
+            id: s.scenario_id,
+            workspace_id: 'guest',
+            title: s.title,
+            description: s.symptom,
+            status: 'completed',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            metadata: {
+                industry: s.industry,
+                market: s.market,
+                customer_state: s.customer_state as any,
+                objective: s.objective as any,
+                budget_band: s.budget_band as any,
+                symptom: s.symptom,
+                constraint: s.constraint,
+                tried: s.what_tried,
+                baseline_signals: s.baseline_signals,
+                time_horizon: s.constraint,
+                risk_level: 'medium'
+            },
+            inputs: {
+                baseline_signals: s.baseline_signals,
+                what_was_tried: s.what_tried,
+                channel_constraints: []
+            },
+            related_blueprints: [`BP-${s.scenario_id}`],
+            related_experiments: [],
+            outcomes_summary: { wins: Math.floor(Math.random() * 5), losses: Math.floor(Math.random() * 3), inconclusive: 0, learning_notes: [] }
+        }));
+
+        const newBlueprints = newScenarios.map(s =>
+            generateMockBlueprint(s.id, s.title, s.metadata.industry)
+        ).map((b, i) => ({ ...b, id: `BP-${newScenarios[i].id}` }));
+
+        storage.set(STORAGE_KEYS.SCENARIOS, newScenarios);
+        storage.set(STORAGE_KEYS.BLUEPRINTS, newBlueprints);
+
+        setScenarios(newScenarios);
+        setBlueprints(newBlueprints);
+        alert('60 Sample Scenarios Populated.');
     };
 
     return (
@@ -84,11 +129,16 @@ export default function LibraryPage() {
                             Search the collective wisdom of your organization. Find patterns, avoid mistakes.
                         </p>
                     </div>
-                    <Link href="/new">
-                        <Button size="lg" className="shadow-sm">
-                            <Sparkles size={16} className="mr-2" /> New Diagnosis
+                    <div className="flex gap-3">
+                        <Button variant="outline" onClick={handleSeed60} className="hidden md:flex">
+                            <Database size={16} className="mr-2" /> Populate 60 Sample Scenarios
                         </Button>
-                    </Link>
+                        <Link href="/new">
+                            <Button size="lg" className="shadow-sm">
+                                <Sparkles size={16} className="mr-2" /> New Diagnosis
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Controls */}

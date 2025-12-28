@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/Badge';
 import { Plus, Beaker, Play, CheckCircle, XCircle, MoreHorizontal, Info, Search, FlaskConical } from 'lucide-react';
 import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 import { UI_COPY } from '@/lib/ui-copy';
+import { getLargeExperimentsSeed } from '@/lib/seed-data';
+import { Database } from 'lucide-react';
 
 interface Experiment {
     experiment_id: string; // Match seed data key
@@ -194,6 +196,29 @@ export default function ExperimentsClientView() {
         setExperiments(updated);
     };
 
+
+
+    // ... (ExperimentsClientView Logic)
+
+    const handleSeed30 = () => {
+        if (!confirm('This will seed 30 sample experiments. Continue?')) return;
+        const largeSeed = getLargeExperimentsSeed();
+
+        const newExps = largeSeed.map(e => ({
+            experiment_id: e.experiment_id,
+            scenario_id: e.scenario_id,
+            title: `[Test] ${e.primary_kpi} Optimization`,
+            hypothesis: e.hypothesis,
+            status: e.status as 'planned' | 'running' | 'completed',
+            created_at: new Date().toISOString(),
+            checkBackDate: new Date(Date.now() + 86400000 * 7).toISOString()
+        }));
+
+        storage.set(STORAGE_KEYS.EXPERIMENTS, newExps);
+        setExperiments(newExps as Experiment[]);
+        alert('30 Sample Experiments Populated.');
+    };
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
             {/* HERO */}
@@ -204,9 +229,14 @@ export default function ExperimentsClientView() {
                         {UI_COPY.EXPERIMENTS.SUBTITLE}
                     </p>
                 </div>
-                <Button size="lg" onClick={() => { resetForm(); setIsCreateOpen(true); }} className="shadow-sm">
-                    <Plus size={18} className="mr-2" /> {UI_COPY.EXPERIMENTS.BUTTONS.CREATE}
-                </Button>
+                <div className="flex gap-3">
+                    <Button variant="outline" onClick={handleSeed30} className="hidden md:flex">
+                        <Database size={16} className="mr-2" /> Populate 30 Sample Experiments
+                    </Button>
+                    <Button size="lg" onClick={() => { resetForm(); setIsCreateOpen(true); }} className="shadow-sm">
+                        <Plus size={18} className="mr-2" /> {UI_COPY.EXPERIMENTS.BUTTONS.CREATE}
+                    </Button>
+                </div>
             </div>
 
             {/* INFO BOX */}

@@ -28,7 +28,7 @@ export function Navbar({ session }: NavbarProps) {
 
                 {/* LEFT: Branding & Navigation */}
                 <div className="flex items-center gap-6">
-                    <Link href="/" className="font-semibold text-lg tracking-tight text-app flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    <Link href="/" className="font-semibold text-lg tracking-tight text-app flex items-center gap-2">
                         {/* Atom Icon */}
                         <div className="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center relative">
                             <div className="w-1.5 h-1.5 bg-primary rounded-full absolute"></div>
@@ -60,7 +60,7 @@ function NavLink({ href, children, active }: { href: string, children: React.Rea
     return (
         <Link
             href={href}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${active ? 'bg-white dark:bg-zinc-800 text-app shadow-sm ring-1 ring-black/5' : 'text-muted hover:text-app hover:bg-black/5 dark:hover:bg-white/5'}`}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${active ? 'bg-white dark:bg-zinc-800 text-app shadow-sm ring-1 ring-black/5' : 'text-zinc-600 dark:text-zinc-400 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5'}`}
         >
             {children}
         </Link>

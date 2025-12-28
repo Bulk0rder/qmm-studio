@@ -33,6 +33,7 @@ export const SCENARIOS_SEED_JSON = [
     { "scenario_id": "S030", "title": "Climate/impact startup needs credibility (buyers skeptical)", "industry": "Climate Tech", "market": "Global", "customer_state": "Consideration→Conversion", "objective": "Trust/Conversion", "budget_band": "Medium", "symptom": "Stakeholders ask for proof", "constraint": "Avoid greenwashing", "what_tried": "Mission-led messaging", "baseline_signals": "Low demo requests" }
 ];
 
+
 export const EXPERIMENTS_SEED_JSON = [
     { "experiment_id": "E001", "scenario_id": "S001", "hypothesis": "If we shift from offer-led ads to trust-led proof sequences, CAC will drop 15% because uncertainty is driving hesitation.", "method": "A/B 14 days: proof-led landing + retargeting vs offer-led control", "primary_kpi": "CAC", "secondary_kpis": ["CVR", "KYC completion", "Day-7 activation"], "duration_days": 14, "status": "planned", "ethics": "No comparative claims; transparent terms" },
     { "experiment_id": "E002", "scenario_id": "S002", "hypothesis": "If we publish a transfer-status transparency UX and faster escalation path, churn will reduce because perceived control increases trust.", "method": "Rollout to 50% cohort: status banner + support SLA page", "primary_kpi": "Churn", "secondary_kpis": ["Tickets per user", "App rating", "NPS"], "duration_days": 21, "status": "planned", "ethics": "No overpromising uptime" },
@@ -65,3 +66,18 @@ export const EXPERIMENTS_SEED_JSON = [
     { "experiment_id": "E029", "scenario_id": "S029", "hypothesis": "If we convert hype into a ‘guided first listen’ ritual, streams rise because friction to start reduces.", "method": "Launch test: ritual playbook vs standard teaser", "primary_kpi": "Streams", "secondary_kpis": ["Saves→Plays", "Shares"], "duration_days": 14, "status": "planned", "ethics": "No fake streaming" },
     { "experiment_id": "E030", "scenario_id": "S030", "hypothesis": "If we publish third-party verification + measurable impact dashboard, demos rise because credibility replaces skepticism.", "method": "Landing test: verification + dashboard vs mission-only", "primary_kpi": "Demo requests", "secondary_kpis": ["Conversion", "Time on page"], "duration_days": 30, "status": "planned", "ethics": "Avoid greenwashing" }
 ];
+
+export const getLargeScenarioSeed = () => {
+    // Return 60 scenarios by duplicating and re-IDing
+    const base = SCENARIOS_SEED_JSON;
+    const doubled = [...base, ...base].map((s, i) => ({
+        ...s,
+        scenario_id: `S${(i + 1).toString().padStart(3, '0')}`,
+        title: i >= 30 ? `${s.title} (Variant B)` : s.title
+    }));
+    return doubled;
+}
+
+export const getLargeExperimentsSeed = () => {
+    return EXPERIMENTS_SEED_JSON; // Already 30
+}

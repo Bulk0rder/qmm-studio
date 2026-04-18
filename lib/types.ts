@@ -21,6 +21,11 @@ export interface Scenario {
     };
     created_at: string;
     updated_at: string;
+    decision_making_unit?: 'founder' | 'growth_lead' | 'marketing_team' | 'finance' | 'compliance' | 'community' | 'multi_stakeholder';
+    primary_trust_barrier?: 'fraud_fear' | 'proof_gap' | 'religious_compliance' | 'price_resistance' | 'reliability_doubt' | 'internal_buy_in' | 'low_context';
+    confidence_score_preview?: number;
+    seeded?: boolean;
+    seed_version?: string;
     // Relationships
     related_blueprints: string[]; // IDs
     related_experiments: string[]; // IDs
@@ -30,6 +35,13 @@ export interface Scenario {
         losses: number;
         learning_notes: string[];
     };
+}
+
+export interface LawCitation {
+    law_number: string;
+    law_title: string;
+    physics_explanation: string;
+    local_context?: string;
 }
 
 export interface Blueprint {
@@ -105,6 +117,11 @@ export interface Blueprint {
     };
 
     // META
+    recommendations?: {
+        title: string;
+        action: string;
+        law_citation: LawCitation;
+    }[];
     kpi_plan: {
         primary_kpi: string;
         secondary_kpis: string[];
@@ -131,13 +148,23 @@ export interface Experiment {
     workspace_id: string;
     title: string;
     type: 'Asset (A/B/n)' | 'Sequence (A/Z)';
-    status: 'draft' | 'running' | 'completed';
+    status: 'draft' | 'planned' | 'running' | 'completed';
 
     // Design
     hypothesis: string;
     principle_tested: string;
+    governing_law_number?: string;
+    law_citation?: LawCitation;
     setup: string;
     linked_step_no?: number;
+    impact_score?: number;
+    confidence_score?: number;
+    ease_score?: number;
+    ice_total?: number;
+    primary_metric?: string;
+    target_lift?: number;
+    measurement_method?: string;
+    run_duration_days?: number;
 
     // Decisions
     stopping_rule: string;
@@ -166,6 +193,7 @@ export interface SequenceStep {
     fallback_if_no_signal: string;
     metric: string;
     expected_time: string;
+    law_citation?: LawCitation;
 }
 
 export interface StrategicOption {

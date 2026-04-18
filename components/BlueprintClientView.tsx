@@ -6,7 +6,7 @@ import { UI_COPY } from '@/lib/ui-copy';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { ArrowLeft, Share2, Printer, Briefcase, Zap, Feather, ShieldAlert, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Share2, Download, Briefcase, Zap, Feather, ShieldAlert, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 interface BlueprintClientViewProps {
@@ -15,6 +15,8 @@ interface BlueprintClientViewProps {
 
 export default function BlueprintClientView({ blueprint }: BlueprintClientViewProps) {
     const [voice, setVoice] = useState<'boardroom' | 'operator' | 'creative'>('boardroom');
+    const primaryLaw = blueprint.recommendations?.[0]?.law_citation || blueprint.sequence_map.steps.find(step => step.law_citation)?.law_citation || blueprint.experiments.sequence_tests[0]?.law_citation;
+    const exportHref = `/api/export/pdf?id=${encodeURIComponent(blueprint.id)}&title=${encodeURIComponent(blueprint.input?.title || blueprint.input?.objective || 'Blueprint')}&confidence=${encodeURIComponent(`${blueprint.confidence.score}% ${blueprint.confidence.overall}`)}&law=${encodeURIComponent(primaryLaw ? `${primaryLaw.law_number}. ${primaryLaw.law_title}` : 'Pending')}`;
 
     const voiceContent = {
         boardroom: {
@@ -65,10 +67,25 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => window.print()}><Printer size={16} className="mr-2" /> Print</Button>
+                    <Link href={exportHref}>
+                        <Button variant="outline" size="sm"><Download size={16} className="mr-2" /> Export PDF</Button>
+                    </Link>
                     <Button variant="primary" size="sm"><Share2 size={16} className="mr-2" /> Share</Button>
                 </div>
             </div>
+
+            <section className="grid md:grid-cols-3 gap-4">
+                <div className="md:col-span-1 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/20 p-5">
+                    <div className="text-xs uppercase font-bold tracking-widest text-blue-700 dark:text-blue-300 mb-2">Confidence Score</div>
+                    <div className="text-4xl font-bold text-blue-700 dark:text-blue-300">{blueprint.confidence.score}%</div>
+                    <p className="text-sm text-blue-900/70 dark:text-blue-200/70 mt-2">{blueprint.confidence.overall} confidence based on retrieved patterns, assumptions, and missing data.</p>
+                </div>
+                <div className="md:col-span-2 rounded-xl border border-purple-200 dark:border-purple-900/50 bg-purple-50 dark:bg-purple-950/20 p-5">
+                    <div className="text-xs uppercase font-bold tracking-widest text-purple-700 dark:text-purple-300 mb-2">Governing Law</div>
+                    <h3 className="text-xl font-bold text-app">{primaryLaw ? `${primaryLaw.law_number}. ${primaryLaw.law_title}` : 'Citation pending'}</h3>
+                    <p className="text-sm text-muted mt-2">{primaryLaw?.physics_explanation || 'This recommendation needs expert review before it can be cited.'}</p>
+                </div>
+            </section>
 
             {/* VOICE TOGGLE */}
             <div className="border-b border-app">
@@ -139,6 +156,12 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
                                                 <div className="text-xs text-muted mt-1">Metric: {step.metric}</div>
                                             </div>
                                         </div>
+                                        {step.law_citation && (
+                                            <div className="mt-4 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 p-3 text-xs text-purple-900 dark:text-purple-200">
+                                                <strong>Law {step.law_citation.law_number}: {step.law_citation.law_title}</strong>
+                                                <span className="block mt-1 text-purple-900/70 dark:text-purple-200/70">{step.law_citation.physics_explanation}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -158,8 +181,14 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
                                     <p className="text-sm text-muted mb-4 flex-grow">
                                         hypothesis: <span className="italic">&quot;{exp.hypothesis}&quot;</span>
                                     </p>
+                                    {exp.law_citation && (
+                                        <div className="mb-4 rounded-lg bg-zinc-50 dark:bg-zinc-800/60 border border-app p-3 text-xs">
+                                            <div className="font-semibold text-app">Law {exp.law_citation.law_number}: {exp.law_citation.law_title}</div>
+                                            <div className="text-muted mt-1">{exp.law_citation.physics_explanation}</div>
+                                        </div>
+                                    )}
                                     <div className="mt-auto pt-4 border-t border-app flex justify-between items-center">
-                                        <div className="text-xs font-mono text-muted">{exp.cost_to_learn}</div>
+                                        <div className="text-xs font-mono text-muted">ICE {exp.ice_total?.toFixed(1) || 'n/a'} · {exp.cost_to_learn}</div>
                                         <Link href="/experiments" className="text-sm font-medium text-blue-600 hover:underline flex items-center gap-1">
                                             Run Test <ArrowRight size={14} />
                                         </Link>

@@ -1,9 +1,11 @@
 import { storage, STORAGE_KEYS } from './storage-client';
 import { Scenario, Blueprint, Experiment } from './types';
-import { SCENARIOS_SEED_JSON, EXPERIMENTS_SEED_JSON } from './seed-data';
+import { SCENARIOS_SEED_JSON, EXPERIMENTS_SEED_JSON, SEED_VERSION, getLawForScenario } from './seed-data';
 
 // Helper to generate a mock blueprint for a seeded scenario
-export const generateMockBlueprint = (scenarioId: string, title?: string, industry?: string): Blueprint => {
+export const generateMockBlueprint = (scenarioId: string, title?: string, industry?: string, symptom?: string): Blueprint => {
+    const law = getLawForScenario(industry, symptom);
+    const confidenceScore = 74 + (scenarioId.charCodeAt(scenarioId.length - 1) % 12);
     return {
         id: `BP-${scenarioId}`,
         scenario_id: scenarioId,
@@ -29,21 +31,21 @@ export const generateMockBlueprint = (scenarioId: string, title?: string, indust
         diagnosis: {
             primary_constraint: "Market Dynamics",
             behavioral_barrier: "Trust Deficit",
-            root_cause_hypotheses: ["Value not communicated clearly", "High friction in signup"],
+            root_cause_hypotheses: ["Value not communicated clearly", "High friction in signup", `${law.law_title} is not being handled early enough in the journey`],
             assumptions: ["Market demand exists", "Pricing is not the primary barrier"]
         },
         qmm_mapping: {
             core_principles: [
-                { principle: "Trust Equation", why_applies: "Low conversion despite high traffic", what_it_changes: "Front-load proof." },
-                { principle: "Friction Cost", why_applies: "Drop-off at checkout", what_it_changes: "Simplify flow." }
+                { principle: `${law.law_number}. ${law.law_title}`, why_applies: law.physics_explanation, what_it_changes: "Make the governing market law visible before asking for conversion." },
+                { principle: "04. Friction Physics", why_applies: "Drop-off signals show decision energy is being lost.", what_it_changes: "Simplify flow and explain unavoidable friction." }
             ],
-            laws_used_optional: ["LAW-1", "LAW-2"]
+            laws_used_optional: [law.law_number, "04"]
         },
         sequence_map: {
             narrative_goal: "Standard Funnel Optimization",
             steps: [
-                { step_no: 1, goal: "Capture Attention", channel: "Paid Social", message_angle: "Pattern Interrupt", expected_time: "Day 1-3", trigger_signal: "Click", fallback_if_no_signal: "Retarget", metric: "CTR" },
-                { step_no: 2, goal: "Build Trust", channel: "Email", message_angle: "Social Proof", expected_time: "Day 4-7", trigger_signal: "Open", fallback_if_no_signal: "Resend", metric: "Open Rate" }
+                { step_no: 1, goal: "Surface the real risk", channel: "Paid Social", message_angle: "Name the customer hesitation before the offer", expected_time: "Day 1-3", trigger_signal: "Click", fallback_if_no_signal: "Retarget with proof variant", metric: "CTR", law_citation: law },
+                { step_no: 2, goal: "Build proof before pressure", channel: "Email / Landing Page", message_angle: "Evidence, mechanism, and next safe step", expected_time: "Day 4-7", trigger_signal: "Open / dwell", fallback_if_no_signal: "Reduce ask and add third-party signal", metric: "Open Rate / CVR", law_citation: law }
             ],
             variants_for_AZ_testing: []
         },
@@ -53,7 +55,30 @@ export const generateMockBlueprint = (scenarioId: string, title?: string, indust
             weird: { title: "Disruptor", sequence_variant: 'Z', big_bet: "Counter-intuitive offer", first_3_tests: ["Pay what you want", "Anti-marketing", "Community led"] }
         },
         experiments: {
-            sequence_tests: [],
+            sequence_tests: [{
+                id: `EXP-${scenarioId}-SEQ`,
+                title: "Proof-before-offer sequence test",
+                type: 'Sequence (A/Z)',
+                hypothesis: `If we apply ${law.law_title} before the commercial ask, conversion quality will improve because the dominant uncertainty is addressed first.`,
+                principle_tested: law.law_title,
+                governing_law_number: law.law_number,
+                law_citation: law,
+                setup: "Variant A leads with offer. Variant Z leads with proof, then offer.",
+                cost_to_learn: "$300",
+                stopping_rule: "1,000 qualified visits or 50 conversions",
+                success_threshold: "Z improves primary KPI by 15%+",
+                win_action: "Adopt proof-first order for this segment",
+                lose_action: "Test a lower-friction ask",
+                linked_step_no: 2,
+                impact_score: 8,
+                confidence_score: 7,
+                ease_score: 7,
+                ice_total: 7.3,
+                primary_metric: "Conversion rate",
+                target_lift: 15,
+                measurement_method: "A/Z sequence split",
+                run_duration_days: 14
+            }],
             asset_tests: []
         },
         trust_governance: {
@@ -63,10 +88,17 @@ export const generateMockBlueprint = (scenarioId: string, title?: string, indust
             bias_check_note: "Mock Data"
         },
         confidence: {
-            overall: 'Medium',
-            score: 75,
+            overall: confidenceScore >= 80 ? 'High' : 'Medium',
+            score: confidenceScore,
             data_needed_to_increase_confidence: ["More historical data"]
         },
+        recommendations: [
+            {
+                title: "Front-load the governing trust signal",
+                action: `Lead with ${law.law_title.toLowerCase()} before campaign pressure or pricing.`,
+                law_citation: law
+            }
+        ],
         kpi_plan: {
             primary_kpi: "Revenue",
             secondary_kpis: ["CAC", "LTV"],
@@ -75,13 +107,13 @@ export const generateMockBlueprint = (scenarioId: string, title?: string, indust
             targets: "10% MoM"
         },
         sources: {
-            kb_refs: [],
+            kb_refs: [{ doc_id: `LAW-${law.law_number}`, section: law.law_title, text_snippet: law.physics_explanation }],
             retrieved_scenarios: []
         }
     };
 };
 
-export const seedSampleData = async (): Promise<string> => {
+export const seedSampleData = async (limit = 15): Promise<string> => {
     // 1. Get existing data
     const existingScenarios = storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
     const existingExperiments = storage.get<Experiment[]>(STORAGE_KEYS.EXPERIMENTS) || [];
@@ -98,14 +130,15 @@ export const seedSampleData = async (): Promise<string> => {
     // 2. Process Experiments first to link them (but they need scenario IDs)
     // We will process scenarios, then look up experiments for them.
 
-    for (const s of SCENARIOS_SEED_JSON) {
+    for (const s of SCENARIOS_SEED_JSON.slice(0, limit)) {
         if (!scenarioMap.has(s.scenario_id)) {
             // Find related experiments from seed
             const relatedExps = EXPERIMENTS_SEED_JSON.filter(e => e.scenario_id === s.scenario_id);
             const relatedExpIds = relatedExps.map(e => e.experiment_id);
 
             // Create Blueprint for this scenario
-            const newBp = generateMockBlueprint(s.scenario_id, s.title, s.industry);
+            const law = getLawForScenario(s.industry, s.symptom);
+            const newBp = generateMockBlueprint(s.scenario_id, s.title, s.industry, s.symptom);
             if (!blueprintMap.has(newBp.id)) {
                 blueprintMap.set(newBp.id, newBp);
             }
@@ -131,6 +164,11 @@ export const seedSampleData = async (): Promise<string> => {
                 },
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
+                decision_making_unit: s.industry.includes('B2B') ? 'multi_stakeholder' : 'growth_lead',
+                primary_trust_barrier: law.law_number === '04' ? 'reliability_doubt' : law.law_number === '03' ? 'proof_gap' : 'fraud_fear',
+                confidence_score_preview: newBp.confidence.score,
+                seeded: true,
+                seed_version: SEED_VERSION,
                 related_blueprints: [newBp.id],
                 related_experiments: relatedExpIds,
                 outcomes_summary: { wins: 0, losses: 0, learning_notes: [] }
@@ -153,12 +191,22 @@ export const seedSampleData = async (): Promise<string> => {
                         status: (e.status as any) || 'planned',
                         // outcome: 'inconclusive', // Optional in type?
                         setup: "A/B Test",
-                        principle_tested: "Unknown",
+                        principle_tested: law.law_title,
+                        governing_law_number: law.law_number,
+                        law_citation: law,
                         stopping_rule: "100 clicks",
                         success_threshold: "10%",
                         win_action: "Scale",
                         lose_action: "Kill",
                         cost_to_learn: "$100",
+                        impact_score: 8,
+                        confidence_score: 7,
+                        ease_score: 6,
+                        ice_total: 7,
+                        primary_metric: e.primary_kpi,
+                        target_lift: 15,
+                        measurement_method: e.method,
+                        run_duration_days: e.duration_days,
                         startDate: new Date().toISOString()
                     };
                     experimentMap.set(newExp.id, newExp);

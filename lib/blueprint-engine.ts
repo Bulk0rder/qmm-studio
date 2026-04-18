@@ -4,6 +4,7 @@ import {
     SequenceStep,
     ExperimentCard
 } from './types';
+import { getLawForScenario } from './seed-data';
 // import { getScenarioById, GUEST_WORKSPACE_ID } from './storage';
 // import { searchKB } from './kb-service';
 
@@ -37,6 +38,7 @@ const CORE_PRINCIPLES = {
 };
 
 export async function generateBlueprint(input: UserScenarioInput & { anchorScenarioId?: string, title?: string }): Promise<Blueprint> {
+    const governingLaw = getLawForScenario(input.industry, `${input.situation} ${input.what_was_tried}`);
 
     // 1. RETRIEVAL CONTEXT (Mocked for Client Side Seeding)
     let retrievedContext = { scenarios: [], kb: [] };
@@ -56,20 +58,20 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
 
     // TEMPLATE A: SaaS / B2B Tech (High Consideration)
     const saasSequence: SequenceStep[] = [
-        { step_no: 1, goal: "Disrupt Cognitive Pattern", channel: "LinkedIn / Meta (Feed)", message_angle: "The 'Counter-Intuitive' Insight", trigger_signal: "Click / Dwell > 3s", fallback_if_no_signal: "Retarget with 'Social Proof' variant", metric: "CTR / Scroll Depth", expected_time: "Day 1-3" },
-        { step_no: 2, goal: "Reframe the Problem", channel: "Landing Page (Above Fold)", message_angle: "It's not your fault, it's the old mechanism.", trigger_signal: "Time on Site > 45s", fallback_if_no_signal: "Exit Intent Popup (Lead Magnet)", metric: "Bounce Rate", expected_time: "Day 3 (Instant)" },
-        { step_no: 3, goal: "Validate Solution Fit", channel: "Email Sequence / Demo", message_angle: "The 'New Mechanism' in action.", trigger_signal: "Reply / Booking", fallback_if_no_signal: "Downsell to 'Lite' version", metric: "Conversion Rate", expected_time: "Day 4-7" },
-        { step_no: 4, goal: "Entangle Social Circles", channel: "Referral / Shared Content", message_angle: "Who else needs to see this?", trigger_signal: "Share Count", fallback_if_no_signal: "N/A", metric: "K-Factor", expected_time: "Day 7+" },
-        { step_no: 5, goal: "Observation & Feedback", channel: "Survey / Usage Data", message_angle: "How did this change your workflow?", trigger_signal: "Response", fallback_if_no_signal: "Auto-reminder", metric: "NPS / CSAT", expected_time: "Day 14" }
+        { step_no: 1, goal: "Disrupt Cognitive Pattern", channel: "LinkedIn / Meta (Feed)", message_angle: "The 'Counter-Intuitive' Insight", trigger_signal: "Click / Dwell > 3s", fallback_if_no_signal: "Retarget with 'Social Proof' variant", metric: "CTR / Scroll Depth", expected_time: "Day 1-3", law_citation: governingLaw },
+        { step_no: 2, goal: "Reframe the Problem", channel: "Landing Page (Above Fold)", message_angle: "It's not your fault, it's the old mechanism.", trigger_signal: "Time on Site > 45s", fallback_if_no_signal: "Exit Intent Popup (Lead Magnet)", metric: "Bounce Rate", expected_time: "Day 3 (Instant)", law_citation: governingLaw },
+        { step_no: 3, goal: "Validate Solution Fit", channel: "Email Sequence / Demo", message_angle: "The 'New Mechanism' in action.", trigger_signal: "Reply / Booking", fallback_if_no_signal: "Downsell to 'Lite' version", metric: "Conversion Rate", expected_time: "Day 4-7", law_citation: governingLaw },
+        { step_no: 4, goal: "Entangle Social Circles", channel: "Referral / Shared Content", message_angle: "Who else needs to see this?", trigger_signal: "Share Count", fallback_if_no_signal: "N/A", metric: "K-Factor", expected_time: "Day 7+", law_citation: governingLaw },
+        { step_no: 5, goal: "Observation & Feedback", channel: "Survey / Usage Data", message_angle: "How did this change your workflow?", trigger_signal: "Response", fallback_if_no_signal: "Auto-reminder", metric: "NPS / CSAT", expected_time: "Day 14", law_citation: governingLaw }
     ];
 
     // TEMPLATE B: E-Commerce / D2C (Impulse + Trust)
     const ecomSequence: SequenceStep[] = [
-        { step_no: 1, goal: "Stop the Scroll", channel: "TikTok / IG Reels", message_angle: "Visceral Product Demo (Hook)", trigger_signal: "Video View > 50%", fallback_if_no_signal: "Test Static Image", metric: "Thumbstop Rate", expected_time: "Day 1" },
-        { step_no: 2, goal: "Build Immediate Trust", channel: "PDP (Product Page)", message_angle: "Social Proof + Guarantee Stack", trigger_signal: "Add to Cart", fallback_if_no_signal: "Retargeting: Unboxing Video", metric: "ATC Rate", expected_time: "Day 1" },
-        { step_no: 3, goal: "Increase Average Order", channel: "Checkout Cart", message_angle: "Bundle Logic ('Most people add...')", trigger_signal: "Upsell Accept", fallback_if_no_signal: "Standard Checkout", metric: "AOV", expected_time: "Day 1" },
-        { step_no: 4, goal: "Post-Purchase High", channel: "Email / SMS", message_angle: "You made a great choice (Validation)", trigger_signal: "Open Rate", fallback_if_no_signal: "Resend", metric: "Open Rate", expected_time: "Day 2" },
-        { step_no: 5, goal: "Loop to Loyalty", channel: "Email", message_angle: "Join the VIP Community", trigger_signal: "Join Group / Referral", fallback_if_no_signal: "Discount Next Order", metric: "LTV", expected_time: "Day 14" }
+        { step_no: 1, goal: "Stop the Scroll", channel: "TikTok / IG Reels", message_angle: "Visceral Product Demo (Hook)", trigger_signal: "Video View > 50%", fallback_if_no_signal: "Test Static Image", metric: "Thumbstop Rate", expected_time: "Day 1", law_citation: governingLaw },
+        { step_no: 2, goal: "Build Immediate Trust", channel: "PDP (Product Page)", message_angle: "Social Proof + Guarantee Stack", trigger_signal: "Add to Cart", fallback_if_no_signal: "Retargeting: Unboxing Video", metric: "ATC Rate", expected_time: "Day 1", law_citation: governingLaw },
+        { step_no: 3, goal: "Increase Average Order", channel: "Checkout Cart", message_angle: "Bundle Logic ('Most people add...')", trigger_signal: "Upsell Accept", fallback_if_no_signal: "Standard Checkout", metric: "AOV", expected_time: "Day 1", law_citation: governingLaw },
+        { step_no: 4, goal: "Post-Purchase High", channel: "Email / SMS", message_angle: "You made a great choice (Validation)", trigger_signal: "Open Rate", fallback_if_no_signal: "Resend", metric: "Open Rate", expected_time: "Day 2", law_citation: governingLaw },
+        { step_no: 5, goal: "Loop to Loyalty", channel: "Email", message_angle: "Join the VIP Community", trigger_signal: "Join Group / Referral", fallback_if_no_signal: "Discount Next Order", metric: "LTV", expected_time: "Day 14", law_citation: governingLaw }
     ];
 
     // Logic to select template
@@ -82,14 +84,24 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
         title: "Sequence Variant Test",
         type: 'Sequence (A/Z)',
         hypothesis: "Showing 'Price' before 'Value' increases drop-off by 40%.",
-        principle_tested: "Non-Commutativity",
+        principle_tested: governingLaw.law_title,
+        governing_law_number: governingLaw.law_number,
+        law_citation: governingLaw,
         setup: "Variant A: Standard Flow. Variant Z: Pricing Table first.",
         cost_to_learn: "$500 ad spend",
         stopping_rule: "1000 Visits or 50 conversions in Control",
         success_threshold: "Variant Z beats A by >15% confident",
         win_action: "Adopt Price-First for high-intent traffic",
         lose_action: "Revert to Value-First standard",
-        linked_step_no: 2
+        linked_step_no: 2,
+        impact_score: 8,
+        confidence_score: 7,
+        ease_score: 6,
+        ice_total: 7,
+        primary_metric: "Conversion rate",
+        target_lift: 15,
+        measurement_method: "A/Z sequence split",
+        run_duration_days: 14
     };
 
     const assetTest: ExperimentCard = {
@@ -97,14 +109,24 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
         title: "Creative Angle Test",
         type: 'Asset (A/B/n)',
         hypothesis: "Social Proof (faces) outperforms Data Proof (charts) for this audience.",
-        principle_tested: "Social Proof",
+        principle_tested: governingLaw.law_title,
+        governing_law_number: governingLaw.law_number,
+        law_citation: governingLaw,
         setup: "A/B test on Step 1 Ad Creative.",
         cost_to_learn: "$200",
         stopping_rule: "50 Clicks per variant",
         success_threshold: "CTR diff > 20%",
         win_action: "Scale winner layout",
         lose_action: "Test 'Fear of Loss' angle next",
-        linked_step_no: 1
+        linked_step_no: 1,
+        impact_score: 7,
+        confidence_score: 6,
+        ease_score: 8,
+        ice_total: 7,
+        primary_metric: "CTR",
+        target_lift: 20,
+        measurement_method: "A/B/n asset split",
+        run_duration_days: 10
     };
 
     // 5. CONSTRUCT BLUEPRINT
@@ -144,9 +166,9 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
         qmm_mapping: {
             core_principles: [
                 {
-                    principle: "The Law of Double Jeopardy",
-                    why_applies: "Your small market share implies lower loyalty naturally.",
-                    what_it_changes: "Stop fighting for loyalty first. Fight for penetration."
+                    principle: `${governingLaw.law_number}. ${governingLaw.law_title}`,
+                    why_applies: governingLaw.physics_explanation,
+                    what_it_changes: "Sequence the plan around the governing law before channel tactics."
                 },
                 {
                     principle: "Signal Cost Theory",
@@ -159,7 +181,7 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
                     what_it_changes: "Radical simplification of the signup flow."
                 }
             ],
-            laws_used_optional: ["LAW-1", "LAW-5"]
+            laws_used_optional: [governingLaw.law_number, "04"]
         },
         sequence_map: {
             narrative_goal: "Disrupt, Validate, Scale",
@@ -208,13 +230,25 @@ export async function generateBlueprint(input: UserScenarioInput & { anchorScena
             bias_check_note: "Standard safeguards applied."
         },
         confidence: {
-            overall: "Medium",
-            score: 72,
+            overall: input.anchorScenarioId ? "High" : "Medium",
+            score: input.anchorScenarioId ? 84 : 72,
             data_needed_to_increase_confidence: [
                 "Historical CAC data",
                 "Competitor conversion benchmarks"
             ]
         },
+        recommendations: [
+            {
+                title: "Change the order of persuasion",
+                action: `Apply ${governingLaw.law_title} before asking for conversion.`,
+                law_citation: governingLaw
+            },
+            {
+                title: "Turn the plan into one proof test",
+                action: "Run the highest-ICE sequence test before scaling media spend.",
+                law_citation: governingLaw
+            }
+        ],
         kpi_plan: {
             primary_kpi: input.primary_kpi || "ROI",
             secondary_kpis: ["CAC", "LTV"],

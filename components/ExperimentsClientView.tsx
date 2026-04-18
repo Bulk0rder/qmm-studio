@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Plus, Beaker, Play, CheckCircle, XCircle, MoreHorizontal, Info, Search, FlaskConical } from 'lucide-react';
 import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 import { UI_COPY } from '@/lib/ui-copy';
-import { getLargeExperimentsSeed } from '@/lib/seed-data';
+import { getLargeExperimentsSeed, getLawForScenario } from '@/lib/seed-data';
 import { Database } from 'lucide-react';
 
 interface Experiment {
@@ -24,6 +24,20 @@ interface Experiment {
     checkBackDate?: string;
     outcomeNotes?: string;
     addedToKB?: boolean;
+    governing_law_number?: string;
+    law_citation?: {
+        law_number: string;
+        law_title: string;
+        physics_explanation: string;
+    };
+    impact_score?: number;
+    confidence_score?: number;
+    ease_score?: number;
+    ice_total?: number;
+    primary_metric?: string;
+    target_lift?: number;
+    measurement_method?: string;
+    run_duration_days?: number;
 }
 
 export default function ExperimentsClientView() {
@@ -44,6 +58,9 @@ export default function ExperimentsClientView() {
     const [newExpHypothesis, setNewExpHypothesis] = useState('');
     const [newExpScenarioId, setNewExpScenarioId] = useState(scenarioParam || '');
     const [checkBackDate, setCheckBackDate] = useState('');
+    const [impactScore, setImpactScore] = useState(7);
+    const [confidenceScore, setConfidenceScore] = useState(6);
+    const [easeScore, setEaseScore] = useState(7);
 
     // Outcome State
     const [outcomeModalOpen, setOutcomeModalOpen] = useState(false);
@@ -60,9 +77,11 @@ export default function ExperimentsClientView() {
         const storedScenarios = storage.get<any[]>(STORAGE_KEYS.SCENARIOS) || [];
 
         // Ensure status is valid for seeded data if coming from pure JSON
-        const validatedExps = storedExps.map(e => ({
+        const validatedExps = storedExps.map((e: any) => ({
             ...e,
-            status: e.status || 'planned'
+            experiment_id: e.experiment_id || e.id,
+            status: e.status || 'planned',
+            ice_total: e.ice_total || Number((((e.impact_score || 7) + (e.confidence_score || 6) + (e.ease_score || 7)) / 3).toFixed(1))
         }));
 
         setExperiments(validatedExps as Experiment[]);
@@ -91,7 +110,7 @@ export default function ExperimentsClientView() {
             // Update existing
             const updated = experiments.map(e =>
                 e.experiment_id === editingExp.experiment_id
-                    ? { ...e, title: newExpTitle, hypothesis: newExpHypothesis, scenario_id: newExpScenarioId, checkBackDate }
+                    ? { ...e, title: newExpTitle, hypothesis: newExpHypothesis, scenario_id: newExpScenarioId, checkBackDate, impact_score: impactScore, confidence_score: confidenceScore, ease_score: easeScore, ice_total: Number(((impactScore + confidenceScore + easeScore) / 3).toFixed(1)) }
                     : e
             );
             storage.set(STORAGE_KEYS.EXPERIMENTS, updated);
@@ -106,7 +125,11 @@ export default function ExperimentsClientView() {
                 hypothesis: newExpHypothesis,
                 status: 'planned',
                 created_at: new Date().toISOString(),
-                checkBackDate: checkBackDate
+                checkBackDate: checkBackDate,
+                impact_score: impactScore,
+                confidence_score: confidenceScore,
+                ease_score: easeScore,
+                ice_total: Number(((impactScore + confidenceScore + easeScore) / 3).toFixed(1))
             };
             const updated = [newExp, ...experiments];
             storage.set(STORAGE_KEYS.EXPERIMENTS, updated);
@@ -122,6 +145,9 @@ export default function ExperimentsClientView() {
         setNewExpHypothesis('');
         setNewExpScenarioId(scenarioParam || '');
         setCheckBackDate('');
+        setImpactScore(7);
+        setConfidenceScore(6);
+        setEaseScore(7);
         setEditingExp(null);
     };
 
@@ -131,6 +157,9 @@ export default function ExperimentsClientView() {
         setNewExpHypothesis(exp.hypothesis);
         setNewExpScenarioId(exp.scenario_id);
         setCheckBackDate(exp.checkBackDate || '');
+        setImpactScore(exp.impact_score || 7);
+        setConfidenceScore(exp.confidence_score || 6);
+        setEaseScore(exp.ease_score || 7);
         setIsCreateOpen(true);
     };
 
@@ -204,15 +233,32 @@ export default function ExperimentsClientView() {
         if (!confirm('This will seed 30 sample experiments. Continue?')) return;
         const largeSeed = getLargeExperimentsSeed();
 
-        const newExps = largeSeed.map(e => ({
-            experiment_id: e.experiment_id,
-            scenario_id: e.scenario_id,
-            title: `[Test] ${e.primary_kpi} Optimization`,
-            hypothesis: e.hypothesis,
-            status: e.status as 'planned' | 'running' | 'completed',
-            created_at: new Date().toISOString(),
-            checkBackDate: new Date(Date.now() + 86400000 * 7).toISOString()
-        }));
+        const newExps = largeSeed.map(e => {
+            const scenario = scenarios.find(s => s.id === e.scenario_id);
+            const law = getLawForScenario(scenario?.metadata?.industry, e.hypothesis);
+            const impact = 8;
+            const confidence = 7;
+            const ease = 6;
+            return {
+                experiment_id: e.experiment_id,
+                scenario_id: e.scenario_id,
+                title: `[Test] ${e.primary_kpi} Optimization`,
+                hypothesis: e.hypothesis,
+                status: e.status as 'planned' | 'running' | 'completed',
+                created_at: new Date().toISOString(),
+                checkBackDate: new Date(Date.now() + 86400000 * 7).toISOString(),
+                governing_law_number: law.law_number,
+                law_citation: law,
+                impact_score: impact,
+                confidence_score: confidence,
+                ease_score: ease,
+                ice_total: Number(((impact + confidence + ease) / 3).toFixed(1)),
+                primary_metric: e.primary_kpi,
+                target_lift: 15,
+                measurement_method: e.method,
+                run_duration_days: e.duration_days
+            };
+        });
 
         storage.set(STORAGE_KEYS.EXPERIMENTS, newExps);
         setExperiments(newExps as Experiment[]);
@@ -269,10 +315,17 @@ export default function ExperimentsClientView() {
                                     <Badge variant={exp.status === 'running' ? 'warning' : (exp.status === 'completed' ? 'secondary' : 'default')}>
                                         {exp.status}
                                     </Badge>
+                                    {typeof exp.ice_total === 'number' && <Badge variant="outline">ICE {exp.ice_total.toFixed(1)}</Badge>}
                                     {exp.outcome === 'win' && <Badge variant="success">Win</Badge>}
                                     {exp.outcome === 'loss' && <Badge variant="destructive">Loss</Badge>}
                                 </div>
                                 <p className="text-muted-foreground text-sm italic mb-2">"{exp.hypothesis}"</p>
+                                {exp.law_citation && (
+                                    <div className="mb-3 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 p-3 text-xs text-purple-900 dark:text-purple-200">
+                                        <strong>Law {exp.law_citation.law_number}: {exp.law_citation.law_title}</strong>
+                                        <span className="block mt-1 text-purple-900/70 dark:text-purple-200/70">{exp.law_citation.physics_explanation}</span>
+                                    </div>
+                                )}
                                 <div className="flex gap-4 text-xs text-muted-foreground">
                                     {exp.checkBackDate && (
                                         <span className="flex items-center gap-1"><Search size={12} /> Check: {new Date(exp.checkBackDate).toLocaleDateString()}</span>
@@ -335,6 +388,23 @@ export default function ExperimentsClientView() {
                             <div>
                                 <label className="block text-sm font-medium mb-1">Check Back Date</label>
                                 <Input type="date" value={checkBackDate} onChange={e => setCheckBackDate(e.target.value)} />
+                            </div>
+                            <div className="grid grid-cols-3 gap-3 rounded-lg border border-border p-3">
+                                <div>
+                                    <label className="block text-xs font-medium mb-1">Impact</label>
+                                    <Input type="number" min="1" max="10" value={impactScore} onChange={e => setImpactScore(Number(e.target.value))} />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium mb-1">Confidence</label>
+                                    <Input type="number" min="1" max="10" value={confidenceScore} onChange={e => setConfidenceScore(Number(e.target.value))} />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium mb-1">Ease</label>
+                                    <Input type="number" min="1" max="10" value={easeScore} onChange={e => setEaseScore(Number(e.target.value))} />
+                                </div>
+                                <div className="col-span-3 text-xs text-muted-foreground">
+                                    ICE score: {(((impactScore + confidenceScore + easeScore) / 3).toFixed(1))}
+                                </div>
                             </div>
 
                             <div className="pt-4 flex justify-end gap-3">

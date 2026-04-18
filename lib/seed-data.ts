@@ -67,6 +67,50 @@ export const EXPERIMENTS_SEED_JSON = [
     { "experiment_id": "E030", "scenario_id": "S030", "hypothesis": "If we publish third-party verification + measurable impact dashboard, demos rise because credibility replaces skepticism.", "method": "Landing test: verification + dashboard vs mission-only", "primary_kpi": "Demo requests", "secondary_kpis": ["Conversion", "Time on page"], "duration_days": 30, "status": "planned", "ethics": "Avoid greenwashing" }
 ];
 
+export const SEED_VERSION = 'v5.0-now';
+
+export const QMM_LAWS = [
+    {
+        law_number: '01',
+        law_title: 'Trust Is the Product',
+        physics_explanation: 'In trust-fragile markets, every recommendation must reduce perceived risk before it asks for action.',
+        local_context: 'Built for markets where fraud awareness, delayed settlement, social proof, and community validation shape conversion.'
+    },
+    {
+        law_number: '02',
+        law_title: 'Non-Commutativity',
+        physics_explanation: 'Order changes outcomes: proof before price is not the same as price before proof.',
+        local_context: 'Useful when buyers need reassurance, internal buy-in, or religious/compliance clarity before a commercial ask.'
+    },
+    {
+        law_number: '03',
+        law_title: 'Signal Cost Theory',
+        physics_explanation: 'Cheap claims do not move skeptical customers; costly proof, guarantees, and third-party validation carry more weight.',
+        local_context: 'Especially important in Nigerian and emerging-market categories where buyers assume claims may be inflated.'
+    },
+    {
+        law_number: '04',
+        law_title: 'Friction Physics',
+        physics_explanation: 'Every extra step, uncertainty, or surprise fee compounds drop-off unless the customer sees a compensating trust signal.',
+        local_context: 'Most visible in KYC, checkout, quote, proposal, and enrollment flows.'
+    },
+    {
+        law_number: '05',
+        law_title: 'Community Entanglement',
+        physics_explanation: 'Customer decisions are coupled to peers, family, trade partners, and internal stakeholders; influence rarely moves alone.',
+        local_context: 'Critical for fintech, education, real estate, public-sector, and B2B decisions across emerging markets.'
+    }
+];
+
+export const getLawForScenario = (industry = '', symptom = '') => {
+    const text = `${industry} ${symptom}`.toLowerCase();
+    if (text.includes('kyc') || text.includes('checkout') || text.includes('cart') || text.includes('drop')) return QMM_LAWS[3];
+    if (text.includes('trust') || text.includes('fraud') || text.includes('counterfeit') || text.includes('reputation')) return QMM_LAWS[0];
+    if (text.includes('proposal') || text.includes('stakeholder') || text.includes('community') || text.includes('government')) return QMM_LAWS[4];
+    if (text.includes('proof') || text.includes('skeptic') || text.includes('price') || text.includes('claim')) return QMM_LAWS[2];
+    return QMM_LAWS[1];
+};
+
 export const getLargeScenarioSeed = () => {
     // Return 60 scenarios by duplicating and re-IDing
     const base = SCENARIOS_SEED_JSON;

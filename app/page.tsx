@@ -8,6 +8,7 @@ import { ArrowRight, BookOpen, Layers, Lightbulb, Zap, Activity, AlertTriangle, 
 import Link from 'next/link';
 import { OrbitNodes } from '@/components/illustrations/OrbitNodes';
 import { seedSampleData, getAllScenarios } from '@/lib/scenario-service';
+import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 
 export default function Home() {
     const { HERO, RECENT_BLUEPRINTS, KNOWN_WINNERS, COVERAGE_GAPS, SYSTEM_STATUS, QUICK_ACTIONS } = UI_COPY.HOME;
@@ -15,16 +16,24 @@ export default function Home() {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const sc = getAllScenarios();
+            let sc = getAllScenarios();
+            if (sc.length === 0) {
+                seedSampleData(15).then(() => {
+                    sc = getAllScenarios();
+                    const blueprints = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+                    setStats({ scenarios: sc.length, blueprints: blueprints.length });
+                });
+                return;
+            }
             // Estimate blueprints count (approx 1 per scenario for now)
-            const bpCount = localStorage.getItem('qmm-blueprints') ? JSON.parse(localStorage.getItem('qmm-blueprints') || '[]').length : 0;
+            const bpCount = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS)?.length || 0;
             setStats({ scenarios: sc.length, blueprints: bpCount });
         }
     }, []);
 
     const handleSeed = async () => {
-        if (confirm("This will overwrite your current guest data with 30 sample scenarios. Continue?")) {
-            await seedSampleData();
+        if (confirm("This will add the 15 curated v5 starter scenarios if they are missing. Continue?")) {
+            await seedSampleData(15);
             window.location.reload();
         }
     };

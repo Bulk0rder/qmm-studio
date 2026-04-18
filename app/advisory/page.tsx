@@ -7,7 +7,7 @@ import { PageShell } from '@/components/layout/PageShell';
 import { Button } from '@/components/ui/Button';
 import { BackButton } from '@/components/ui/BackButton';
 import { Badge } from '@/components/ui/Badge';
-import { Briefcase, Zap, Feather, Check, ArrowRight, ShieldAlert, BookOpen, Beaker, CheckCircle } from 'lucide-react';
+import { Briefcase, Zap, Feather, Check, ArrowRight, ShieldAlert, BookOpen, Beaker, CheckCircle, Download } from 'lucide-react';
 import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 import { Blueprint, Scenario } from '@/lib/types';
 import { UI_COPY } from '@/lib/ui-copy';
@@ -129,6 +129,8 @@ export default function AdvisoryPage() {
     };
 
     const activeVoice = getVoiceContent(voice);
+    const primaryLaw = blueprint.recommendations?.[0]?.law_citation || blueprint.sequence_map.steps.find(step => step.law_citation)?.law_citation || blueprint.experiments.sequence_tests[0]?.law_citation;
+    const exportHref = `/api/export/pdf?id=${encodeURIComponent(blueprint.id)}&title=${encodeURIComponent(scenario.title)}&confidence=${encodeURIComponent(`${blueprint.confidence.score}% ${blueprint.confidence.overall}`)}&law=${encodeURIComponent(primaryLaw ? `${primaryLaw.law_number}. ${primaryLaw.law_title}` : 'Pending')}`;
 
     return (
         <PageShell>
@@ -141,7 +143,7 @@ export default function AdvisoryPage() {
                             blueprint.sources.retrieved_scenarios.length,
                             5, // Mock KB refs count for now
                             blueprint.diagnosis.assumptions.length,
-                            "High (87%)"
+                            `${blueprint.confidence.overall} (${blueprint.confidence.score}%)`
                         )}
                     </div>
                     <div className="flex gap-4">
@@ -193,11 +195,28 @@ export default function AdvisoryPage() {
                         <Link href={`/blueprint/${blueprint.id}`}>
                             <Button variant="outline" size="sm">View Raw Data</Button>
                         </Link>
-                        <Button variant="outline" size="sm" onClick={() => window.print()}>
-                            {UI_COPY.BLUEPRINT.TOP_STRIP.BUTTONS.EXPORT}
-                        </Button>
+                        <Link href={exportHref}>
+                            <Button variant="outline" size="sm">
+                                <Download size={14} className="mr-2" /> {UI_COPY.BLUEPRINT.TOP_STRIP.BUTTONS.EXPORT}
+                            </Button>
+                        </Link>
                     </div>
                 </header>
+
+                <section className="grid md:grid-cols-2 gap-4">
+                    <div className="rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/20 p-5">
+                        <div className="text-xs uppercase font-bold tracking-widest text-blue-700 dark:text-blue-300 mb-2">Confidence Score</div>
+                        <div className="text-4xl font-bold text-blue-700 dark:text-blue-300">{blueprint.confidence.score}%</div>
+                        <p className="text-sm text-blue-900/70 dark:text-blue-200/70 mt-2">
+                            {blueprint.confidence.overall} confidence. Improve it with: {blueprint.confidence.data_needed_to_increase_confidence.join(', ')}.
+                        </p>
+                    </div>
+                    <div className="rounded-xl border border-purple-200 dark:border-purple-900/50 bg-purple-50 dark:bg-purple-950/20 p-5">
+                        <div className="text-xs uppercase font-bold tracking-widest text-purple-700 dark:text-purple-300 mb-2">Governing Law</div>
+                        <h3 className="text-xl font-bold text-foreground">{primaryLaw ? `${primaryLaw.law_number}. ${primaryLaw.law_title}` : 'Citation pending'}</h3>
+                        <p className="text-sm text-muted-foreground mt-2">{primaryLaw?.physics_explanation || 'This recommendation needs expert review before it can be cited.'}</p>
+                    </div>
+                </section>
 
                 <hr className="border-border" />
 

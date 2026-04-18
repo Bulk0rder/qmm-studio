@@ -12,7 +12,7 @@ import { KB_SEED } from '@/lib/kb-data';
 interface KBItem {
     id: string;
     title: string;
-    category: 'Laws' | 'Ratios' | 'Local Context' | 'Guardrails';
+    category: 'Quantum Laws' | 'Laws' | 'Ratios' | 'Local Context' | 'Guardrails';
     summary: string;
     content: string;
 }

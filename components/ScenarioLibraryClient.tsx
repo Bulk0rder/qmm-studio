@@ -89,6 +89,12 @@ export default function ScenarioLibraryClient({ scenarios, onSeed }: ScenarioLib
                                     </p>
 
                                     <div className="border-t border-app pt-4 flex gap-4 text-xs text-muted font-medium">
+                                        {scenario.confidence_score_preview && (
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                                {scenario.confidence_score_preview}% Confidence
+                                            </div>
+                                        )}
                                         <div className="flex items-center gap-1.5">
                                             <span className={`w-1.5 h-1.5 rounded-full ${scenario.outcomes_summary && scenario.outcomes_summary.wins > 0 ? 'bg-green-500' : 'bg-zinc-300'}`}></span>
                                             {scenario.outcomes_summary?.wins || 0} Wins

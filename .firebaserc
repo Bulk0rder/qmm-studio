@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "alt-institute"
+  },
+  "targets": {
+    "alt-institute": {
+      "hosting": {
+        "qmm-studio": [
+          "qmm-studio"
+        ]
+      }
+    }
+  }
+}

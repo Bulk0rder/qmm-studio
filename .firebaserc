@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "alt-institute"
+    "default": "qmm-studio-28e72"
   },
   "targets": {
-    "alt-institute": {
+    "qmm-studio-28e72": {
       "hosting": {
         "qmm-studio": [
-          "qmm-studio"
+          "qmm-studio-28e72"
         ]
       }
     }

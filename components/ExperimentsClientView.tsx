@@ -11,6 +11,7 @@ import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 import { UI_COPY } from '@/lib/ui-copy';
 import { getLargeExperimentsSeed, getLawForScenario } from '@/lib/seed-data';
 import { Database } from 'lucide-react';
+import { seedSampleData } from '@/lib/scenario-service';
 
 interface Experiment {
     experiment_id: string; // Match seed data key
@@ -72,9 +73,15 @@ export default function ExperimentsClientView() {
     // Scenarios for dropdown
     const [scenarios, setScenarios] = useState<any[]>([]);
 
-    const loadData = () => {
-        const storedExps = storage.get<Experiment[]>(STORAGE_KEYS.EXPERIMENTS) || [];
-        const storedScenarios = storage.get<any[]>(STORAGE_KEYS.SCENARIOS) || [];
+    const loadData = async () => {
+        let storedExps = storage.get<Experiment[]>(STORAGE_KEYS.EXPERIMENTS) || [];
+        let storedScenarios = storage.get<any[]>(STORAGE_KEYS.SCENARIOS) || [];
+
+        if (storedExps.length === 0 || storedScenarios.length === 0) {
+            await seedSampleData(15);
+            storedExps = storage.get<Experiment[]>(STORAGE_KEYS.EXPERIMENTS) || [];
+            storedScenarios = storage.get<any[]>(STORAGE_KEYS.SCENARIOS) || [];
+        }
 
         // Ensure status is valid for seeded data if coming from pure JSON
         const validatedExps = storedExps.map((e: any) => ({

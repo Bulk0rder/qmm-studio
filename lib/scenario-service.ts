@@ -121,7 +121,7 @@ export const seedSampleData = async (limit = 15): Promise<string> => {
 
     // Map for fast lookup
     const scenarioMap = new Map(existingScenarios.map(s => [s.id, s]));
-    const experimentMap = new Map(existingExperiments.map(e => [e.id, e]));
+    const experimentMap = new Map(existingExperiments.map((e: any) => [e.id || e.experiment_id, e]));
     const blueprintMap = new Map(existingBlueprints.map(b => [b.id, b]));
 
     let addedScenarios = 0;
@@ -131,18 +131,16 @@ export const seedSampleData = async (limit = 15): Promise<string> => {
     // We will process scenarios, then look up experiments for them.
 
     for (const s of SCENARIOS_SEED_JSON.slice(0, limit)) {
+        const relatedExps = EXPERIMENTS_SEED_JSON.filter(e => e.scenario_id === s.scenario_id);
+        const relatedExpIds = relatedExps.map(e => e.experiment_id);
+        const law = getLawForScenario(s.industry, s.symptom);
+        const newBp = generateMockBlueprint(s.scenario_id, s.title, s.industry, s.symptom);
+
+        if (!blueprintMap.has(newBp.id)) {
+            blueprintMap.set(newBp.id, newBp);
+        }
+
         if (!scenarioMap.has(s.scenario_id)) {
-            // Find related experiments from seed
-            const relatedExps = EXPERIMENTS_SEED_JSON.filter(e => e.scenario_id === s.scenario_id);
-            const relatedExpIds = relatedExps.map(e => e.experiment_id);
-
-            // Create Blueprint for this scenario
-            const law = getLawForScenario(s.industry, s.symptom);
-            const newBp = generateMockBlueprint(s.scenario_id, s.title, s.industry, s.symptom);
-            if (!blueprintMap.has(newBp.id)) {
-                blueprintMap.set(newBp.id, newBp);
-            }
-
             const newScenario: Scenario = {
                 id: s.scenario_id,
                 workspace_id: 'guest',
@@ -176,42 +174,52 @@ export const seedSampleData = async (limit = 15): Promise<string> => {
 
             scenarioMap.set(newScenario.id, newScenario);
             addedScenarios++;
+        } else {
+            const existing = scenarioMap.get(s.scenario_id);
+            if (existing && (!existing.related_blueprints?.includes(newBp.id) || !existing.related_experiments?.length)) {
+                scenarioMap.set(s.scenario_id, {
+                    ...existing,
+                    confidence_score_preview: existing.confidence_score_preview || newBp.confidence.score,
+                    seeded: existing.seeded ?? true,
+                    seed_version: existing.seed_version || SEED_VERSION,
+                    related_blueprints: Array.from(new Set([...(existing.related_blueprints || []), newBp.id])),
+                    related_experiments: Array.from(new Set([...(existing.related_experiments || []), ...relatedExpIds])),
+                });
+            }
+        }
 
-            // Add the experiments to map
-            for (const e of relatedExps) {
-                if (!experimentMap.has(e.experiment_id)) {
-                    const newExp: Experiment = {
-                        id: e.experiment_id, // Map seed's experiment_id to type's id
-                        scenario_id: e.scenario_id,
-                        blueprint_id: newBp.id,
-                        workspace_id: 'guest',
-                        title: e.hypothesis.split(' because')[0]?.replace('If we ', '') || "Experiment",
-                        type: 'Asset (A/B/n)', // Default
-                        hypothesis: e.hypothesis,
-                        status: (e.status as any) || 'planned',
-                        // outcome: 'inconclusive', // Optional in type?
-                        setup: "A/B Test",
-                        principle_tested: law.law_title,
-                        governing_law_number: law.law_number,
-                        law_citation: law,
-                        stopping_rule: "100 clicks",
-                        success_threshold: "10%",
-                        win_action: "Scale",
-                        lose_action: "Kill",
-                        cost_to_learn: "$100",
-                        impact_score: 8,
-                        confidence_score: 7,
-                        ease_score: 6,
-                        ice_total: 7,
-                        primary_metric: e.primary_kpi,
-                        target_lift: 15,
-                        measurement_method: e.method,
-                        run_duration_days: e.duration_days,
-                        startDate: new Date().toISOString()
-                    };
-                    experimentMap.set(newExp.id, newExp);
-                    addedExperiments++;
-                }
+        for (const e of relatedExps) {
+            if (!experimentMap.has(e.experiment_id)) {
+                const newExp: Experiment = {
+                    id: e.experiment_id,
+                    scenario_id: e.scenario_id,
+                    blueprint_id: newBp.id,
+                    workspace_id: 'guest',
+                    title: e.hypothesis.split(' because')[0]?.replace('If we ', '') || "Experiment",
+                    type: 'Asset (A/B/n)',
+                    hypothesis: e.hypothesis,
+                    status: (e.status as any) || 'planned',
+                    setup: "A/B Test",
+                    principle_tested: law.law_title,
+                    governing_law_number: law.law_number,
+                    law_citation: law,
+                    stopping_rule: "100 clicks",
+                    success_threshold: "10%",
+                    win_action: "Scale",
+                    lose_action: "Kill",
+                    cost_to_learn: "$100",
+                    impact_score: 8,
+                    confidence_score: 7,
+                    ease_score: 6,
+                    ice_total: 7,
+                    primary_metric: e.primary_kpi,
+                    target_lift: 15,
+                    measurement_method: e.method,
+                    run_duration_days: e.duration_days,
+                    startDate: new Date().toISOString()
+                };
+                experimentMap.set(newExp.id, newExp);
+                addedExperiments++;
             }
         }
     }

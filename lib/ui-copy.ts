@@ -28,10 +28,10 @@ export const UI_COPY = {
     },
     HOME: {
         HERO: {
-            TITLE: "Stop Guessing. Start Validating.",
-            SUBTITLE: "The Scenario Librarian turns market ambiguity into boardroom-ready strategy, actionable roadmaps, and proven playbooks.",
-            PRIMARY_CTA: "Consult the Librarian",
-            SECONDARY_CTA: "Browse Proven Winners",
+            TITLE: "Quantum Marketing Memory for high-stakes decisions.",
+            SUBTITLE: "QMM Studio retrieves institutional memory, cites the market laws behind each recommendation, and turns diagnosis into measurable experiments.",
+            PRIMARY_CTA: "Start a Diagnosis",
+            SECONDARY_CTA: "Explore the 25 Laws",
         },
         RECENT_BLUEPRINTS: {
             HEADER: "Your Strategic Workbench",

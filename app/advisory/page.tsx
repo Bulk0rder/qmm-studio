@@ -11,6 +11,7 @@ import { Briefcase, Zap, Feather, Check, ArrowRight, ShieldAlert, BookOpen, Beak
 import { storage, STORAGE_KEYS } from '@/lib/storage-client';
 import { Blueprint, Scenario } from '@/lib/types';
 import { UI_COPY } from '@/lib/ui-copy';
+import { seedSampleData } from '@/lib/scenario-service';
 
 // Storage Key
 const VOICE_KEY = 'qmm.voice';
@@ -29,27 +30,38 @@ export default function AdvisoryPage() {
     const [activeSection, setActiveSection] = useState('blueprint'); // 'retrieval', 'blueprint', 'experiments'
 
     useEffect(() => {
-        setMounted(true);
-        // Load preference
-        const savedVoice = localStorage.getItem(VOICE_KEY) as VoiceType;
-        if (savedVoice && ['boardroom', 'operator', 'creative'].includes(savedVoice)) {
-            setVoice(savedVoice);
-        }
+        const loadAdvisory = async () => {
+            setMounted(true);
+            // Load preference
+            const savedVoice = localStorage.getItem(VOICE_KEY) as VoiceType;
+            if (savedVoice && ['boardroom', 'operator', 'creative'].includes(savedVoice)) {
+                setVoice(savedVoice);
+            }
 
-        // Load Data
-        const scenarios = storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
-        const blueprints = storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+            let scenarios = storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
+            let blueprints = storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
 
-        // 1. Try exact match from URL
-        let foundBp = blueprintId ? blueprints.find(b => b.id === blueprintId) : null;
-        let foundSc = scenarioId ? scenarios.find(s => s.id === scenarioId) : null;
+            if (scenarios.length === 0 || blueprints.length === 0) {
+                await seedSampleData(15);
+                scenarios = storage.get<Scenario[]>(STORAGE_KEYS.SCENARIOS) || [];
+                blueprints = storage.get<Blueprint[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+            }
 
-        // 2. Fallback: Most recent
-        if (!foundBp && blueprints.length > 0) foundBp = blueprints[blueprints.length - 1]; // Last one is usually newest appended
-        if (!foundSc && foundBp) foundSc = scenarios.find(s => s.id === foundBp?.scenario_id);
+            // 1. Try exact match from URL
+            let foundBp = blueprintId ? blueprints.find(b => b.id === blueprintId) : null;
+            let foundSc = scenarioId ? scenarios.find(s => s.id === scenarioId) : null;
 
-        setBlueprint(foundBp || null);
-        setScenario(foundSc || null);
+            // 2. Fallback: Most recent usable blueprint
+            if (!foundBp && foundSc) foundBp = blueprints.find(b => b.scenario_id === foundSc?.id) || null;
+            if (!foundBp && blueprints.length > 0) foundBp = blueprints[blueprints.length - 1];
+            if (!foundSc && foundBp) foundSc = scenarios.find(s => s.id === foundBp?.scenario_id) || null;
+            if (!foundSc && scenarios.length > 0) foundSc = scenarios[scenarios.length - 1];
+
+            setBlueprint(foundBp || null);
+            setScenario(foundSc || null);
+        };
+
+        loadAdvisory();
 
     }, [scenarioId, blueprintId]);
 

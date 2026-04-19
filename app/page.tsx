@@ -17,17 +17,16 @@ export default function Home() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             let sc = getAllScenarios();
-            if (sc.length === 0) {
+            let blueprints = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+            if (sc.length === 0 || blueprints.length === 0) {
                 seedSampleData(15).then(() => {
                     sc = getAllScenarios();
-                    const blueprints = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS) || [];
+                    blueprints = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS) || [];
                     setStats({ scenarios: sc.length, blueprints: blueprints.length });
                 });
                 return;
             }
-            // Estimate blueprints count (approx 1 per scenario for now)
-            const bpCount = storage.get<any[]>(STORAGE_KEYS.BLUEPRINTS)?.length || 0;
-            setStats({ scenarios: sc.length, blueprints: bpCount });
+            setStats({ scenarios: sc.length, blueprints: blueprints.length });
         }
     }, []);
 

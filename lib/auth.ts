@@ -10,8 +10,8 @@ export interface SessionPayload {
     role: 'admin' | 'user' | 'guest';
 }
 
-export function getSession(): SessionPayload | null {
-    const cookieStore = cookies();
+export async function getSession(): Promise<SessionPayload | null> {
+    const cookieStore = await cookies();
     const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
     if (!sessionCookie?.value) return null;
 
@@ -19,8 +19,8 @@ export function getSession(): SessionPayload | null {
 }
 
 // For API Routes - checks session or throws error
-export function requireSession(): SessionPayload {
-    const session = getSession();
+export async function requireSession(): Promise<SessionPayload> {
+    const session = await getSession();
     if (!session) {
         throw new Error('Unauthorized');
     }
@@ -29,7 +29,7 @@ export function requireSession(): SessionPayload {
 
 export async function createSessionCookie(payload: SessionPayload) {
     const token = signSession(payload);
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     cookieStore.set(SESSION_COOKIE_NAME, token, {
         httpOnly: true,
@@ -41,6 +41,6 @@ export async function createSessionCookie(payload: SessionPayload) {
 }
 
 export async function clearSessionCookie() {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     cookieStore.delete(SESSION_COOKIE_NAME);
 }

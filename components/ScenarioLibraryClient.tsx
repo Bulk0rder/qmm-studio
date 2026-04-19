@@ -34,7 +34,7 @@ export default function ScenarioLibraryClient({ scenarios, onSeed }: ScenarioLib
                         {UI_COPY.SCENARIOS.SUBTITLE}
                     </p>
                 </div>
-                <Link href="/new">
+                <Link href="/diagnose">
                     <Button size="lg" className="shadow-sm">{UI_COPY.SCENARIOS.EMPTY_CTA}</Button>
                 </Link>
             </div>
@@ -58,7 +58,7 @@ export default function ScenarioLibraryClient({ scenarios, onSeed }: ScenarioLib
                         <h3 className="text-lg font-semibold text-app mb-2">{UI_COPY.SCENARIOS.EMPTY_TITLE}</h3>
                         <p className="text-muted mb-6">{UI_COPY.SCENARIOS.EMPTY_BODY}</p>
                         <div className="flex justify-center gap-4">
-                            <Link href="/new">
+                            <Link href="/diagnose">
                                 <Button variant="outline" className="bg-white dark:bg-zinc-800 shadow-sm">{UI_COPY.SCENARIOS.EMPTY_CTA}</Button>
                             </Link>
                             {onSeed && (

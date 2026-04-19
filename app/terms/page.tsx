@@ -13,7 +13,7 @@ export default function TermsPage() {
                 </div>
 
                 <div className="prose dark:prose-invert">
-                    <h3>1. Advisory Disclaimer</h3>
+                    <h3>1. Blueprint Disclaimer</h3>
                     <p>
                         QMM Studio ("The Librarian") provides strategic guidance based on pattern matching and algorithmic models.
                         <strong>This is not legal, financial, or guaranteed professional advice.</strong>

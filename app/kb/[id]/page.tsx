@@ -8,31 +8,33 @@ import Link from 'next/link';
 import { KB_SEED } from '@/lib/kb-data';
 
 interface KBDetailPageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export function generateStaticParams() {
     return KB_SEED.map(item => ({ id: item.id }));
 }
 
-export function generateMetadata({ params }: KBDetailPageProps) {
-    const item = KB_SEED.find(k => k.id === params.id);
+export async function generateMetadata({ params }: KBDetailPageProps) {
+    const { id } = await params;
+    const item = KB_SEED.find(k => k.id === id);
     if (!item) {
         return {
-            title: 'Knowledge Base | QMM Studio'
+            title: 'Physics Library | QMM Studio'
         };
     }
 
     return {
-        title: `${item.title} | QMM Studio`,
+        title: `${item.title} — The Physics of Marketing | QMM Studio`,
         description: item.summary
     };
 }
 
-export default function KBDetailPage({ params }: KBDetailPageProps) {
-    const item = KB_SEED.find(k => k.id === params.id);
+export default async function KBDetailPage({ params }: KBDetailPageProps) {
+    const { id } = await params;
+    const item = KB_SEED.find(k => k.id === id);
 
     if (!item) {
         notFound();
@@ -49,9 +51,9 @@ export default function KBDetailPage({ params }: KBDetailPageProps) {
         <PageShell>
             <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center justify-between gap-4">
-                    <Link href="/kb">
+                    <Link href="/physics">
                         <Button variant="ghost" className="gap-2 pl-0 hover:bg-transparent hover:text-blue-600">
-                            <ArrowLeft size={16} /> Back to Physics
+                            <ArrowLeft size={16} /> Back to Physics Library
                         </Button>
                     </Link>
                     <Button variant="outline" size="sm" disabled className="opacity-70">
@@ -117,6 +119,15 @@ export default function KBDetailPage({ params }: KBDetailPageProps) {
                         </p>
                     </div>
                 </div>
+                <div className="rounded-xl border border-border bg-card p-5">
+                    <h3 className="font-bold text-foreground">Applied in Blueprints</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        Sample: Nigerian Fintech B2C, Enterprise sales velocity, and trust-led onboarding flows.
+                    </p>
+                </div>
+                <Link href="/diagnose">
+                    <Button className="w-full">Apply this law: Run a Diagnosis</Button>
+                </Link>
             </div>
         </PageShell>
     );

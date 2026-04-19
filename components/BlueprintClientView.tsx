@@ -50,7 +50,7 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <Link href="/library" className="text-muted hover:text-app transition-colors">
+                        <Link href="/memory" className="text-muted hover:text-app transition-colors">
                             <ArrowLeft size={20} />
                         </Link>
                         <Badge variant="outline" className="text-xs uppercase tracking-widest">{blueprint.id}</Badge>
@@ -189,7 +189,7 @@ export default function BlueprintClientView({ blueprint }: BlueprintClientViewPr
                                     )}
                                     <div className="mt-auto pt-4 border-t border-app flex justify-between items-center">
                                         <div className="text-xs font-mono text-muted">ICE {exp.ice_total?.toFixed(1) || 'n/a'} · {exp.cost_to_learn}</div>
-                                        <Link href="/experiments" className="text-sm font-medium text-blue-600 hover:underline flex items-center gap-1">
+                                        <Link href="/lab" className="text-sm font-medium text-blue-600 hover:underline flex items-center gap-1">
                                             Run Test <ArrowRight size={14} />
                                         </Link>
                                     </div>

@@ -5,6 +5,9 @@ import { Navbar } from '@/components/Navbar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { UI_COPY } from '@/lib/ui-copy';
 import type { Metadata } from 'next';
+import { AutoSeed } from '@/components/AutoSeed';
+import { AnalyticsProvider } from '@/components/AnalyticsProvider';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
     title: UI_COPY.APP.NAME,
@@ -14,22 +17,27 @@ export const metadata: Metadata = {
 import { PageShell } from '@/components/layout/PageShell';
 import { Footer } from '@/components/layout/Footer';
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const session = getSession();
+    const session = await getSession();
 
     return (
         <html lang="en" suppressHydrationWarning>
             <body className="min-h-screen bg-app text-app font-sans antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100">
-                <ThemeProvider defaultTheme="system" storageKey="qmm-theme">
-                    <Navbar session={session} />
-                    <PageShell className={session ? "pt-24 md:pt-32 fade-in" : "fade-in pt-24"}>
-                        {children}
-                    </PageShell>
-                    <Footer />
+                <ThemeProvider defaultTheme="dark" storageKey="qmm-theme">
+                    <Suspense fallback={null}>
+                        <AnalyticsProvider>
+                            <AutoSeed />
+                            <Navbar session={session} />
+                            <PageShell className="fade-in">
+                                {children}
+                            </PageShell>
+                            <Footer />
+                        </AnalyticsProvider>
+                    </Suspense>
                 </ThemeProvider>
             </body>
         </html>

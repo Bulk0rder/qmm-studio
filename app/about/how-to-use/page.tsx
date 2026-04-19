@@ -26,7 +26,7 @@ export default function HowToUsePage() {
                             <h3 className="text-2xl font-bold text-foreground">Diagnosis (The Arena)</h3>
                         </div>
                         <p className="text-lg text-muted-foreground ml-14">
-                            Start at <strong>New Scenario</strong>. Define your market conditions, the entropy (chaos/competitors), and the friction stopping your growth. Be honest—garbage in, garbage out.
+                            Start at <strong>Diagnose</strong>. Define your market conditions, the entropy, and the friction stopping your growth. Be honest about the numbers.
                         </p>
                     </section>
 
@@ -36,14 +36,14 @@ export default function HowToUsePage() {
                             <h3 className="text-2xl font-bold text-foreground">Retrieval</h3>
                         </div>
                         <p className="text-lg text-muted-foreground ml-14">
-                            The system searches the <strong>Institutional Memory</strong> (Knowledge Base & Library) for similar historical patterns. Review these matches to verify that the system "understands" your context.
+                            The system searches <strong>Memory</strong> and <strong>Physics</strong> for similar patterns. Review these matches to verify that the system understands your context.
                         </p>
                     </section>
 
                     <section className="space-y-4">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">3</div>
-                            <h3 className="text-2xl font-bold text-foreground">The Advisory Board</h3>
+                            <h3 className="text-2xl font-bold text-foreground">Blueprint</h3>
                         </div>
                         <p className="text-lg text-muted-foreground ml-14">
                             Receive a 7-part Strategic Blueprint. Use the <strong>Voice Toggle</strong> to translate the strategy for different stakeholders:
@@ -58,16 +58,16 @@ export default function HowToUsePage() {
                     <section className="space-y-4">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">4</div>
-                            <h3 className="text-2xl font-bold text-foreground">Experiments</h3>
+                            <h3 className="text-2xl font-bold text-foreground">The Lab</h3>
                         </div>
                         <p className="text-lg text-muted-foreground ml-14">
-                            Deploy the strategy. Log experiments directly from the Blueprint. Track Wins and Losses. Winning experiments are promoted back to the <strong>Scenario Library</strong>, making the system smarter for the next user.
+                            Deploy the strategy. Log experiments directly from the Blueprint. Track wins and losses. Winning experiments are promoted back to <strong>Memory</strong>, making the system smarter for the next diagnosis.
                         </p>
                     </section>
                 </div>
 
                 <div className="pt-8 text-center">
-                    <Link href="/new">
+                    <Link href="/diagnose">
                         <Button size="lg">Start a Diagnosis</Button>
                     </Link>
                 </div>

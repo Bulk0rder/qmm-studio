@@ -22,11 +22,11 @@ export function Footer() {
                         <div className="space-y-3">
                             <h5 className="font-semibold text-sm">Studio</h5>
                             <ul className="space-y-2 text-sm text-muted-foreground">
-                                <li><Link href="/new" className="hover:text-primary transition-colors">Diagnostic</Link></li>
-                                <li><Link href="/library" className="hover:text-primary transition-colors">Library</Link></li>
-                                <li><Link href="/kb" className="hover:text-primary transition-colors">Knowledge Base</Link></li>
-                                <li><Link href="/experiments" className="hover:text-primary transition-colors">Experiments</Link></li>
-                                <li><Link href="/advisory" className="hover:text-primary transition-colors">Advisory Room</Link></li>
+                                <li><Link href="/diagnose" className="hover:text-primary transition-colors">Diagnose</Link></li>
+                                <li><Link href="/memory" className="hover:text-primary transition-colors">Memory</Link></li>
+                                <li><Link href="/physics" className="hover:text-primary transition-colors">Physics</Link></li>
+                                <li><Link href="/lab" className="hover:text-primary transition-colors">The Lab</Link></li>
+                                <li><Link href="/blueprint" className="hover:text-primary transition-colors">Blueprint</Link></li>
                             </ul>
                         </div>
                         <div className="space-y-3">

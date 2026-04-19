@@ -14,6 +14,12 @@ export function middleware(request: NextRequest) {
         pathname.startsWith('/library') ||
         pathname.startsWith('/experiments') ||
         pathname.startsWith('/new') ||
+        pathname.startsWith('/diagnose') ||
+        pathname.startsWith('/lab') ||
+        pathname.startsWith('/memory') ||
+        pathname.startsWith('/physics') ||
+        pathname.startsWith('/pulse') ||
+        pathname.startsWith('/wins') ||
         pathname.startsWith('/about') ||
         pathname.startsWith('/blueprint') ||
         pathname === '/privacy' ||

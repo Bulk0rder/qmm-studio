@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { PageShell } from '@/components/layout/PageShell';
 import { Button } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
-import { Plus, Beaker, Play, CheckCircle, XCircle, MoreHorizontal, Info, Search, FlaskConical } from 'lucide-react';
-import { storage, STORAGE_KEYS } from '@/lib/storage-client';
+import { Plus, Beaker, Play, CheckCircle, XCircle, Info, Search, FlaskConical } from 'lucide-react';
+import { storage, STORAGE_KEYS, trackEvent, writeThroughCache } from '@/lib/storage-client';
 import { UI_COPY } from '@/lib/ui-copy';
 import { getLargeExperimentsSeed, getLawForScenario } from '@/lib/seed-data';
 import { Database } from 'lucide-react';
@@ -218,8 +219,15 @@ export default function ExperimentsClientView() {
         }
 
         if (addToKB) {
-            // Mock toast?
-            console.log("Promoted to KB:", selectedExpId);
+            const exp = updated.find(e => e.experiment_id === selectedExpId);
+            const winners = storage.get<any[]>(STORAGE_KEYS.KNOWN_WINNERS) || [];
+            writeThroughCache(STORAGE_KEYS.KNOWN_WINNERS, [{
+                ...exp,
+                promotedAt: new Date().toISOString(),
+                outcomeMetric: exp?.primary_metric || 'Winning result',
+            }, ...winners]);
+            storage.set(STORAGE_KEYS.STRATEGY_SCORE, Math.min(10, (storage.get<number>(STORAGE_KEYS.STRATEGY_SCORE) || 3) + 2));
+            trackEvent('known_winner_promoted', { experimentId: selectedExpId });
         }
     };
 
@@ -234,7 +242,17 @@ export default function ExperimentsClientView() {
 
 
 
-    // ... (ExperimentsClientView Logic)
+    const stats = {
+        running: filteredExperiments.filter(e => e.status === 'running').length,
+        won: filteredExperiments.filter(e => e.outcome === 'win').length,
+        lost: filteredExperiments.filter(e => e.outcome === 'loss').length,
+        ideas: filteredExperiments.filter(e => e.status === 'planned').length,
+        averageIce: filteredExperiments.length
+            ? filteredExperiments.reduce((sum, e) => sum + (e.ice_total || 0), 0) / filteredExperiments.length
+            : 0,
+    };
+    const logged = stats.won + stats.lost;
+    const winRate = logged ? Math.round((stats.won / logged) * 100) : 0;
 
     const handleSeed30 = () => {
         if (!confirm('This will seed 30 sample experiments. Continue?')) return;
@@ -283,20 +301,35 @@ export default function ExperimentsClientView() {
                     </p>
                 </div>
                 <div className="flex gap-3">
-                    <Button variant="outline" onClick={handleSeed30} className="hidden md:flex">
-                        <Database size={16} className="mr-2" /> Populate 30 Sample Experiments
-                    </Button>
                     <Button size="lg" onClick={() => { resetForm(); setIsCreateOpen(true); }} className="shadow-sm">
                         <Plus size={18} className="mr-2" /> {UI_COPY.EXPERIMENTS.BUTTONS.CREATE}
                     </Button>
                 </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-6">
+                {[
+                    ['Running', stats.running, 'bg-emerald-400'],
+                    ['Won', stats.won, 'bg-yellow-300'],
+                    ['Lost', stats.lost, 'bg-red-400'],
+                    ['Ideas', stats.ideas, 'bg-zinc-400'],
+                    ['Win Rate', `${winRate}%`, 'bg-blue-400'],
+                    ['Avg ICE', stats.averageIce.toFixed(1), 'bg-purple-400'],
+                ].map(([label, value, color]) => (
+                    <div key={label} className="rounded-lg border border-border bg-card p-4">
+                        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                            <span className={`h-2 w-2 rounded-full ${color}`} /> {label}
+                        </div>
+                        <div className="mt-2 text-2xl font-black text-foreground">{value}</div>
+                    </div>
+                ))}
+            </div>
+
             {/* INFO BOX */}
             <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-border rounded-xl p-5 flex gap-4">
                 <div className="text-blue-600 mt-1"><Info size={20} /></div>
                 <div className="space-y-1">
-                    <h3 className="font-bold text-foreground">Experiments vs Scenarios</h3>
+                    <h3 className="font-bold text-foreground">The Lab operating model</h3>
                     <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-4">
                         <li><strong>Scenarios</strong> describe what is happening in the market.</li>
                         <li><strong>Blueprints</strong> prescribe what to do about it (strategy).</li>
@@ -310,8 +343,13 @@ export default function ExperimentsClientView() {
                 {filteredExperiments.length === 0 ? (
                     <div className="text-center py-20 border border-border rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50">
                         <Beaker className="mx-auto text-muted-foreground mb-4 opacity-50" size={48} />
-                        <h3 className="text-lg font-semibold text-foreground mb-2">No Experiments Found</h3>
-                        <p className="text-muted-foreground mb-6">Start by creating a scenario and generating a blueprint, or log an ad-hoc test.</p>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Your Lab is empty.</h3>
+                        <p className="text-muted-foreground mb-6">Law 16: Continuous testing turns strategy from opinion into compounding evidence.</p>
+                        <div className="flex flex-wrap justify-center gap-3">
+                            <Link href="/blueprint"><Button variant="outline">Start from your Blueprint</Button></Link>
+                            <Button onClick={() => { resetForm(); setIsCreateOpen(true); }}>New Experiment</Button>
+                            <Link href="/"><Button variant="ghost">Run a Quick Pulse</Button></Link>
+                        </div>
                     </div>
                 ) : (
                     filteredExperiments.map(exp => (
@@ -455,7 +493,7 @@ export default function ExperimentsClientView() {
                                     className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                 />
                                 <label htmlFor="kb-promo" className="text-sm font-medium cursor-pointer select-none">
-                                    Promote to Institutional Memory (Shared KB)
+                                    Promote to Memory
                                 </label>
                             </div>
 

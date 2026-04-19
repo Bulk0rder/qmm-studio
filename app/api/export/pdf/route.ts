@@ -55,7 +55,7 @@ export async function GET(request: Request) {
         `Governing Law: ${law}`,
         'Boardroom Summary:',
         'This export is designed for first-pass board sharing.',
-        'For full visual detail, use the in-app Blueprint and Advisory views.',
+        'For full visual detail, use the in-app Blueprint view.',
         '',
         'QMM Studio: evidence-backed strategic diagnosis for trust-fragile markets.'
     ]);

@@ -4,6 +4,43 @@
 
 @layer base {
   :root {
+    /* Typography scale */
+    --text-hero:        54px;
+    --text-page-title:  34px;
+    --text-section:     22px;
+    --text-card:        16px;
+    --text-body:        14px;
+    --text-caption:     11px;
+    --text-nav:         13px;
+    --text-button:      14px;
+    --text-button-sm:   12px;
+    --text-law-num:     11px;
+    --text-score:       44px;
+    --text-ice:         20px;
+    --text-manifesto-h: 30px;
+
+    /* Font weights */
+    --weight-hero:    800;
+    --weight-title:   700;
+    --weight-section: 600;
+    --weight-card:    500;
+    --weight-body:    400;
+    --weight-caption: 400;
+
+    /* Line heights */
+    --lh-hero:    1.08;
+    --lh-title:   1.15;
+    --lh-section: 1.3;
+    --lh-body:    1.6;
+    --lh-caption: 1.5;
+
+    /* Hero image tokens — light mode */
+    --hero-glow:   #5D4FD4;
+    --hero-node:   #5050A0;
+    --hero-line:   #9090CC;
+    --hero-accent: #5D4FD4;
+    --hero-label:  #3A3A6A;
+
     --background: 255 255 255;
     --foreground: 24 24 27;
     /* Zinc-900 */
@@ -32,6 +69,13 @@
   }
 
   .dark {
+    /* Hero image tokens — dark mode */
+    --hero-glow:   #6B5CE7;
+    --hero-node:   #8080CC;
+    --hero-line:   #4040AA;
+    --hero-accent: #6B5CE7;
+    --hero-label:  #C0C0E0;
+
     --background: 9 9 11;
     /* Zinc-950 */
     --foreground: 255 255 255;
@@ -151,5 +195,13 @@
 
   .glass-panel {
     @apply bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md border border-border shadow-sm;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --text-hero:       36px;
+    --text-page-title: 26px;
+    --text-section:    20px;
   }
 }

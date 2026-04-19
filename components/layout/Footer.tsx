@@ -26,10 +26,10 @@ export function Footer() {
                     <div>
                         <h4 className="font-semibold mb-4 text-xs uppercase tracking-wider text-zinc-900 dark:text-white">Platform</h4>
                         <ul className="space-y-3 text-sm">
-                            <li><Link href="/new" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">New Scenario</Link></li>
-                            <li><Link href="/library" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Scenario Library</Link></li>
-                            <li><Link href="/experiments" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Experiments</Link></li>
-                            <li><Link href="/kb" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Knowledge Base</Link></li>
+                            <li><Link href="/diagnose" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Diagnose</Link></li>
+                            <li><Link href="/blueprint" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Blueprint</Link></li>
+                            <li><Link href="/lab" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">The Lab</Link></li>
+                            <li><Link href="/physics" className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Physics</Link></li>
                         </ul>
                     </div>
 

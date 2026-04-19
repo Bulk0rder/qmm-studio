@@ -16,10 +16,10 @@ export const UI_COPY = {
     },
     NAV: {
         HOME: "Home",
-        NEW_SCENARIO: "New Scenario",
-        EXPERIMENTS: "Experiments",
-        SCENARIO_LIBRARY: "Scenario Library",
-        KNOWLEDGE_BASE: "Knowledge Base",
+        NEW_SCENARIO: "Diagnose",
+        EXPERIMENTS: "The Lab",
+        SCENARIO_LIBRARY: "Memory",
+        KNOWLEDGE_BASE: "Physics",
         ABOUT: "About",
         HOW_TO_USE: "How to Use",
         USEFULNESS: "Usefulness",
@@ -53,7 +53,7 @@ export const UI_COPY = {
             EMPTY_BODY: "Your library coverage looks healthy for recent usage.",
         },
         QUICK_ACTIONS: {
-            HEADER: "Institutional Memory",
+            HEADER: "Memory",
             LOG_RESULT: "Log result",
             ADD_KB: "Add KB doc",
             HELPER: "Don’t reinvent the wheel. See what’s working right now.",
@@ -208,12 +208,12 @@ export const UI_COPY = {
         FOOTER: {
             CONFIDENCE: "Confidence & next inputs",
             IMPROVE: "What would make this smarter on the next run?",
-            CTA_DEPLOY: "Deploy to Experiments"
+            CTA_DEPLOY: "Send Experiments to The Lab"
         },
     },
     EXPERIMENTS: {
-        TITLE: "The Logic Lab",
-        SUBTITLE: "Turn hypotheses into company assets. If it wins, we save it forever.",
+        TITLE: "The Lab",
+        SUBTITLE: "Turn hypotheses into company assets. Every experiment carries an ICE score and a governing law.",
         BUTTONS: {
             CREATE: "Create experiment",
             LOG: "Log result",
@@ -227,16 +227,16 @@ export const UI_COPY = {
         },
     },
     SCENARIOS: {
-        TITLE: "Scenario library",
-        SUBTITLE: "The memory of the system. Better scenarios → better blueprints.",
+        TITLE: "Memory",
+        SUBTITLE: "Your Strategy Memory — every diagnosis, Blueprint, and result you have logged.",
         SEARCH_PLACEHOLDER: "Search scenarios by title, objective, state, industry…",
         EMPTY_TITLE: "No scenarios yet.",
         EMPTY_BODY: "Add your first scenario to make retrieval-first planning possible.",
         EMPTY_CTA: "Start new scenario",
     },
     KB: {
-        TITLE: "The Physics of Marketing",
-        SUBTITLE: "First principles and mental models that drive our algorithms. These are the laws of gravity for your strategy.",
+        TITLE: "Physics",
+        SUBTITLE: "Browse the market laws behind every recommendation. This is the intellectual moat QMM cites in each Blueprint.",
         SEARCH_PLACEHOLDER: "Search KB (principles, experiments, governance, channels…)",
         COVERAGE_EMPTY_TITLE: "No gaps detected.",
         COVERAGE_EMPTY_BODY: "Your KB coverage is strong for recent usage.",
